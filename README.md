@@ -1,6 +1,6 @@
 # pllcare
 
-pll-care
+only android
 
 ## Getting Started
 
