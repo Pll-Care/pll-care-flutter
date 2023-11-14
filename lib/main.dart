@@ -1,13 +1,18 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:pllcare/auth/view/login_screen.dart';
 import 'package:pllcare/common/common_style.dart';
+import 'package:pllcare/main/view/home.dart';
 
-import 'main/view/home.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(nativeAppKey: '4f2e05ad16de5afc28b263da1980b5a1',javaScriptAppKey: 'af256746c2a504b44720df430decd9d3',);
+  runApp(const ProviderScope(child: MyApp()) );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +36,7 @@ class MyApp extends StatelessWidget {
             textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(GREEN_200),
-                textStyle: MaterialStateProperty.all(TextStyle(color: GREY_100)),
+                textStyle: MaterialStateProperty.all(const TextStyle(color: GREY_100)),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.r),
@@ -43,7 +48,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const HomeScreen(),
+      child:  const HomeScreen(),// LoginScreen(),
     );
   }
 }
