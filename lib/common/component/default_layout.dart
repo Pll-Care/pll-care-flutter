@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pllcare/main/view/home.dart';
+import 'package:pllcare/project/component/project_body.dart';
+import 'package:pllcare/recruit/component/recruit_body.dart';
 import 'package:pllcare/theme.dart';
 
+import 'default_appbar.dart';
+
 class DefaultLayout extends ConsumerStatefulWidget {
-  final Widget appbar;
   final bool hasInfiniteScroll;
   final Widget body;
 
@@ -19,7 +24,6 @@ class DefaultLayout extends ConsumerStatefulWidget {
 
   const DefaultLayout({
     super.key,
-    required this.appbar,
     required this.body,
     this.hasInfiniteScroll = false,
     // this.paginationParams,
@@ -31,18 +35,23 @@ class DefaultLayout extends ConsumerStatefulWidget {
 }
 
 class _DefaultLayoutState extends ConsumerState<DefaultLayout>
-    with SingleTickerProviderStateMixin {
-  int _currentIdx = 0;
+    with TickerProviderStateMixin {
+  int _currentIdx = 1;
   late ScrollController _scrollController;
+  late final TabController tabController;
   var _isVisible;
 
   @override
   void initState() {
     super.initState();
     _isVisible = true;
+    tabController = TabController(length: 3, vsync: this)
+      ..addListener(() {
+        setState(() {});
+      });
 
+    _scrollController = ScrollController();
     if (widget.hasInfiniteScroll) {
-      _scrollController = ScrollController();
       _scrollController.addListener(listener);
       _scrollController.addListener(bottomHideListener);
     }
@@ -72,12 +81,22 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
 
   @override
   void dispose() {
+    _scrollController.dispose();
     if (widget.hasInfiniteScroll) {
       _scrollController.removeListener(listener);
       _scrollController.removeListener(bottomHideListener);
-      _scrollController.dispose();
     }
     super.dispose();
+  }
+
+  int getIndex(BuildContext context) {
+    if (GoRouterState.of(context).matchedLocation == '/management') {
+      return 0;
+    } else if (GoRouterState.of(context).matchedLocation == '/home') {
+      return 1;
+    } else {
+      return 2;
+    }
   }
 
   @override
@@ -86,21 +105,26 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
       backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: NestedScrollView(
-          // controller: _scrollController,
+          controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
-              widget.appbar,
+              const DefaultAppbar(),
             ];
           },
           body: widget.body,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (index){
-          setState(() {
-            _currentIdx = index;
-          });
+        onTap: (index) {
+          if (index == 0) {
+            context.goNamed(ProjectBody.routeName);
+          } else if (index == 1) {
+            context.goNamed(HomeBody.routeName);
+          } else {
+            context.goNamed(RecruitBody.routeName);
+          }
         },
+        currentIndex: getIndex(context),
         selectedItemColor: GREEN_200,
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -117,7 +141,6 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
             label: '인원 모집',
           ),
         ],
-        currentIndex: _currentIdx,
       ),
     );
   }

@@ -1,29 +1,35 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/project/model/project_model.dart';
+import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
 import 'package:pllcare/common/component/default_appbar.dart';
 import 'package:pllcare/common/component/default_layout.dart';
 
-import '../component/project_card.dart';
+import '../../project/component/project_main_card.dart';
 
-class HomeScreen extends StatelessWidget {
+// class HomeScreen extends StatelessWidget {
+//
+//   const HomeScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return const DefaultLayout( body: HomeBody());
+//   }
+// }
+
+class HomeBody extends ConsumerWidget {
   static String get routeName => 'home';
-
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const DefaultLayout(appbar: DefaultAppbar(), body: _HomeBody());
-  }
-}
-
-class _HomeBody extends StatelessWidget {
-  const _HomeBody({super.key});
+  const HomeBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
@@ -69,11 +75,59 @@ class _HomeBody extends StatelessWidget {
   }
 }
 
-class _MainContent extends StatelessWidget {
+class _MainContent extends ConsumerWidget {
   const _MainContent({super.key});
 
+  Widget getCloseDeadline({required BaseModel model}) {
+    if (model is LoadingModel) {
+      return Center(
+        child: Text("loading"),
+      );
+    } else if (model is ErrorModel) {
+      return Center(
+        child: Text("error"),
+      );
+    }
+    model as ListModel<ProjectCloseDeadLine>;
+    return ProjectMainCard.fromModel(
+        model: model.data.first, cardTitle: '마감 임박 프로젝트');
+  }
+
+  Widget getMostLike({required BaseModel model}) {
+    if (model is LoadingModel) {
+      return Center(
+        child: Text("loading"),
+      );
+    } else if (model is ErrorModel) {
+      return Center(
+        child: Text("error"),
+      );
+    }
+    model as ListModel<ProjectMostLiked>;
+    return ProjectMainCard.fromModel(
+        model: model.data.first, cardTitle: '실시간 인기 프로젝트');
+  }
+
+  Widget getUpToDate({required BaseModel model}) {
+    if (model is LoadingModel) {
+      return Center(
+        child: Text("loading"),
+      );
+    } else if (model is ErrorModel) {
+      return Center(
+        child: Text("error"),
+      );
+    }
+    model as ListModel<ProjectUpToDate>;
+    return ProjectMainCard.fromModel(
+        model: model.data.first, cardTitle: '최근 올라온 프로젝트');
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mostLike = ref.watch(projectMostLikedProvider);
+    final closeDeadline = ref.watch(projectCloseDeadLineProvider);
+    final upToDate = ref.watch(projectUpToDateProvider);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(50.r)),
@@ -91,13 +145,16 @@ class _MainContent extends StatelessWidget {
           SizedBox(
             height: 38.h,
           ),
-          const ProjectCard(
-            cardTitle: '마감 임박 프로젝트',
-            title: '우리 팀의 미래를 함께할 팀원을 찾습니다!',
-            period: '2023-04-30 ~ 2023-12-23',
-            content:
-                '저희는 SmartLiving 프로젝트를 시작하게 되었습니다. 이 프로젝트는 최신 기술을 활용하여 스마트 홈 시스템을 개발하고자 합니다. 더 편리하고 효율적인 스마트 라이프를 만들어 갈 팀원을 찾습니다.',
-            imageUrl: 'assets/main/main1.png',
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                getMostLike(model: mostLike),
+                getCloseDeadline(model: closeDeadline),
+                getUpToDate(model: upToDate),
+              ],
+            ),
           ),
           SizedBox(height: 43.h),
           const Divider(

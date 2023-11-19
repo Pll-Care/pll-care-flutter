@@ -6,12 +6,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:pllcare/auth/param/auth_param.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/common/login_platform.dart';
 
 class LoginScreen extends ConsumerWidget {
+  static String get routeName => 'login';
    LoginScreen({Key? key}) : super(key: key);
 
   LoginPlatform _loginPlatform = LoginPlatform.none;
@@ -179,6 +181,9 @@ class LoginScreen extends ConsumerWidget {
                             log("userProfile = ${userProfile}");
                             log('param $param');
                             await ref.read(authProvider.notifier).signUp(param: param);
+                            if(context.mounted) {
+                              context.goNamed('home');
+                            }
 
                             // if (await AuthApi.instance.hasToken()) {
                             //   try {

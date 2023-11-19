@@ -1,12 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:collection/collection.dart';
+import 'package:pllcare/auth/provider/auth_provider.dart';
+import 'package:pllcare/auth/view/login_screen.dart';
 
 import '../../theme.dart';
 
-class DefaultAppbar extends StatelessWidget {
+class DefaultAppbar extends ConsumerWidget {
   // final List<Widget>? actions;
   final List<Map<String, dynamic>>? actions;
 
@@ -25,7 +30,8 @@ class DefaultAppbar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLogin = ref.watch(authProvider);
     return SliverAppBar(
       leading: getLogoIcon(),
       leadingWidth: 160.w,
@@ -40,14 +46,18 @@ class DefaultAppbar extends StatelessWidget {
           width: 80.w,
           padding: EdgeInsets.symmetric(vertical: 12.h),
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              isLogin == null
+                  ? context.pushNamed(LoginScreen.routeName)
+                  : ref.read(authProvider.notifier).logout();
+            },
             style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.r),
               ),
             ),
             child: Text(
-              'Log In',
+              isLogin == null ? 'Log In' : 'Log Out',
               style: m_Button_00.copyWith(color: Colors.white),
             ),
           ),
