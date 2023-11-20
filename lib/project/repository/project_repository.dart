@@ -19,20 +19,25 @@ abstract class ProjectRepository {
   factory ProjectRepository(Dio dio, {required String baseUrl}) =
       _ProjectRepository;
 
-  @GET('/auth/main/uptodate')
+  @GET('/api/auth/main/uptodate')
   Future<List<ProjectUpToDate>> getUpToDate();
 
-  @GET('/auth/main/closedeadline')
+  @GET('/api/auth/main/closedeadline')
   Future<List<ProjectCloseDeadLine>> getCloseDeadLine();
 
-  @GET('/auth/main/mostliked')
+  @GET('/api/auth/main/mostliked')
   Future<List<ProjectMostLiked>> getMostLiked();
 
-  @GET('/auth/project/list')
+  @GET('/api/auth/project/list')
   @Headers({
     'token': 'true',
   })
-
   Future<ProjectList> getProjectList(
       {@Queries() required ProjectParams params});
+
+  @DELETE('/api/auth/project/{projectId}/selfout')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> selfOutProject({@Path() required int projectId});
 }

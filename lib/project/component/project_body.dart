@@ -8,6 +8,7 @@ import 'package:pllcare/project/component/project_list_card.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
+import 'package:collection/collection.dart';
 
 final isSelectAllProvider = StateProvider.autoDispose<bool>((ref) => true);
 
@@ -24,37 +25,49 @@ class ProjectBody extends ConsumerWidget {
 
     if (modelList is ProjectList) {
       pModelList = modelList as ProjectList;
-    }
-    return SafeArea(
+    } else if (modelList is ErrorModel) {}
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(projectListProvider.notifier).getList(
+            params: ProjectParams(
+                page: 0,
+                size: 5,
+                direction: 'ASC',
+                state: [ProjectListType.COMPLETE, ProjectListType.ONGOING]));
+        ref.read(isSelectAllProvider.notifier).update((state) => true);
+      },
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-              child: ProjectListNav(
-            onTapAll: () {
-              onTapFetch(
-                  ref: ref,
-                  state: [ProjectListType.ONGOING, ProjectListType.COMPLETE]);
-            },
-            onTapOnGoing: () {
-              onTapFetch(ref: ref, state: [ProjectListType.ONGOING]);
-            },
-            onCreate: () {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(32.r))),
-                  context: context,
-                  builder: (context) {
-                    return SingleChildScrollView(
-                      child: Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: ProjectForm()),
-                    );
-                  });
-            },
-          )),
+            child: ProjectListNav(
+              onTapAll: () {
+                onTapFetch(ref: ref, state: [
+                  ProjectListType.ONGOING,
+                  ProjectListType.COMPLETE
+                ]);
+              },
+              onTapOnGoing: () {
+                onTapFetch(ref: ref, state: [ProjectListType.ONGOING]);
+              },
+              onCreate: () {
+                showModalBottomSheet(
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(32.r))),
+                    context: context,
+                    builder: (context) {
+                      return SingleChildScrollView(
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: ProjectForm()),
+                      );
+                    });
+              },
+            ),
+          ),
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
             sliver: modelList is! LoadingModel
@@ -75,6 +88,22 @@ class ProjectBody extends ConsumerWidget {
                     ),
                   ),
           ),
+          if (modelList is ProjectList)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (int i = 1; i < pModelList.totalPages! + 1; i++)
+                      Text(
+                        i.toString(),
+                        style: m_Heading_02.copyWith(color: GREY_500),
+                      )
+                  ],
+                ),
+              ),
+            )
         ],
       ),
     );

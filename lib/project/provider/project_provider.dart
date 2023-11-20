@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pllcare/common/logger/custom_logger.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/dio/param/param.dart';
 import 'package:pllcare/project/model/project_model.dart';
@@ -15,18 +16,25 @@ class ProjectMostLikedStateNotifier extends StateNotifier<BaseModel> {
   final ProjectRepository repository;
 
   ProjectMostLikedStateNotifier({required this.repository})
-      : super(LoadingModel()){
-   getMostLiked();
+      : super(LoadingModel()) {
+    getMostLiked();
   }
 
   Future<void> getMostLiked() async {
-    final resp = await repository.getMostLiked();
-    state = ListModel<ProjectMostLiked>(data: resp);
+    state = LoadingModel();
+
+    repository.getMostLiked().then((value) {
+      logger.i(value);
+      state = ListModel<ProjectMostLiked>(data: value);
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
   }
 }
 
 final projectCloseDeadLineProvider =
-StateNotifierProvider<ProjectCloseDeadLineStateNotifier, BaseModel>((ref) {
+    StateNotifierProvider<ProjectCloseDeadLineStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectCloseDeadLineStateNotifier(repository: repository);
 });
@@ -35,18 +43,25 @@ class ProjectCloseDeadLineStateNotifier extends StateNotifier<BaseModel> {
   final ProjectRepository repository;
 
   ProjectCloseDeadLineStateNotifier({required this.repository})
-      : super(LoadingModel()){
+      : super(LoadingModel()) {
     getCloseDeadline();
   }
 
   Future<void> getCloseDeadline() async {
-    final resp = await repository.getCloseDeadLine();
-    state = ListModel<ProjectCloseDeadLine>(data: resp);
+    state = LoadingModel();
+
+    repository.getCloseDeadLine().then((value) {
+      logger.i(value);
+      state = ListModel<ProjectCloseDeadLine>(data: value);
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
   }
 }
 
 final projectUpToDateProvider =
-StateNotifierProvider<ProjectUpToDateStateNotifier, BaseModel>((ref) {
+    StateNotifierProvider<ProjectUpToDateStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectUpToDateStateNotifier(repository: repository);
 });
@@ -55,18 +70,25 @@ class ProjectUpToDateStateNotifier extends StateNotifier<BaseModel> {
   final ProjectRepository repository;
 
   ProjectUpToDateStateNotifier({required this.repository})
-      : super(LoadingModel()){
+      : super(LoadingModel()) {
     getUpToDate();
   }
 
   Future<void> getUpToDate() async {
-    final resp = await repository.getUpToDate();
-    state = ListModel<ProjectUpToDate>(data: resp);
+    state = LoadingModel();
+
+    repository.getUpToDate().then((value) {
+      logger.i(value);
+      state = ListModel<ProjectUpToDate>(data: value);
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
   }
 }
 
 final projectListProvider =
-StateNotifierProvider<ProjectListStateNotifier, BaseModel>((ref) {
+    StateNotifierProvider<ProjectListStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectListStateNotifier(repository: repository);
 });
@@ -74,13 +96,42 @@ StateNotifierProvider<ProjectListStateNotifier, BaseModel>((ref) {
 class ProjectListStateNotifier extends StateNotifier<BaseModel> {
   final ProjectRepository repository;
 
-  ProjectListStateNotifier({required this.repository})
-      : super(LoadingModel()){
-    getList(params: ProjectParams(page: 0, size: 5, direction: 'ASC', state: [ProjectListType.TBD]));
+  ProjectListStateNotifier({required this.repository}) : super(LoadingModel()) {
+    getList(
+        params: ProjectParams(
+            page: 0, size: 5, direction: 'ASC', state: [ProjectListType.TBD]));
   }
 
   Future<void> getList({required ProjectParams params}) async {
-    final resp = await repository.getProjectList(params: params);
-    state = resp;
+    state = LoadingModel();
+    repository.getProjectList(params: params).then((value) {
+      logger.i(value);
+      state = value;
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
+  }
+}
+
+final projectProvider =
+    StateNotifierProvider<ProjectStateNotifier, BaseModel?>((ref) {
+  final repository = ref.watch(projectRepositoryProvider);
+  return ProjectStateNotifier(repository: repository);
+});
+
+class ProjectStateNotifier extends StateNotifier<BaseModel?> {
+  final ProjectRepository repository;
+
+  ProjectStateNotifier({required this.repository}) : super(null);
+
+  Future<void> selfOut({required int projectId}) async {
+    repository
+        .selfOutProject(projectId: projectId)
+        .then((value) {})
+        .catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
   }
 }

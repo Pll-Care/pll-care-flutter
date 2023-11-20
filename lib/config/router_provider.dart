@@ -5,6 +5,7 @@ import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
 import 'package:pllcare/common/component/default_layout.dart';
 import 'package:pllcare/main/view/home.dart';
+import 'package:pllcare/schedule/view/schedule_overview_screen.dart';
 
 import '../project/component/project_body.dart';
 import '../recruit/component/recruit_body.dart';
@@ -27,6 +28,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (BuildContext context, GoRouterState state) {
               return LoginScreen();
             }),
+
         ShellRoute(
             builder: (context, state, child) {
               return DefaultLayout(body: child);
@@ -36,6 +38,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: '/management',
                 name: ProjectBody.routeName,
                 builder: (_, state) =>  ProjectBody(),
+                routes: [
+                  GoRoute(
+                      path: ':projectId/overview',
+                      name: ScheduleOverViewScreen.routeName,
+                      builder: (BuildContext context, GoRouterState state) {
+                        final int projectId = int.parse(state.pathParameters['projectId']!);
+
+                        return ScheduleOverViewScreen(projectId: projectId,);
+                      }),
+                ]
               ),
               GoRoute(
                 path: '/home',

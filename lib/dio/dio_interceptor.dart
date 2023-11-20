@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../common/logger/custom_logger.dart';
 
-const String serverURL = "http://59.6.173.110:8080/api";
+const String serverURL = "http://59.6.173.110:8080";
 // const String serverURL = "https://pll-care.store";
 
 class CustomDioInterceptor extends Interceptor {
@@ -110,7 +110,7 @@ class CustomDioInterceptor extends Interceptor {
     log("err.type = ${err.type}");
     if (err.type == DioExceptionType.badResponse) {
       print(
-          "err.response!.data['_metadata'] ${err.response!.data['_metadata']}");
+          "err.response!.data['_metadata'] ${err.response!.data}");
       // return handler.resolve(err.response!);
 
     }

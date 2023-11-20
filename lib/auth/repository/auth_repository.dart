@@ -19,6 +19,6 @@ final authRepositoryProvider = Provider<AuthRepository>((ref){
 abstract class AuthRepository {
   factory AuthRepository(Dio dio, {String baseUrl}) = _AuthRepository;
 
-  @POST('/auth/flutter/signup')
+  @POST('/api/auth/flutter/signup')
   Future<AuthModel> signUp({@Body() required AuthParameter param});
 }

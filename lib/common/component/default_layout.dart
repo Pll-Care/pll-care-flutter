@@ -105,7 +105,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
       backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: NestedScrollView(
-          controller: _scrollController,
+          // controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               const DefaultAppbar(),

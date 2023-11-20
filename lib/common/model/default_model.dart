@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../logger/custom_logger.dart';
 
 part 'default_model.g.dart';
 
@@ -6,7 +9,53 @@ abstract class BaseModel {}
 
 class LoadingModel extends BaseModel {}
 
-class ErrorModel extends BaseModel {}
+/*
+{
+  "code": "string",
+  "status": 0,
+  "timestamp": "2023-11-20T11:48:18.413Z",
+  "message": "string",
+  "path": "string"
+}
+ */
+class ErrorModel extends BaseModel {
+  final String code;
+  final int status;
+  final String timestamp;
+  final String message;
+  final String path;
+
+  ErrorModel({
+    required this.code,
+    required this.status,
+    required this.timestamp,
+    required this.message,
+    required this.path,
+  });
+
+  static ErrorModel respToError(e) {
+    logger.e(e);
+    switch (e.runtimeType) {
+      case DioException:
+        final resp = (e as DioException).response!.data;
+        return ErrorModel(
+          code: resp['code'],
+          status: resp['status'],
+          timestamp: resp['timestamp'],
+          message: resp['message'],
+          path: resp['path'],
+        );
+      default:
+        return ErrorModel(
+          code: '',
+          status: 600,
+          timestamp: '',
+          message: '',
+          path: '',
+        );
+    }
+  }
+}
 
 class ListModel<T> extends BaseModel {
   List<T> data;
