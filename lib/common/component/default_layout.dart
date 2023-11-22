@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pllcare/main/view/home.dart';
 import 'package:pllcare/project/component/project_body.dart';
+import 'package:pllcare/project/component/project_header.dart';
 import 'package:pllcare/recruit/component/recruit_body.dart';
 import 'package:pllcare/theme.dart';
 
@@ -15,6 +16,7 @@ import 'default_appbar.dart';
 
 class DefaultLayout extends ConsumerStatefulWidget {
   final bool hasInfiniteScroll;
+  final Widget? header;
   final Widget body;
 
   // final PaginationParams? paginationParams;
@@ -24,6 +26,7 @@ class DefaultLayout extends ConsumerStatefulWidget {
 
   const DefaultLayout({
     super.key,
+    this.header,
     required this.body,
     this.hasInfiniteScroll = false,
     // this.paginationParams,
@@ -109,6 +112,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               const DefaultAppbar(),
+              if (widget.header != null) widget.header!,
             ];
           },
           body: widget.body,

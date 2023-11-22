@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pllcare/common/component/default_layout.dart';
 import 'package:pllcare/schedule/model/schedule_model.dart';
 import 'package:pllcare/schedule/provider/schedule_provider.dart';
@@ -14,7 +15,9 @@ class ScheduleOverViewScreen extends ConsumerStatefulWidget {
   static String get routeName => 'scheduleOverview';
   final int projectId;
 
-  const ScheduleOverViewScreen({super.key, required this.projectId});
+   ScheduleOverViewScreen({required Key key , required this.projectId}) : super(key: key){
+     log("key = $key");
+   }
 
   @override
   ConsumerState<ScheduleOverViewScreen> createState() =>
@@ -35,6 +38,9 @@ class _ScheduleOverViewScreenState
 
   @override
   Widget build(BuildContext context) {
+
+    log(' GoRouterState.of(context).name ${ GoRouterState.of(context).name}');
+
     log(' MediaQuery.of(context).size.width / 2 ${MediaQuery.of(context).size.width / 2}');
     final bModel = ref.watch(scheduleOverviewProvider(widget.projectId));
     if (bModel is LoadingModel) {

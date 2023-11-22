@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +24,7 @@ class ProjectBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final modelList = ref.watch(projectListProvider);
+    log("modelList = ${modelList.runtimeType}");
 
     if (modelList is ProjectList) {
       pModelList = modelList as ProjectList;

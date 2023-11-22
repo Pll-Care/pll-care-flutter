@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +10,7 @@ import 'package:pllcare/main/view/home.dart';
 import 'package:pllcare/schedule/view/schedule_overview_screen.dart';
 
 import '../project/component/project_body.dart';
+import '../project/component/project_header.dart';
 import '../recruit/component/recruit_body.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -31,24 +34,33 @@ final routerProvider = Provider<GoRouter>((ref) {
 
         ShellRoute(
             builder: (context, state, child) {
-              return DefaultLayout(body: child);
+              log("child.runtimeType =${child.toString()}");
+              final hasHeader = child.runtimeType is ScheduleOverViewScreen;
+
+
+              return DefaultLayout(
+                  header: hasHeader ? const ProjectHeader() : null,
+                  body: child);
             },
             routes: [
               GoRoute(
-                path: '/management',
-                name: ProjectBody.routeName,
-                builder: (_, state) =>  ProjectBody(),
-                routes: [
-                  GoRoute(
-                      path: ':projectId/overview',
-                      name: ScheduleOverViewScreen.routeName,
-                      builder: (BuildContext context, GoRouterState state) {
-                        final int projectId = int.parse(state.pathParameters['projectId']!);
+                  path: '/management',
+                  name: ProjectBody.routeName,
+                  builder: (_, state) => ProjectBody(),
+                  routes: [
+                    GoRoute(
+                        path: ':projectId/overview',
+                        name: ScheduleOverViewScreen.routeName,
+                        builder: (BuildContext context, GoRouterState state) {
+                          final int projectId =
+                              int.parse(state.pathParameters['projectId']!);
 
-                        return ScheduleOverViewScreen(projectId: projectId,);
-                      }),
-                ]
-              ),
+                          return ScheduleOverViewScreen(
+                            key: GlobalKey(),
+                            projectId: projectId,
+                          );
+                        }),
+                  ]),
               GoRoute(
                 path: '/home',
                 name: HomeBody.routeName,
