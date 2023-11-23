@@ -7,17 +7,27 @@ import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
 import 'package:pllcare/common/component/default_layout.dart';
 import 'package:pllcare/main/view/home.dart';
+import 'package:pllcare/project/view/project_screen.dart';
+import 'package:pllcare/recruit/view/recruit_screen.dart';
+import 'package:pllcare/schedule/component/schedule_overview_body.dart';
 import 'package:pllcare/schedule/view/schedule_overview_screen.dart';
+import 'package:pllcare/theme.dart';
 
+import '../home_screen.dart';
 import '../project/component/project_body.dart';
 import '../project/component/project_header.dart';
 import '../recruit/component/recruit_body.dart';
+import '../test_screen.dart';
+
+final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> shellNavKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
   final provider = ref.read(authProvider);
   return GoRouter(
       initialLocation: '/home',
       debugLogDiagnostics: true,
+      navigatorKey: rootNavKey,
       routes: <RouteBase>[
         // GoRoute(
         //     path: '/home',
@@ -31,45 +41,44 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (BuildContext context, GoRouterState state) {
               return LoginScreen();
             }),
-
+        GoRoute(
+            path: '/test',
+            name: TestScreen.routeName,
+            builder: (BuildContext context, GoRouterState state) {
+              return TestScreen();
+            }),
         ShellRoute(
+          navigatorKey: shellNavKey,
             builder: (context, state, child) {
-              log("child.runtimeType =${child.toString()}");
-              final hasHeader = child.runtimeType is ScheduleOverViewScreen;
-
-
               return DefaultLayout(
-                  header: hasHeader ? const ProjectHeader() : null,
                   body: child);
             },
             routes: [
               GoRoute(
                   path: '/management',
-                  name: ProjectBody.routeName,
-                  builder: (_, state) => ProjectBody(),
+                  name: ProjectScreen.routeName,
+                  builder: (_, state) => const ProjectScreen(),
                   routes: [
                     GoRoute(
                         path: ':projectId/overview',
-                        name: ScheduleOverViewScreen.routeName,
+                        name: ProjectManagementScreen.routeName,
                         builder: (BuildContext context, GoRouterState state) {
                           final int projectId =
                               int.parse(state.pathParameters['projectId']!);
-
-                          return ScheduleOverViewScreen(
-                            key: GlobalKey(),
+                          return ProjectManagementScreen(
                             projectId: projectId,
                           );
                         }),
                   ]),
               GoRoute(
                 path: '/home',
-                name: HomeBody.routeName,
-                builder: (_, state) => const HomeBody(),
+                name: HomeScreen.routeName,
+                builder: (_, state) => const HomeScreen(),
               ),
               GoRoute(
                 path: '/recruit',
-                name: RecruitBody.routeName,
-                builder: (_, state) => const RecruitBody(),
+                name: RecruitScreen.routeName,
+                builder: (_, state) => const RecruitScreen(),
               ),
             ]),
       ]);

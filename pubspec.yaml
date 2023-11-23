@@ -49,6 +49,7 @@ dependencies:
   hive: ^2.2.3
   flutter_riverpod: ^2.4.6
   flutter_svg: ^2.0.9
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

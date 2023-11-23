@@ -12,11 +12,13 @@ import 'package:pllcare/project/component/project_header.dart';
 import 'package:pllcare/recruit/component/recruit_body.dart';
 import 'package:pllcare/theme.dart';
 
+import '../../home_screen.dart';
+import '../../project/view/project_screen.dart';
+import '../../recruit/view/recruit_screen.dart';
 import 'default_appbar.dart';
 
 class DefaultLayout extends ConsumerStatefulWidget {
   final bool hasInfiniteScroll;
-  final Widget? header;
   final Widget body;
 
   // final PaginationParams? paginationParams;
@@ -26,7 +28,6 @@ class DefaultLayout extends ConsumerStatefulWidget {
 
   const DefaultLayout({
     super.key,
-    this.header,
     required this.body,
     this.hasInfiniteScroll = false,
     // this.paginationParams,
@@ -107,25 +108,16 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: SafeArea(
-        child: NestedScrollView(
-          // controller: _scrollController,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              const DefaultAppbar(),
-              if (widget.header != null) widget.header!,
-            ];
-          },
-          body: widget.body,
-        ),
+        child: widget.body,
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           if (index == 0) {
-            context.goNamed(ProjectBody.routeName);
+            context.goNamed(ProjectScreen.routeName);
           } else if (index == 1) {
-            context.goNamed(HomeBody.routeName);
+            context.goNamed(HomeScreen.routeName);
           } else {
-            context.goNamed(RecruitBody.routeName);
+            context.goNamed(RecruitScreen.routeName);
           }
         },
         currentIndex: getIndex(context),

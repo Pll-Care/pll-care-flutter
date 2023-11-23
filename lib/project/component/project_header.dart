@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pllcare/theme.dart';
 
 class ProjectHeader extends StatefulWidget {
-  const ProjectHeader({super.key});
+  final TabController tabController;
+  const ProjectHeader({super.key, required this.tabController});
 
   @override
   State<ProjectHeader> createState() => _ProjectHeaderState();
@@ -15,7 +16,7 @@ class _ProjectHeaderState extends State<ProjectHeader>
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
       delegate:
-          TabBarDelegate(tabController: TabController(length: 6, vsync: this)),
+          TabBarDelegate(tabController: widget.tabController),
     );
   }
 }
@@ -56,6 +57,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
           onTap: (idx){
             tabController.animateTo(idx);
           },
+
           tabs: [
             projectTab(title: '개요'),
             projectTab(title: '회의록'),

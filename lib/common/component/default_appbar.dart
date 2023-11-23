@@ -13,11 +13,11 @@ import '../../theme.dart';
 
 class DefaultAppbar extends ConsumerWidget {
   // final List<Widget>? actions;
-  final List<Map<String, dynamic>>? actions;
+  // final List<Map<String, dynamic>>? actions;
 
   const DefaultAppbar({
     super.key,
-    this.actions,
+    // this.actions,
   });
 
   Widget getLogoIcon() {

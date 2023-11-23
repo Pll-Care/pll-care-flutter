@@ -25,51 +25,48 @@ import '../../project/component/project_main_card.dart';
 // }
 
 class HomeBody extends ConsumerWidget {
-  static String get routeName => 'home';
   const HomeBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.r),
-              child: Image.asset(
-                'assets/main/main1.png',
-                fit: BoxFit.fitWidth,
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.r),
+            child: Image.asset(
+              'assets/main/main1.png',
+              fit: BoxFit.fitWidth,
             ),
-            SizedBox(
-              height: 42.h,
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 33.w),
-                child: Text(
-                  '프로젝트 관리 서비스, 풀케어',
-                  style: m_Heading_05.copyWith(color: GREEN_500),
-                )),
-            SizedBox(
-              height: 10.h,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 37.w, right: 37.w),
+          ),
+          SizedBox(
+            height: 42.h,
+          ),
+          Padding(
+              padding: EdgeInsets.only(left: 33.w),
               child: Text(
-                '유구한 역사와 전통에 빛나는 우리 대한국민은 3ㆍ1운동으로 건립된 대한민국임시정부의 법통과 불의에 항거한 4ㆍ19민주이념을 계승하고, 조국의 민주개혁과 평화적 통일의 사명에 입각하여 정의ㆍ인도와 동포애로써 민족의 단결을 공고히 하고, 모든 사회적 폐습과 불의를 타파하며, ',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style: m_Body_01.copyWith(color: GREY_500),
-              ),
+                '프로젝트 관리 서비스, 풀케어',
+                style: m_Heading_05.copyWith(color: GREEN_500),
+              )),
+          SizedBox(
+            height: 10.h,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 37.w, right: 37.w),
+            child: Text(
+              '유구한 역사와 전통에 빛나는 우리 대한국민은 3ㆍ1운동으로 건립된 대한민국임시정부의 법통과 불의에 항거한 4ㆍ19민주이념을 계승하고, 조국의 민주개혁과 평화적 통일의 사명에 입각하여 정의ㆍ인도와 동포애로써 민족의 단결을 공고히 하고, 모든 사회적 폐습과 불의를 타파하며, ',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              style: m_Body_01.copyWith(color: GREY_500),
             ),
-            SizedBox(
-              height: 41.h,
-            ),
-            const _MainContent(),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 41.h,
+          ),
+          const _MainContent(),
+        ],
       ),
     );
   }

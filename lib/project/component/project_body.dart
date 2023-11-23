@@ -3,19 +3,24 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/dio/param/param.dart';
 import 'package:pllcare/project/component/project_form.dart';
 import 'package:pllcare/project/component/project_list_card.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
+import 'package:pllcare/test_screen.dart';
 import 'package:pllcare/theme.dart';
 import 'package:collection/collection.dart';
 
 final isSelectAllProvider = StateProvider.autoDispose<bool>((ref) => true);
 
 class ProjectBody extends ConsumerWidget {
-  static String get routeName => 'project';
+  late String? title;
+  late String? content;
+  final formKey = GlobalKey<FormState>();
+
 
   ProjectBody({super.key});
 
@@ -24,10 +29,10 @@ class ProjectBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final modelList = ref.watch(projectListProvider);
-    log("modelList = ${modelList.runtimeType}");
 
     if (modelList is ProjectList) {
       pModelList = modelList as ProjectList;
+
     } else if (modelList is ErrorModel) {}
     return RefreshIndicator(
       onRefresh: () async {
@@ -44,10 +49,9 @@ class ProjectBody extends ConsumerWidget {
           SliverToBoxAdapter(
             child: ProjectListNav(
               onTapAll: () {
-                onTapFetch(ref: ref, state: [
-                  ProjectListType.ONGOING,
-                  ProjectListType.COMPLETE
-                ]);
+                onTapFetch(
+                    ref: ref,
+                    state: [ProjectListType.ONGOING, ProjectListType.COMPLETE]);
               },
               onTapOnGoing: () {
                 onTapFetch(ref: ref, state: [ProjectListType.ONGOING]);
@@ -55,17 +59,42 @@ class ProjectBody extends ConsumerWidget {
               onCreate: () {
                 showModalBottomSheet(
                     isScrollControlled: true,
+                    showDragHandle: true,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(32.r))),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(32.r))),
                     context: context,
                     builder: (context) {
                       return SingleChildScrollView(
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
-                            child: ProjectForm()),
+                        physics: AlwaysScrollableScrollPhysics(),
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        child: Form(
+                          autovalidateMode: AutovalidateMode.always,
+                          key: formKey,
+                          child: Padding(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              child: ProjectForm(
+                                onSavedTitle: (String? newValue) {
+                                  if(formKey.currentState!.validate()){
+                                    title = newValue;
+                                  }
+                                },
+                                onSavedContent: (String? newValue) {
+                                  if(formKey.currentState!.validate()){
+                                    content = newValue;
+                                  }
+                                },
+                                onSaved: () {
+                                  formKey.currentState!.save();
+                                  if(formKey.currentState!.validate()){
+                                    context.pop();
+                                  }
+                                },
+                              )),
+                        ),
                       );
                     });
               },

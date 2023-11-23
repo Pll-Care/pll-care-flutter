@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pllcare/dio/param/param.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
+import 'package:pllcare/schedule/component/schedule_overview_body.dart';
 import 'package:pllcare/schedule/view/schedule_overview_screen.dart';
 import 'package:pllcare/theme.dart';
 
@@ -40,9 +42,10 @@ class ProjectListCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         final pathParam = {'projectId': projectId.toString()};
-        context.pushNamed(ScheduleOverViewScreen.routeName, pathParameters: pathParam);
+        context.pushNamed(ProjectManagementScreen.routeName,
+            pathParameters: pathParam);
       },
       child: Container(
         width: 360.w,
@@ -63,8 +66,9 @@ class ProjectListCard extends ConsumerWidget {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage:
-                              imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
+                          backgroundImage: imageUrl.isNotEmpty
+                              ? NetworkImage(imageUrl)
+                              : null,
                           radius: 20.r,
                         ),
                         SizedBox(
@@ -146,6 +150,8 @@ class ProjectListCard extends ConsumerWidget {
     );
   }
 
+
+
   void customDialog(BuildContext context, WidgetRef ref) {
     final textButtonStyle = TextButton.styleFrom(
       backgroundColor: GREY_100,
@@ -154,8 +160,7 @@ class ProjectListCard extends ConsumerWidget {
       ),
     );
 
-
-     showDialog(
+    showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -172,7 +177,7 @@ class ProjectListCard extends ConsumerWidget {
             actionsPadding: const EdgeInsets.only(bottom: 24),
             actions: [
               SizedBox(
-                height:35,
+                height: 35,
                 width: 80,
                 child: TextButton(
                   onPressed: () {
@@ -182,7 +187,10 @@ class ProjectListCard extends ConsumerWidget {
                     context.pop();
                   },
                   style: textButtonStyle,
-                  child: Text('네', style: Button_03.copyWith(color: GREEN_400),),
+                  child: Text(
+                    '네',
+                    style: Button_03.copyWith(color: GREEN_400),
+                  ),
                 ),
               ),
               SizedBox(
@@ -193,8 +201,10 @@ class ProjectListCard extends ConsumerWidget {
                       context.pop();
                     },
                     style: textButtonStyle,
-
-                    child: Text('아니오', style: Button_03.copyWith(color: GREEN_400),)),
+                    child: Text(
+                      '아니오',
+                      style: Button_03.copyWith(color: GREEN_400),
+                    )),
               )
             ],
           );
