@@ -126,7 +126,7 @@ class _MainContent extends ConsumerWidget {
             child: Text("error"),
           );
         }
-        model as ListModel<ProjectCloseDeadLine>;
+        model as ListModel<ProjectMainModel>;
         return ProjectMainCard.fromModel(
             model: model.data.first, cardTitle: title);
       },

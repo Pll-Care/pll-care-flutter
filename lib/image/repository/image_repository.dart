@@ -19,6 +19,7 @@ final imageRepositoryProvider = Provider<ImageRepository>((ref) {
 abstract class ImageRepository {
   factory ImageRepository(Dio dio) = _ImageRepository;
 
+  @MultiPart()
   @POST('/api/auth/upload/image')
   @Headers({
     'token': 'true',
@@ -29,5 +30,5 @@ abstract class ImageRepository {
   @Headers({
     'token': 'true',
   })
-  Future<ImageModel> deleteImage({@Query('url') required String url});
+  Future<void> deleteImage({@Query('url') required String url});
 }

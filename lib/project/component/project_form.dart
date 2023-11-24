@@ -11,7 +11,9 @@ import 'package:pllcare/theme.dart';
 import 'package:pllcare/util/util.dart';
 
 final imageUrlProvider = StateProvider.autoDispose<String?>((ref) => null);
-typedef ImagePick = Function(WidgetRef ref);
+final checkDateValidateProvider = StateProvider.autoDispose<bool>((ref) => false);
+
+typedef ImagePick = Future<void> Function(WidgetRef ref);
 
 class ProjectForm extends ConsumerWidget {
   final FormFieldSetter<String?>? onSavedTitle;
@@ -31,18 +33,23 @@ class ProjectForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final inputFormBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.r),
+      borderSide: const BorderSide(color: GREEN_200, width: 2.0),
+    );
     final inputDecoration = InputDecoration(
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5.r),
-          borderSide: BorderSide.none),
+      border: inputFormBorder,
+      focusedBorder: inputFormBorder,
+      enabledBorder: inputFormBorder,
       fillColor: GREY_100,
       filled: true,
       hintText: '내용 입력',
       hintStyle: m_Heading_03.copyWith(
         color: GREY_400,
       ),
+      errorStyle: m_Heading_04.copyWith(color: Colors.red),
     );
-
+    ref.watch(dateRangeProvider);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Column(
@@ -51,17 +58,19 @@ class ProjectForm extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.only(top: 34.h, bottom: 14.h),
             child: TextFormField(
+              maxLength: 20,
               decoration: inputDecoration.copyWith(
-                  hintText: '프로젝트 이름을 입력하세요',
-                  hintStyle: m_Heading_01.copyWith(
-                    color: GREY_400,
-                  )),
+                hintText: '프로젝트 이름을 입력하세요',
+                hintStyle: m_Heading_01.copyWith(
+                  color: GREY_400,
+                ),
+              ),
+              cursorColor: GREEN_400,
               validator: (val) {
-                log('title value ${val}');
-                if (val != null) {
+                if (val == null  || val.isEmpty) {
                   return '이름은 필수사항입니다.';
                 }
-                if (val!.length < 5) {
+                if (val.length < 5) {
                   return '이름은 다섯 글자 이상 입력 해주셔야 합니다.';
                 }
               },
@@ -86,7 +95,7 @@ class ProjectForm extends ConsumerWidget {
                         return CircleAvatar(
                           backgroundImage: imageUrl != null
                               ? NetworkImage(imageUrl)
-                              : const AssetImage('assets/default/')
+                              : const AssetImage('assets/main/main1.png')
                                   as ImageProvider,
                           //todo image 변경
                           radius: 30,
@@ -96,18 +105,24 @@ class ProjectForm extends ConsumerWidget {
                     SizedBox(height: 8.h),
                     _CustomButton(
                       title: '이미지 업로드',
-                      onPressed: pickImage(ref),
+                      onPressed: () {
+                        log("이미지 업로드!");
+                        pickImage(ref);
+                      },
                     ),
                     SizedBox(height: 4.h),
                     _CustomButton(
                       title: '이미지 제거',
-                      onPressed: deleteImage(ref),
+                      onPressed: () {
+                        deleteImage(ref);
+                      },
                     ),
                   ],
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         height: 36.h,
@@ -117,6 +132,22 @@ class ProjectForm extends ConsumerWidget {
                         padding: EdgeInsets.symmetric(horizontal: 7.w),
                         child: const DateForm(),
                       ),
+                      if (!ref.watch(dateRangeProvider.notifier).isValidate())
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "시작일자가 종료일자가 같거나 이후 일 수 없습니다.",
+                            style: m_Heading_04.copyWith(color: Colors.red),
+                          ),
+                        ),
+                      if (!ref.watch(dateRangeProvider.notifier).isSaveValidate() && ref.watch(checkDateValidateProvider))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            style: m_Heading_04.copyWith(color: Colors.red),
+                            "시작일자와 종료일자를 선택해주세요.",
+                          ),
+                        ),
                       SizedBox(
                         height: 8.h,
                       ),
@@ -124,11 +155,11 @@ class ProjectForm extends ConsumerWidget {
                         child: TextFormField(
                           cursorColor: GREEN_400,
                           maxLines: null,
+                          maxLength: 500,
                           expands: true,
                           decoration: inputDecoration,
                           validator: (val) {
-                            log('desc value ${val}');
-                            if (val != null) {
+                            if (val == null  || val.isEmpty) {
                               return '내용은 필수사항입니다.';
                             }
                           },
@@ -178,6 +209,7 @@ class DateForm extends ConsumerWidget {
     final dateRange = ref.watch(dateRangeProvider);
     final dateFormat = DateFormat('yy-MM-dd');
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,11 +286,6 @@ class DateForm extends ConsumerWidget {
             ),
           ],
         ),
-        if (ref.watch(dateRangeProvider.notifier).isValidate())
-          Text(
-            "시작일자가 종료일자가 같거나 이후 일 수 없습니다.",
-            style: m_Heading_03.copyWith(color: Colors.red),
-          ),
       ],
     );
   }
@@ -340,10 +367,13 @@ class _CustomButton extends StatelessWidget {
         onPressed: onPressed,
         style: textButtonStyle,
         child: Text(
-          '이미지 제거',
+          title,
           style: m_Button_01.copyWith(color: GREEN_400),
         ),
       ),
     );
   }
 }
+
+
+

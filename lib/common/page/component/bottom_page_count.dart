@@ -20,16 +20,18 @@ class BottomPageCount<T> extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final startPage = (pModelList.pageNumber! ~/ 5) * 5;
+    // log('pModelList.pageNumber = ${pModelList.pageNumber}');
+    // log('pModelList.totalPages = ${pModelList.totalPages}');
+    // log('pModelList.numberOfElements = ${pModelList.numberOfElements}');
+    final startPage = (pModelList.pageNumber! ~/ 5) * 5 + 1;
     final bool isLastPage =
         ((pModelList.pageNumber! ~/ 5) + 1) * 5 > pModelList.totalPages!;
     final lastPage = isLastPage // 마지막 페이지면 totalPage 아니면 시작페이지 + 5
         ? pModelList.totalPages!
         : ((pModelList.pageNumber! ~/ 5) + 1) * 5;
-
-    log("startPage ${startPage}");
-    log("lastDividePage ${((pModelList.pageNumber! ~/ 5) + 1) * 5 }");
+    //
+    // log("startPage ${startPage}");
+    // log("lastDividePage ${((pModelList.pageNumber! ~/ 5) + 1) * 5}");
 
     return SliverPadding(
       padding: const EdgeInsets.symmetric(vertical: 24),
@@ -37,15 +39,20 @@ class BottomPageCount<T> extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (int i = startPage; i < lastPage; i++)
+            for (int i = startPage; i < lastPage + 1; i++)
               GestureDetector(
                 onTap: () {
                   onTapPage(i);
                 },
-                child: Text(
-                  (i + 1).toString(),
-                  style: m_Heading_02.copyWith(
-                      color: pModelList.pageNumber == i ? GREEN_200 : GREY_500),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    (i).toString(),
+                    style: m_Heading_02.copyWith(
+                        color: (pModelList.pageNumber!) == (i)
+                            ? GREEN_200
+                            : GREY_500),
+                  ),
                 ),
               )
           ],

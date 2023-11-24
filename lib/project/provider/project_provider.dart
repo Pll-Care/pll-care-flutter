@@ -100,9 +100,9 @@ class ProjectListStateNotifier extends StateNotifier<BaseModel> {
   ProjectListStateNotifier({required this.repository}) : super(LoadingModel()) {
     getList(
         params: ProjectParams(
-            page: 0,
+            page: 1,
             size: 5,
-            direction: 'ASC',
+            direction: 'DESC',
             state: [StateType.ONGOING, StateType.COMPLETE]));
   }
 

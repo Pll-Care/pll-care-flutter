@@ -79,6 +79,7 @@ class ProjectListCard extends ConsumerWidget {
                           child: Text(
                             title,
                             overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: m_Heading_02.copyWith(
                               color: GREEN_500,
                             ),
@@ -138,6 +139,7 @@ class ProjectListCard extends ConsumerWidget {
                   Text(
                     '프로젝트 설명: $content',
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     style: m_Body_02.copyWith(
                       color: GREY_500,
                     ),

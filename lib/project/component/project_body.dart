@@ -16,7 +16,7 @@ import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/schedule/provider/date_range_provider.dart';
 import 'package:pllcare/theme.dart';
 
-import '../../common/page/component/component.dart';
+import '../../common/page/component/bottom_page_count.dart';
 import '../../image/model/image_model.dart';
 
 final isSelectAllProvider = StateProvider.autoDispose<bool>((ref) => true);
@@ -42,8 +42,7 @@ class ProjectBody extends ConsumerWidget {
             child: ProjectListNav(
               onTapAll: () {
                 _onTapFetch(
-                    ref: ref,
-                    state: [StateType.ONGOING, StateType.COMPLETE]);
+                    ref: ref, state: [StateType.ONGOING, StateType.COMPLETE]);
               },
               onTapOnGoing: () {
                 _onTapFetch(ref: ref, state: [StateType.ONGOING]);
@@ -62,9 +61,9 @@ class ProjectBody extends ConsumerWidget {
   Future<void> _onRefresh(WidgetRef ref) async {
     ref.read(projectListProvider.notifier).getList(
         params: ProjectParams(
-            page: 0,
+            page: 1,
             size: 5,
-            direction: 'ASC',
+            direction: 'DESC',
             state: [StateType.COMPLETE, StateType.ONGOING]));
     ref.read(isSelectAllProvider.notifier).update((state) => true);
   }
@@ -80,24 +79,27 @@ class ProjectBody extends ConsumerWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(32.r))),
         context: context,
         builder: (context) {
-          return SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Form(
-              autovalidateMode: AutovalidateMode.always,
-              key: formKey,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: ProjectForm(
-                    onSavedTitle: onSavedTitle,
-                    onSavedDesc: onSavedDesc,
-                    onSaved: () async {
-                      await _createProject(ref, context);
-                    },
-                    pickImage: pickImage,
-                    deleteImage: deleteImage,
-                  )),
+          return GestureDetector(
+            onTap: (){
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: SingleChildScrollView(
+              child: Form(
+                autovalidateMode: AutovalidateMode.always,
+                key: formKey,
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: ProjectForm(
+                      onSavedTitle: onSavedTitle,
+                      onSavedDesc: onSavedDesc,
+                      onSaved: () async {
+                        await _createProject(ref, context);
+                      },
+                      pickImage: pickImage,
+                      deleteImage: deleteImage,
+                    )),
+              ),
             ),
           );
         });
@@ -115,7 +117,7 @@ class ProjectBody extends ConsumerWidget {
     }
   }
 
-  void pickImage(WidgetRef ref) async {
+  Future<void> pickImage(WidgetRef ref) async {
     await ref.read(imageProvider.notifier).uploadImage();
     final imageModel = ref.read(imageProvider);
     if (imageModel is ErrorModel) {
@@ -127,7 +129,7 @@ class ProjectBody extends ConsumerWidget {
     }
   }
 
-  void deleteImage(WidgetRef ref) async {
+  Future<void> deleteImage(WidgetRef ref) async {
     await ref.read(imageProvider.notifier).deleteImage();
     ref.read(imageUrlProvider.notifier).update((state) => null);
   }
@@ -135,8 +137,9 @@ class ProjectBody extends ConsumerWidget {
   Future<void> _createProject(WidgetRef ref, BuildContext context) async {
     final dateFormat = DateFormat('yyyy-MM-dd');
     formKey.currentState!.save();
+    ref.read(checkDateValidateProvider.notifier).state = true;
     if (formKey.currentState!.validate() &&
-        ref.read(dateRangeProvider.notifier).isValidate()) {
+        ref.read(dateRangeProvider.notifier).isValidate() && ref.read(dateRangeProvider.notifier).isSaveValidate()) {
       final startDate =
           dateFormat.format(ref.read(dateRangeProvider).startDate!);
       final endDate = dateFormat.format(ref.read(dateRangeProvider).endDate!);
@@ -163,11 +166,10 @@ class ProjectBody extends ConsumerWidget {
     }
   }
 
-  void _onTapFetch(
-      {required WidgetRef ref, required List<StateType> state}) {
+  void _onTapFetch({required WidgetRef ref, required List<StateType> state}) {
     ref.read(projectListProvider.notifier).getList(
         params:
-            ProjectParams(page: 0, size: 5, direction: 'ASC', state: state));
+            ProjectParams(page:1, size: 5, direction: 'DESC', state: state));
     ref.read(isSelectAllProvider.notifier).update((isSelectAll) {
       return state.length == 1 ? false : true;
     });
@@ -302,28 +304,26 @@ class _ProjectList extends ConsumerWidget {
     return SliverPadding(
       padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
       sliver: modelList is! LoadingModel
-          ? SliverToBoxAdapter(
-              child: Column(children: [
-                SliverList.separated(
-                    itemBuilder: (context, index) {
-                      return ProjectListCard.fromModel(
-                          model: pModelList.data![index]);
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 18.h,
-                      );
-                    },
-                    itemCount: pModelList.data!.length),
-                // page 수
-                BottomPageCount<ProjectListModel>(
-                  pModelList: pModelList,
-                  onTapPage: (int page) {
-                    _onTapPage(ref, page);
+          ? SliverMainAxisGroup(slivers: [
+              SliverList.separated(
+                  itemBuilder: (context, index) {
+                    return ProjectListCard.fromModel(
+                        model: pModelList.data![index]);
                   },
-                ),
-              ]),
-            )
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 18.h,
+                    );
+                  },
+                  itemCount: pModelList.data!.length),
+              // page 수
+              BottomPageCount<ProjectListModel>(
+                pModelList: pModelList,
+                onTapPage: (int page) {
+                  _onTapPage(ref, page);
+                },
+              ),
+            ])
           : const SliverToBoxAdapter(
               child: Text("로딩"),
             ),
@@ -338,6 +338,6 @@ class _ProjectList extends ConsumerWidget {
         : [StateType.ONGOING];
     ref.read(projectListProvider.notifier).getList(
         params:
-            ProjectParams(page: page, size: 5, direction: 'ASC', state: state));
+            ProjectParams(page: page, size: 5, direction: 'DESC', state: state));
   }
 }

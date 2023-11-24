@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,10 +28,17 @@ class DateRangeStateNotifier extends StateNotifier<DateRange> {
   DateRangeStateNotifier() : super(DateRange());
 
   bool isValidate() {
+    // log("state.startDate!.difference(state.endDate!) == const Duration() =${state.startDate!.difference(state.endDate!) == const Duration()}");
     if (state.startDate != null &&
         state.endDate != null &&
         (state.startDate!.isAfter(state.endDate!) ||
             state.startDate!.difference(state.endDate!) == const Duration())) {
+      return false;
+    }
+    return true;
+  }
+  bool isSaveValidate(){
+    if(state.startDate == null || state.endDate == null){
       return false;
     }
     return true;
