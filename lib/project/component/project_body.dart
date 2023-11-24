@@ -21,127 +21,88 @@ class ProjectBody extends ConsumerWidget {
   late String? content;
   final formKey = GlobalKey<FormState>();
 
-
   ProjectBody({super.key});
-
-  late ProjectList pModelList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final modelList = ref.watch(projectListProvider);
-
-    if (modelList is ProjectList) {
-      pModelList = modelList as ProjectList;
-
-    } else if (modelList is ErrorModel) {}
     return RefreshIndicator(
       onRefresh: () async {
-        ref.read(projectListProvider.notifier).getList(
-            params: ProjectParams(
-                page: 0,
-                size: 5,
-                direction: 'ASC',
-                state: [ProjectListType.COMPLETE, ProjectListType.ONGOING]));
-        ref.read(isSelectAllProvider.notifier).update((state) => true);
+        _onRefresh(ref);
       },
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: ProjectListNav(
               onTapAll: () {
-                onTapFetch(
+                _onTapFetch(
                     ref: ref,
                     state: [ProjectListType.ONGOING, ProjectListType.COMPLETE]);
               },
               onTapOnGoing: () {
-                onTapFetch(ref: ref, state: [ProjectListType.ONGOING]);
+                _onTapFetch(ref: ref, state: [ProjectListType.ONGOING]);
               },
               onCreate: () {
-                showModalBottomSheet(
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(32.r))),
-                    context: context,
-                    builder: (context) {
-                      return SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        child: Form(
-                          autovalidateMode: AutovalidateMode.always,
-                          key: formKey,
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
-                              child: ProjectForm(
-                                onSavedTitle: (String? newValue) {
-                                  if(formKey.currentState!.validate()){
-                                    title = newValue;
-                                  }
-                                },
-                                onSavedContent: (String? newValue) {
-                                  if(formKey.currentState!.validate()){
-                                    content = newValue;
-                                  }
-                                },
-                                onSaved: () {
-                                  formKey.currentState!.save();
-                                  if(formKey.currentState!.validate()){
-                                    context.pop();
-                                  }
-                                },
-                              )),
-                        ),
-                      );
-                    });
+                _projectCreateForm(context);
               },
             ),
           ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
-            sliver: modelList is! LoadingModel
-                ? SliverList.separated(
-                    itemBuilder: (context, index) {
-                      return ProjectListCard.fromModel(
-                          model: pModelList.data![index]);
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 18.h,
-                      );
-                    },
-                    itemCount: pModelList.data!.length)
-                : SliverToBoxAdapter(
-                    child: Container(
-                      child: Text("로딩"),
-                    ),
-                  ),
-          ),
-          if (modelList is ProjectList)
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              sliver: SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 1; i < pModelList.totalPages! + 1; i++)
-                      Text(
-                        i.toString(),
-                        style: m_Heading_02.copyWith(color: GREY_500),
-                      )
-                  ],
-                ),
-              ),
-            )
+          const _ProjectList(),
         ],
       ),
     );
   }
 
-  void onTapFetch(
+  void _onRefresh(WidgetRef ref) {
+    ref.read(projectListProvider.notifier).getList(
+        params: ProjectParams(
+            page: 0,
+            size: 5,
+            direction: 'ASC',
+            state: [ProjectListType.COMPLETE, ProjectListType.ONGOING]));
+    ref.read(isSelectAllProvider.notifier).update((state) => true);
+  }
+
+  void _projectCreateForm(BuildContext context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        showDragHandle: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32.r))),
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Form(
+              autovalidateMode: AutovalidateMode.always,
+              key: formKey,
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: ProjectForm(
+                    onSavedTitle: (String? newValue) {
+                      if (formKey.currentState!.validate()) {
+                        title = newValue;
+                      }
+                    },
+                    onSavedContent: (String? newValue) {
+                      if (formKey.currentState!.validate()) {
+                        content = newValue;
+                      }
+                    },
+                    onSaved: () {
+                      formKey.currentState!.save();
+                      if (formKey.currentState!.validate()) {
+                        context.pop();
+                      }
+                    },
+                  )),
+            ),
+          );
+        });
+  }
+
+  void _onTapFetch(
       {required WidgetRef ref, required List<ProjectListType> state}) {
     ref.read(projectListProvider.notifier).getList(
         params:
@@ -254,6 +215,74 @@ class ProjectListNav extends ConsumerWidget {
                 )
               ],
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProjectList extends ConsumerWidget {
+  const _ProjectList({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    late final ProjectList pModelList;
+
+    final modelList = ref.watch(projectListProvider);
+    if (modelList is ProjectList) {
+      pModelList = modelList as ProjectList;
+    } else if (modelList is ErrorModel) {}
+
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+      sliver: modelList is! LoadingModel
+          ? SliverToBoxAdapter(
+              child: Column(children: [
+                SliverList.separated(
+                    itemBuilder: (context, index) {
+                      return ProjectListCard.fromModel(
+                          model: pModelList.data![index]);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 18.h,
+                      );
+                    },
+                    itemCount: pModelList.data!.length),
+                // page 수
+                _BottomPageCount(
+                  pModelList: pModelList,
+                ),
+              ]),
+            )
+          : SliverToBoxAdapter(
+              child: Container(
+                child: Text("로딩"),
+              ),
+            ),
+    );
+  }
+}
+
+class _BottomPageCount extends StatelessWidget {
+  final ProjectList pModelList;
+
+  const _BottomPageCount({super.key, required this.pModelList});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      sliver: SliverToBoxAdapter(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (int i = 1; i < pModelList.totalPages! + 1; i++)
+              Text(
+                i.toString(),
+                style: m_Heading_02.copyWith(color: GREY_500),
+              )
           ],
         ),
       ),

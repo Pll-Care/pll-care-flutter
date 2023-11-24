@@ -3,10 +3,10 @@ import 'package:pllcare/project/component/project_body.dart';
 
 import '../../common/component/default_appbar.dart';
 
-class ProjectScreen extends StatelessWidget {
+class ProjectListScreen extends StatelessWidget {
   static String get routeName => 'project';
 
-  const ProjectScreen({
+  const ProjectListScreen({
     super.key,
   });
 

@@ -14,16 +14,6 @@ import 'package:pllcare/common/component/default_layout.dart';
 
 import '../../project/component/project_main_card.dart';
 
-// class HomeScreen extends StatelessWidget {
-//
-//   const HomeScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const DefaultLayout( body: HomeBody());
-//   }
-// }
-
 class HomeBody extends ConsumerWidget {
   const HomeBody({super.key});
 
@@ -72,59 +62,13 @@ class HomeBody extends ConsumerWidget {
   }
 }
 
+enum MainCareType { DEADLINE, MOSTLIKE, UPTODATE }
+
 class _MainContent extends ConsumerWidget {
   const _MainContent({super.key});
 
-  Widget getCloseDeadline({required BaseModel model}) {
-    if (model is LoadingModel) {
-      return Center(
-        child: Text("loading"),
-      );
-    } else if (model is ErrorModel) {
-      return Center(
-        child: Text("error"),
-      );
-    }
-    model as ListModel<ProjectCloseDeadLine>;
-    return ProjectMainCard.fromModel(
-        model: model.data.first, cardTitle: '마감 임박 프로젝트');
-  }
-
-  Widget getMostLike({required BaseModel model}) {
-    if (model is LoadingModel) {
-      return Center(
-        child: Text("loading"),
-      );
-    } else if (model is ErrorModel) {
-      return Center(
-        child: Text("error"),
-      );
-    }
-    model as ListModel<ProjectMostLiked>;
-    return ProjectMainCard.fromModel(
-        model: model.data.first, cardTitle: '실시간 인기 프로젝트');
-  }
-
-  Widget getUpToDate({required BaseModel model}) {
-    if (model is LoadingModel) {
-      return Center(
-        child: Text("loading"),
-      );
-    } else if (model is ErrorModel) {
-      return Center(
-        child: Text("error"),
-      );
-    }
-    model as ListModel<ProjectUpToDate>;
-    return ProjectMainCard.fromModel(
-        model: model.data.first, cardTitle: '최근 올라온 프로젝트');
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mostLike = ref.watch(projectMostLikedProvider);
-    final closeDeadline = ref.watch(projectCloseDeadLineProvider);
-    final upToDate = ref.watch(projectUpToDateProvider);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(50.r)),
@@ -147,9 +91,9 @@ class _MainContent extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                getMostLike(model: mostLike),
-                getCloseDeadline(model: closeDeadline),
-                getUpToDate(model: upToDate),
+                _getMainCard(ref: ref, type: MainCareType.MOSTLIKE),
+                _getMainCard(ref: ref, type: MainCareType.DEADLINE),
+                _getMainCard(ref: ref, type: MainCareType.UPTODATE),
               ],
             ),
           ),
@@ -166,6 +110,61 @@ class _MainContent extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Widget _getMainCard({required WidgetRef ref, required MainCareType type}) {
+    return Consumer(
+      builder: (_, ref, __) {
+        BaseModel model = _getModel(type, ref);
+        String title = _getTitle(type);
+
+        if (model is LoadingModel) {
+          return const Center(
+            child: Text("loading"),
+          );
+        } else if (model is ErrorModel) {
+          return const Center(
+            child: Text("error"),
+          );
+        }
+        model as ListModel<ProjectCloseDeadLine>;
+        return ProjectMainCard.fromModel(
+            model: model.data.first, cardTitle: title);
+      },
+    );
+  }
+
+  String _getTitle(MainCareType type) {
+    final String title;
+    switch (type) {
+      case MainCareType.DEADLINE:
+        title = '마감 임박 프로젝트';
+        break;
+      case MainCareType.MOSTLIKE:
+        title = '실시간 인기 프로젝트';
+
+        break;
+      case MainCareType.UPTODATE:
+        title = '최근 올라온 프로젝트';
+        break;
+    }
+    return title;
+  }
+
+  BaseModel _getModel(MainCareType type, WidgetRef ref) {
+    late final BaseModel model;
+    switch (type) {
+      case MainCareType.DEADLINE:
+        model = ref.watch(projectCloseDeadLineProvider);
+        break;
+      case MainCareType.MOSTLIKE:
+        model = ref.watch(projectMostLikedProvider);
+        break;
+      case MainCareType.UPTODATE:
+        model = ref.watch(projectUpToDateProvider);
+        break;
+    }
+    return model;
   }
 }
 

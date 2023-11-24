@@ -7,7 +7,7 @@ import 'package:pllcare/dio/param/param.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/schedule/component/schedule_overview_body.dart';
-import 'package:pllcare/schedule/view/schedule_overview_screen.dart';
+import 'package:pllcare/project/view/project_management_screen.dart';
 import 'package:pllcare/theme.dart';
 
 class ProjectListCard extends ConsumerWidget {

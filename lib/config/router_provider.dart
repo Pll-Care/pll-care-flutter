@@ -7,10 +7,10 @@ import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
 import 'package:pllcare/common/component/default_layout.dart';
 import 'package:pllcare/main/view/home.dart';
-import 'package:pllcare/project/view/project_screen.dart';
+import 'package:pllcare/project/view/project_list_screen.dart';
 import 'package:pllcare/recruit/view/recruit_screen.dart';
 import 'package:pllcare/schedule/component/schedule_overview_body.dart';
-import 'package:pllcare/schedule/view/schedule_overview_screen.dart';
+import 'package:pllcare/project/view/project_management_screen.dart';
 import 'package:pllcare/theme.dart';
 
 import '../home_screen.dart';
@@ -56,8 +56,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                   path: '/management',
-                  name: ProjectScreen.routeName,
-                  builder: (_, state) => const ProjectScreen(),
+                  name: ProjectListScreen.routeName,
+                  builder: (_, state) => const ProjectListScreen(),
                   routes: [
                     GoRoute(
                         path: ':projectId/overview',

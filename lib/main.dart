@@ -44,6 +44,7 @@ class MyApp extends ConsumerWidget {
             textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(GREEN_200),
+                foregroundColor: MaterialStateProperty.all(GREY_100),
                 textStyle:
                     MaterialStateProperty.all(const TextStyle(color: GREY_100)),
                 shape: MaterialStateProperty.all(

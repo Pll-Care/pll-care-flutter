@@ -13,7 +13,7 @@ import 'package:pllcare/recruit/component/recruit_body.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../home_screen.dart';
-import '../../project/view/project_screen.dart';
+import '../../project/view/project_list_screen.dart';
 import '../../recruit/view/recruit_screen.dart';
 import 'default_appbar.dart';
 
@@ -113,7 +113,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           if (index == 0) {
-            context.goNamed(ProjectScreen.routeName);
+            context.goNamed(ProjectListScreen.routeName);
           } else if (index == 1) {
             context.goNamed(HomeScreen.routeName);
           } else {
