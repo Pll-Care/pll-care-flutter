@@ -6,12 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/schedule/provider/date_range_provider.dart';
 import 'package:pllcare/theme.dart';
 import 'package:pllcare/util/util.dart';
 
+import '../model/project_model.dart';
+
 final imageUrlProvider = StateProvider.autoDispose<String?>((ref) => null);
-final checkDateValidateProvider = StateProvider.autoDispose<bool>((ref) => false);
+final checkDateValidateProvider =
+    StateProvider.autoDispose<bool>((ref) => false);
 
 typedef ImagePick = Future<void> Function(WidgetRef ref);
 
@@ -21,6 +25,7 @@ class ProjectForm extends ConsumerWidget {
   final VoidCallback onSaved;
   final ImagePick pickImage;
   final ImagePick deleteImage;
+  final int? projectId;
 
   const ProjectForm({
     super.key,
@@ -29,10 +34,28 @@ class ProjectForm extends ConsumerWidget {
     required this.onSaved,
     required this.pickImage,
     required this.deleteImage,
+    this.projectId,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ProjectModel? projectModel;
+    if (projectId != null) {
+      final bModel = ref.watch(projectFamilyProvider(projectId!));
+
+      if (bModel is ProjectModel) {
+        projectModel = bModel as ProjectModel;
+        // ref
+        //     .read(imageUrlProvider.notifier)
+        //     .update((state) => projectModel!.imageUrl);
+        // final startDate = DateTime.parse(projectModel.startDate);
+        // final endDate = DateTime.parse(projectModel.endDate);
+        // ref
+        //     .read(dateRangeProvider.notifier)
+        //     .updateDate(startDate: startDate, endDate: endDate);
+      }
+    }
+
     final inputFormBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(5.r),
       borderSide: const BorderSide(color: GREEN_200, width: 2.0),
@@ -59,6 +82,7 @@ class ProjectForm extends ConsumerWidget {
             padding: EdgeInsets.only(top: 34.h, bottom: 14.h),
             child: TextFormField(
               maxLength: 20,
+              initialValue: projectModel != null ? projectModel.title : null,
               decoration: inputDecoration.copyWith(
                 hintText: '프로젝트 이름을 입력하세요',
                 hintStyle: m_Heading_01.copyWith(
@@ -67,7 +91,7 @@ class ProjectForm extends ConsumerWidget {
               ),
               cursorColor: GREEN_400,
               validator: (val) {
-                if (val == null  || val.isEmpty) {
+                if (val == null || val.isEmpty) {
                   return '이름은 필수사항입니다.';
                 }
                 if (val.length < 5) {
@@ -140,7 +164,10 @@ class ProjectForm extends ConsumerWidget {
                             style: m_Heading_04.copyWith(color: Colors.red),
                           ),
                         ),
-                      if (!ref.watch(dateRangeProvider.notifier).isSaveValidate() && ref.watch(checkDateValidateProvider))
+                      if (!ref
+                              .watch(dateRangeProvider.notifier)
+                              .isSaveValidate() &&
+                          ref.watch(checkDateValidateProvider))
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
@@ -154,12 +181,14 @@ class ProjectForm extends ConsumerWidget {
                       Expanded(
                         child: TextFormField(
                           cursorColor: GREEN_400,
+                          initialValue: projectModel != null ? projectModel.description : null,
+
                           maxLines: null,
                           maxLength: 500,
                           expands: true,
                           decoration: inputDecoration,
                           validator: (val) {
-                            if (val == null  || val.isEmpty) {
+                            if (val == null || val.isEmpty) {
                               return '내용은 필수사항입니다.';
                             }
                           },
@@ -186,7 +215,7 @@ class ProjectForm extends ConsumerWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(48.r))),
                   child: Text(
-                    '작성 완료',
+                    projectId == null ? '작성 완료' : '수정 완료',
                     style: m_Button_00.copyWith(
                       color: GREY_100,
                     ),
@@ -374,6 +403,3 @@ class _CustomButton extends StatelessWidget {
     );
   }
 }
-
-
-

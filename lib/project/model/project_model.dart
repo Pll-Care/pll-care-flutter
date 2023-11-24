@@ -93,8 +93,7 @@ class ProjectMostLiked extends ProjectMainModel {
       "imageUrl": "string"
  */
 @JsonSerializable()
-class ProjectListModel {
-  final int projectId;
+class ProjectModel extends BaseModel {
   final String title;
   final String description;
   final String startDate;
@@ -102,14 +101,31 @@ class ProjectListModel {
   final StateType state;
   final String? imageUrl;
 
-  ProjectListModel({
-    required this.projectId,
+  ProjectModel({
     required this.title,
     required this.description,
     required this.startDate,
     required this.endDate,
     required this.state,
     required this.imageUrl,
+  });
+
+  factory ProjectModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectModelFromJson(json);
+}
+
+@JsonSerializable()
+class ProjectListModel extends ProjectModel {
+  final int projectId;
+
+  ProjectListModel({
+    required this.projectId,
+    required super.title,
+    required super.description,
+    required super.startDate,
+    required super.endDate,
+    required super.state,
+    required super.imageUrl,
   });
 
   factory ProjectListModel.fromJson(Map<String, dynamic> json) =>
@@ -137,4 +153,17 @@ class ProjectList extends PaginationModel<ProjectListModel> {
   @override
   factory ProjectList.fromJson(Map<String, dynamic> json) =>
       _$ProjectListFromJson(json);
+}
+
+@JsonSerializable()
+class ProjectUpdateResponse extends BaseModel {
+  final String? imageUrl;
+
+  ProjectUpdateResponse({
+    required this.imageUrl,
+  });
+
+  @override
+  factory ProjectUpdateResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProjectUpdateResponseFromJson(json);
 }

@@ -118,8 +118,15 @@ class ProjectListStateNotifier extends StateNotifier<BaseModel> {
   }
 }
 
+final projectFamilyProvider =
+    StateNotifierProvider.family<ProjectStateNotifier, BaseModel?, int>(
+        (ref, projectId) {
+  final repository = ref.watch(projectRepositoryProvider);
+  return ProjectStateNotifier(repository: repository);
+});
+
 final projectProvider =
-    StateNotifierProvider<ProjectStateNotifier, BaseModel?>((ref) {
+    StateNotifierProvider.autoDispose<ProjectStateNotifier, BaseModel?>((ref) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectStateNotifier(repository: repository);
 });
@@ -138,9 +145,47 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     });
   }
 
-  Future<void> createProject({required ProjectCreateParam param}) async {
+  Future<void> getProject({required int projectId}) async {
+    await repository.getProject(projectId: projectId).then((value) {
+      logger.i(value);
+      state = value;
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
+  }
+
+  Future<void> createProject({required CreateProjectFormParam param}) async {
     repository.createProject(param: param).then((value) {
       logger.i('project create');
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
+  }
+
+  Future<void> updateProject(
+      {required int projectId, required UpdateProjectFormParam param}) async {
+    repository.updateProject(param: param, projectId: projectId).then((value) {
+      logger.i('project update');
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
+  }
+
+  Future<void> completeProject({required int projectId}) async {
+    repository.completeProject(projectId: projectId).then((value) {
+      logger.i('project complete');
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
+  }
+
+  Future<void> deleteProject({required int projectId}) async {
+    repository.deleteProject(projectId: projectId).then((value) {
+      logger.i('project complete');
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);

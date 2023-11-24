@@ -10,6 +10,7 @@ import 'package:pllcare/project/view/project_management_screen.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../common/model/default_model.dart';
+import '../../util/custom_dialog.dart';
 
 class ProjectListCard extends ConsumerWidget {
   final int projectId;
@@ -91,7 +92,7 @@ class ProjectListCard extends ConsumerWidget {
                   if (state != StateType.COMPLETE)
                     InkWell(
                       onTap: () {
-                        customDialog(context, ref);
+                        onTapSelfOut(context: context, ref: ref);
                       },
                       child: Container(
                         width: 30,
@@ -153,64 +154,48 @@ class ProjectListCard extends ConsumerWidget {
     );
   }
 
-
-
-  void customDialog(BuildContext context, WidgetRef ref) {
-    final textButtonStyle = TextButton.styleFrom(
-      backgroundColor: GREY_100,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(48.r),
-      ),
-    );
-
-    showDialog(
+  void onTapSelfOut({required BuildContext context, required WidgetRef ref}) {
+    CustomDialog.showCustomDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.r)),
-            backgroundColor: GREEN_200,
-            content: Text(
-              '정말 팀 탈퇴하시겠습니까?\n팀 탈퇴 후에는 복구가 불가합니다.',
-              style: Heading_06.copyWith(
-                color: GREY_100,
+        ref: ref,
+        content: Text(
+          '정말 팀 탈퇴하시겠습니까?\n팀 탈퇴 후에는 복구가 불가합니다.',
+          style: Heading_06.copyWith(
+            color: GREY_100,
+          ),
+        ),
+        actions: [
+          SizedBox(
+            height: 35,
+            width: 80,
+            child: TextButton(
+              onPressed: () {
+                ref
+                    .read(projectProvider.notifier)
+                    .selfOut(projectId: projectId);
+                context.pop();
+              },
+              style: CustomDialog.textButtonStyle,
+              child: Text(
+                '네',
+                style: Button_03.copyWith(color: GREEN_400),
               ),
             ),
-            actionsAlignment: MainAxisAlignment.spaceEvenly,
-            actionsPadding: const EdgeInsets.only(bottom: 24),
-            actions: [
-              SizedBox(
-                height: 35,
-                width: 80,
-                child: TextButton(
-                  onPressed: () {
-                    ref
-                        .read(projectProvider.notifier)
-                        .selfOut(projectId: projectId);
-                    context.pop();
-                  },
-                  style: textButtonStyle,
-                  child: Text(
-                    '네',
-                    style: Button_03.copyWith(color: GREEN_400),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 35,
-                width: 80,
-                child: TextButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    style: textButtonStyle,
-                    child: Text(
-                      '아니오',
-                      style: Button_03.copyWith(color: GREEN_400),
-                    )),
-              )
-            ],
-          );
-        });
+          ),
+          SizedBox(
+            height: 35,
+            width: 80,
+            child: TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                style: CustomDialog.textButtonStyle,
+                child: Text(
+                  '아니오',
+                  style: Button_03.copyWith(color: GREEN_400),
+                )),
+          )
+        ]);
+
   }
 }

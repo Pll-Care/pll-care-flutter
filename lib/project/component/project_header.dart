@@ -35,7 +35,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
         width: width,
         child: Text(
           title,
-          style: m_Heading_03.copyWith(color: GREY_500),
+          style: m_Heading_03,
         ),
       ),
     );
@@ -55,17 +55,17 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
           controller: tabController,
           labelPadding: EdgeInsets.zero,
           indicatorColor: Colors.transparent,
-          labelColor: GREEN_400,
+          labelColor: GREEN_200,
           unselectedLabelColor: GREY_500,
           onTap: (idx) {
             tabController.animateTo(idx);
           },
           tabs: [
-            projectTab(title: '개요'),
+            projectTab(title: '오버뷰'),
             projectTab(title: '회의록'),
-            projectTab(title: '팀원'),
             projectTab(title: '일정'),
             projectTab(title: '평가'),
+            projectTab(title: '팀관리'),
             projectTab(title: '관리'),
           ],
         ),

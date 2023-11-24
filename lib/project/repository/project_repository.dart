@@ -46,5 +46,31 @@ abstract class ProjectRepository {
   @Headers({
     'token': 'true',
   })
-  Future<void> createProject({@Body() required ProjectCreateParam param});
+  Future<void> createProject({@Body() required CreateProjectFormParam param});
+
+  @POST('/api/auth/project/{projectId}/complete')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> completeProject({@Path() required int projectId});
+
+  @DELETE('/api/auth/project/{projectId}')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> deleteProject({@Path() required int projectId});
+
+  @PUT('/api/auth/project/{projectId}')
+  @Headers({
+    'token': 'true',
+  })
+  Future<ProjectUpdateResponse> updateProject(
+      {@Path() required int projectId,
+      @Body() required UpdateProjectFormParam param});
+
+  @GET('/api/auth/project/{projectId}')
+  @Headers({
+    'token': 'true',
+  })
+  Future<ProjectModel> getProject({@Path() required int projectId});
 }

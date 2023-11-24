@@ -18,16 +18,11 @@ import 'package:pllcare/theme.dart';
 
 import '../../common/page/component/bottom_page_count.dart';
 import '../../image/model/image_model.dart';
+import '../../util/custom_form_bottom_sheet.dart';
 
 final isSelectAllProvider = StateProvider.autoDispose<bool>((ref) => true);
 
 class ProjectBody extends ConsumerWidget {
-  late String? title;
-  late String? description;
-  late String? startDate;
-  late String? endDate;
-  final formKey = GlobalKey<FormState>();
-
   ProjectBody({super.key});
 
   @override
@@ -72,104 +67,13 @@ class ProjectBody extends ConsumerWidget {
     required BuildContext context,
     required WidgetRef ref,
   }) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        showDragHandle: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32.r))),
-        context: context,
-        builder: (context) {
-          return GestureDetector(
-            onTap: (){
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: SingleChildScrollView(
-              child: Form(
-                autovalidateMode: AutovalidateMode.always,
-                key: formKey,
-                child: Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: ProjectForm(
-                      onSavedTitle: onSavedTitle,
-                      onSavedDesc: onSavedDesc,
-                      onSaved: () async {
-                        await _createProject(ref, context);
-                      },
-                      pickImage: pickImage,
-                      deleteImage: deleteImage,
-                    )),
-              ),
-            ),
-          );
-        });
-  }
-
-  void onSavedTitle(String? newValue) {
-    if (formKey.currentState!.validate()) {
-      title = newValue;
-    }
-  }
-
-  void onSavedDesc(String? newValue) {
-    if (formKey.currentState!.validate()) {
-      description = newValue;
-    }
-  }
-
-  Future<void> pickImage(WidgetRef ref) async {
-    await ref.read(imageProvider.notifier).uploadImage();
-    final imageModel = ref.read(imageProvider);
-    if (imageModel is ErrorModel) {
-      // todo error handling
-    } else if (imageModel is ImageModel) {
-      ref
-          .read(imageUrlProvider.notifier)
-          .update((state) => imageModel.imageUrl);
-    }
-  }
-
-  Future<void> deleteImage(WidgetRef ref) async {
-    await ref.read(imageProvider.notifier).deleteImage();
-    ref.read(imageUrlProvider.notifier).update((state) => null);
-  }
-
-  Future<void> _createProject(WidgetRef ref, BuildContext context) async {
-    final dateFormat = DateFormat('yyyy-MM-dd');
-    formKey.currentState!.save();
-    ref.read(checkDateValidateProvider.notifier).state = true;
-    if (formKey.currentState!.validate() &&
-        ref.read(dateRangeProvider.notifier).isValidate() && ref.read(dateRangeProvider.notifier).isSaveValidate()) {
-      final startDate =
-          dateFormat.format(ref.read(dateRangeProvider).startDate!);
-      final endDate = dateFormat.format(ref.read(dateRangeProvider).endDate!);
-      final model = ref.read(imageProvider);
-      if (model is ImageModel) {
-        ref.read(imageUrlProvider.notifier).update((state) => model.imageUrl);
-      }
-      final param = ProjectCreateParam(
-          title: title!,
-          description: description!,
-          startDate: startDate,
-          endDate: endDate,
-          imageUrl: ref.read(imageUrlProvider) ?? '');
-      await ref.read(projectProvider.notifier).createProject(param: param);
-      final state = ref.read(projectProvider);
-      if (state is ErrorModel) {
-        log('프로젝트를 생성하지 못했습니다.');
-      } else {
-        await _onRefresh(ref);
-        if (context.mounted) {
-          context.pop();
-        }
-      }
-    }
+    CustomFormBottomSheet.showCustomFormBottomSheet(context: context, ref: ref, isCreate: true);
   }
 
   void _onTapFetch({required WidgetRef ref, required List<StateType> state}) {
     ref.read(projectListProvider.notifier).getList(
         params:
-            ProjectParams(page:1, size: 5, direction: 'DESC', state: state));
+            ProjectParams(page: 1, size: 5, direction: 'DESC', state: state));
     ref.read(isSelectAllProvider.notifier).update((isSelectAll) {
       return state.length == 1 ? false : true;
     });
@@ -297,6 +201,7 @@ class _ProjectList extends ConsumerWidget {
     late final ProjectList pModelList;
 
     final modelList = ref.watch(projectListProvider);
+    log("projectList build!");
     if (modelList is ProjectList) {
       pModelList = modelList as ProjectList;
     } else if (modelList is ErrorModel) {}
@@ -337,7 +242,7 @@ class _ProjectList extends ConsumerWidget {
         ? [StateType.COMPLETE, StateType.ONGOING]
         : [StateType.ONGOING];
     ref.read(projectListProvider.notifier).getList(
-        params:
-            ProjectParams(page: page, size: 5, direction: 'DESC', state: state));
+        params: ProjectParams(
+            page: page, size: 5, direction: 'DESC', state: state));
   }
 }
