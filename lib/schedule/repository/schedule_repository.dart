@@ -2,9 +2,12 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/dio/dio_interceptor.dart' ;
 import 'package:pllcare/dio/provider/dio_provider.dart';
+import 'package:pllcare/schedule/model/schedule_calendar_model.dart';
 import 'package:retrofit/http.dart';
 
-import '../model/schedule_model.dart';
+import '../model/schedule_daily_model.dart';
+import '../model/schedule_filter_model.dart';
+import '../model/schedule_overview_model.dart';
 
 part 'schedule_repository.g.dart';
 
@@ -21,6 +24,27 @@ abstract class ScheduleRepository {
   @Headers({
     'token': 'true',
   })
-  Future<ScheduleModel> getScheduleOverview(
+  Future<ScheduleOverViewModel> getScheduleOverview(
+      {@Query('project_id') required int projectId});
+
+  @GET('/api/auth/schedule/calendarlist')
+  @Headers({
+    'token': 'true',
+  })
+  Future<CalendarScheduleModel> getCalendarSchedule(
+      {@Query('project_id') required int projectId});
+
+  @GET('/api/auth/schedule/daily')
+  @Headers({
+    'token': 'true',
+  })
+  Future<List<ScheduleDailyModel>> getScheduleDaily(
+      {@Query('project_id') required int projectId});
+
+  @GET('/api/auth/schedule/search')
+  @Headers({
+    'token': 'true',
+  })
+  Future<ScheduleFilterList> getScheduleFilter(
       {@Query('project_id') required int projectId});
 }

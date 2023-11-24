@@ -4,6 +4,7 @@ import 'package:pllcare/theme.dart';
 
 class ProjectHeader extends StatefulWidget {
   final TabController tabController;
+
   const ProjectHeader({super.key, required this.tabController});
 
   @override
@@ -15,8 +16,7 @@ class _ProjectHeaderState extends State<ProjectHeader>
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-      delegate:
-          TabBarDelegate(tabController: widget.tabController),
+      delegate: TabBarDelegate(tabController: widget.tabController),
     );
   }
 }
@@ -31,7 +31,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
     double? width,
   }) {
     return Tab(
-      child: Container(
+      child: SizedBox(
         width: width,
         child: Text(
           title,
@@ -54,10 +54,12 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
         child: TabBar(
           controller: tabController,
           labelPadding: EdgeInsets.zero,
-          onTap: (idx){
+          indicatorColor: Colors.transparent,
+          labelColor: GREEN_400,
+          unselectedLabelColor: GREY_500,
+          onTap: (idx) {
             tabController.animateTo(idx);
           },
-
           tabs: [
             projectTab(title: '개요'),
             projectTab(title: '회의록'),

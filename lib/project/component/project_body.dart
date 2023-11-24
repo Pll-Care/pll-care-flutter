@@ -4,21 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:pllcare/common/model/default_model.dart';
-import 'package:pllcare/dio/param/param.dart';
+import 'package:pllcare/project/param/param.dart';
+import 'package:pllcare/image/provider/image_provider.dart';
 import 'package:pllcare/project/component/project_form.dart';
 import 'package:pllcare/project/component/project_list_card.dart';
 import 'package:pllcare/project/model/project_model.dart';
+import 'package:pllcare/project/param/project_create_param.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
-import 'package:pllcare/test_screen.dart';
+import 'package:pllcare/schedule/provider/date_range_provider.dart';
 import 'package:pllcare/theme.dart';
-import 'package:collection/collection.dart';
+
+import '../../common/page/component/component.dart';
+import '../../image/model/image_model.dart';
 
 final isSelectAllProvider = StateProvider.autoDispose<bool>((ref) => true);
 
 class ProjectBody extends ConsumerWidget {
   late String? title;
-  late String? content;
+  late String? description;
+  late String? startDate;
+  late String? endDate;
   final formKey = GlobalKey<FormState>();
 
   ProjectBody({super.key});
@@ -36,13 +43,13 @@ class ProjectBody extends ConsumerWidget {
               onTapAll: () {
                 _onTapFetch(
                     ref: ref,
-                    state: [ProjectListType.ONGOING, ProjectListType.COMPLETE]);
+                    state: [StateType.ONGOING, StateType.COMPLETE]);
               },
               onTapOnGoing: () {
-                _onTapFetch(ref: ref, state: [ProjectListType.ONGOING]);
+                _onTapFetch(ref: ref, state: [StateType.ONGOING]);
               },
               onCreate: () {
-                _projectCreateForm(context);
+                _projectCreateForm(context: context, ref: ref);
               },
             ),
           ),
@@ -52,17 +59,20 @@ class ProjectBody extends ConsumerWidget {
     );
   }
 
-  void _onRefresh(WidgetRef ref) {
+  Future<void> _onRefresh(WidgetRef ref) async {
     ref.read(projectListProvider.notifier).getList(
         params: ProjectParams(
             page: 0,
             size: 5,
             direction: 'ASC',
-            state: [ProjectListType.COMPLETE, ProjectListType.ONGOING]));
+            state: [StateType.COMPLETE, StateType.ONGOING]));
     ref.read(isSelectAllProvider.notifier).update((state) => true);
   }
 
-  void _projectCreateForm(BuildContext context) {
+  void _projectCreateForm({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     showModalBottomSheet(
         isScrollControlled: true,
         showDragHandle: true,
@@ -71,7 +81,7 @@ class ProjectBody extends ConsumerWidget {
         context: context,
         builder: (context) {
           return SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Form(
               autovalidateMode: AutovalidateMode.always,
@@ -80,30 +90,81 @@ class ProjectBody extends ConsumerWidget {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: ProjectForm(
-                    onSavedTitle: (String? newValue) {
-                      if (formKey.currentState!.validate()) {
-                        title = newValue;
-                      }
+                    onSavedTitle: onSavedTitle,
+                    onSavedDesc: onSavedDesc,
+                    onSaved: () async {
+                      await _createProject(ref, context);
                     },
-                    onSavedContent: (String? newValue) {
-                      if (formKey.currentState!.validate()) {
-                        content = newValue;
-                      }
-                    },
-                    onSaved: () {
-                      formKey.currentState!.save();
-                      if (formKey.currentState!.validate()) {
-                        context.pop();
-                      }
-                    },
+                    pickImage: pickImage,
+                    deleteImage: deleteImage,
                   )),
             ),
           );
         });
   }
 
+  void onSavedTitle(String? newValue) {
+    if (formKey.currentState!.validate()) {
+      title = newValue;
+    }
+  }
+
+  void onSavedDesc(String? newValue) {
+    if (formKey.currentState!.validate()) {
+      description = newValue;
+    }
+  }
+
+  void pickImage(WidgetRef ref) async {
+    await ref.read(imageProvider.notifier).uploadImage();
+    final imageModel = ref.read(imageProvider);
+    if (imageModel is ErrorModel) {
+      // todo error handling
+    } else if (imageModel is ImageModel) {
+      ref
+          .read(imageUrlProvider.notifier)
+          .update((state) => imageModel.imageUrl);
+    }
+  }
+
+  void deleteImage(WidgetRef ref) async {
+    await ref.read(imageProvider.notifier).deleteImage();
+    ref.read(imageUrlProvider.notifier).update((state) => null);
+  }
+
+  Future<void> _createProject(WidgetRef ref, BuildContext context) async {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    formKey.currentState!.save();
+    if (formKey.currentState!.validate() &&
+        ref.read(dateRangeProvider.notifier).isValidate()) {
+      final startDate =
+          dateFormat.format(ref.read(dateRangeProvider).startDate!);
+      final endDate = dateFormat.format(ref.read(dateRangeProvider).endDate!);
+      final model = ref.read(imageProvider);
+      if (model is ImageModel) {
+        ref.read(imageUrlProvider.notifier).update((state) => model.imageUrl);
+      }
+      final param = ProjectCreateParam(
+          title: title!,
+          description: description!,
+          startDate: startDate,
+          endDate: endDate,
+          imageUrl: ref.read(imageUrlProvider) ?? '');
+      await ref.read(projectProvider.notifier).createProject(param: param);
+      final state = ref.read(projectProvider);
+      if (state is ErrorModel) {
+        log('프로젝트를 생성하지 못했습니다.');
+      } else {
+        await _onRefresh(ref);
+        if (context.mounted) {
+          context.pop();
+        }
+      }
+    }
+  }
+
   void _onTapFetch(
-      {required WidgetRef ref, required List<ProjectListType> state}) {
+      {required WidgetRef ref, required List<StateType> state}) {
     ref.read(projectListProvider.notifier).getList(
         params:
             ProjectParams(page: 0, size: 5, direction: 'ASC', state: state));
@@ -126,7 +187,6 @@ class ProjectListNav extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSelectAll = ref.watch(isSelectAllProvider);
     final ButtonStyle buttonStyle = TextButton.styleFrom(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       backgroundColor: GREY_100,
@@ -174,46 +234,51 @@ class ProjectListNav extends ConsumerWidget {
                 )
               ],
             ),
-            Row(
-              children: [
-                TextButton(
-                  onPressed: onTapAll,
-                  style: buttonStyle.copyWith(
-                    minimumSize:
-                        MaterialStateProperty.all<Size?>(Size(32.w, 5.h)),
-                    maximumSize:
-                        MaterialStateProperty.all<Size?>(Size(45.w, 30.h)),
-                    backgroundColor: isSelectAll
-                        ? MaterialStateProperty.all<Color?>(GREEN_400)
-                        : null,
-                  ),
-                  child: Text(
-                    '전체',
-                    style: m_Button_01.copyWith(
-                        color: isSelectAll ? GREY_100 : GREY_500),
-                  ),
-                ),
-                SizedBox(
-                  width: 8.w,
-                ),
-                TextButton(
-                  onPressed: onTapOnGoing,
-                  style: buttonStyle.copyWith(
-                    minimumSize:
-                        MaterialStateProperty.all<Size?>(Size(40.w, 5.h)),
-                    maximumSize:
-                        MaterialStateProperty.all<Size?>(Size(65.w, 30.h)),
-                    backgroundColor: isSelectAll
-                        ? null
-                        : MaterialStateProperty.all<Color?>(GREEN_400),
-                  ),
-                  child: Text(
-                    '진행 중',
-                    style: m_Button_01.copyWith(
-                        color: isSelectAll ? GREY_500 : GREY_100),
-                  ),
-                )
-              ],
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final isSelectAll = ref.watch(isSelectAllProvider);
+                return Row(
+                  children: [
+                    TextButton(
+                      onPressed: onTapAll,
+                      style: buttonStyle.copyWith(
+                        minimumSize:
+                            MaterialStateProperty.all<Size?>(Size(32.w, 5.h)),
+                        maximumSize:
+                            MaterialStateProperty.all<Size?>(Size(45.w, 30.h)),
+                        backgroundColor: isSelectAll
+                            ? MaterialStateProperty.all<Color?>(GREEN_400)
+                            : null,
+                      ),
+                      child: Text(
+                        '전체',
+                        style: m_Button_01.copyWith(
+                            color: isSelectAll ? GREY_100 : GREY_500),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    TextButton(
+                      onPressed: onTapOnGoing,
+                      style: buttonStyle.copyWith(
+                        minimumSize:
+                            MaterialStateProperty.all<Size?>(Size(40.w, 5.h)),
+                        maximumSize:
+                            MaterialStateProperty.all<Size?>(Size(65.w, 30.h)),
+                        backgroundColor: isSelectAll
+                            ? null
+                            : MaterialStateProperty.all<Color?>(GREEN_400),
+                      ),
+                      child: Text(
+                        '진행 중',
+                        style: m_Button_01.copyWith(
+                            color: isSelectAll ? GREY_500 : GREY_100),
+                      ),
+                    )
+                  ],
+                );
+              },
             )
           ],
         ),
@@ -251,41 +316,28 @@ class _ProjectList extends ConsumerWidget {
                     },
                     itemCount: pModelList.data!.length),
                 // page 수
-                _BottomPageCount(
+                BottomPageCount<ProjectListModel>(
                   pModelList: pModelList,
+                  onTapPage: (int page) {
+                    _onTapPage(ref, page);
+                  },
                 ),
               ]),
             )
-          : SliverToBoxAdapter(
-              child: Container(
-                child: Text("로딩"),
-              ),
+          : const SliverToBoxAdapter(
+              child: Text("로딩"),
             ),
     );
   }
-}
 
-class _BottomPageCount extends StatelessWidget {
-  final ProjectList pModelList;
-
-  const _BottomPageCount({super.key, required this.pModelList});
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      sliver: SliverToBoxAdapter(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (int i = 1; i < pModelList.totalPages! + 1; i++)
-              Text(
-                i.toString(),
-                style: m_Heading_02.copyWith(color: GREY_500),
-              )
-          ],
-        ),
-      ),
-    );
+  void _onTapPage(WidgetRef ref, int page) {
+    // todo page 넘어가는지 확인
+    log("page = $page");
+    final List<StateType> state = ref.read(isSelectAllProvider)
+        ? [StateType.COMPLETE, StateType.ONGOING]
+        : [StateType.ONGOING];
+    ref.read(projectListProvider.notifier).getList(
+        params:
+            ProjectParams(page: page, size: 5, direction: 'ASC', state: state));
   }
 }

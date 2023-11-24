@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
+import 'package:pllcare/common/provider/provider_observer.dart';
 import 'package:pllcare/theme.dart';
 import 'package:pllcare/main/view/home.dart';
 
@@ -16,7 +17,12 @@ void main() {
     nativeAppKey: '4f2e05ad16de5afc28b263da1980b5a1',
     javaScriptAppKey: 'af256746c2a504b44720df430decd9d3',
   );
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      observers: [CustomProviderObserver(),],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {

@@ -5,6 +5,8 @@ import '../logger/custom_logger.dart';
 
 part 'default_model.g.dart';
 
+enum StateType { TBD, ONGOING, COMPLETE }
+
 abstract class BaseModel {}
 
 class LoadingModel extends BaseModel {}

@@ -117,7 +117,6 @@ class _MainContent extends ConsumerWidget {
       builder: (_, ref, __) {
         BaseModel model = _getModel(type, ref);
         String title = _getTitle(type);
-
         if (model is LoadingModel) {
           return const Center(
             child: Text("loading"),

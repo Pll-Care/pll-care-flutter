@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/logger/custom_logger.dart';
 import 'package:pllcare/common/model/default_model.dart';
-import 'package:pllcare/dio/param/param.dart';
+import 'package:pllcare/project/param/param.dart';
 import 'package:pllcare/project/model/project_model.dart';
+import 'package:pllcare/project/param/project_create_param.dart';
 import 'package:pllcare/project/repository/project_repository.dart';
 
 final projectMostLikedProvider =
@@ -99,7 +100,10 @@ class ProjectListStateNotifier extends StateNotifier<BaseModel> {
   ProjectListStateNotifier({required this.repository}) : super(LoadingModel()) {
     getList(
         params: ProjectParams(
-            page: 0, size: 5, direction: 'ASC', state: [ProjectListType.ONGOING, ProjectListType.COMPLETE]));
+            page: 0,
+            size: 5,
+            direction: 'ASC',
+            state: [StateType.ONGOING, StateType.COMPLETE]));
   }
 
   Future<void> getList({required ProjectParams params}) async {
@@ -126,10 +130,18 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
   ProjectStateNotifier({required this.repository}) : super(null);
 
   Future<void> selfOut({required int projectId}) async {
-    repository
-        .selfOutProject(projectId: projectId)
-        .then((value) {})
-        .catchError((e) {
+    repository.selfOutProject(projectId: projectId).then((value) {
+      logger.i('project selfOut');
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
+  }
+
+  Future<void> createProject({required ProjectCreateParam param}) async {
+    repository.createProject(param: param).then((value) {
+      logger.i('project create');
+    }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);
     });

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
-import 'package:pllcare/dio/param/param.dart';
+import 'package:pllcare/project/param/param.dart';
 
 part 'project_model.g.dart';
 
@@ -99,7 +99,7 @@ class ProjectListModel {
   final String description;
   final String startDate;
   final String endDate;
-  final ProjectListType state;
+  final StateType state;
   final String? imageUrl;
 
   ProjectListModel({
@@ -134,6 +134,7 @@ class ProjectList extends PaginationModel<ProjectListModel> {
       required super.first,
       required super.empty});
 
+  @override
   factory ProjectList.fromJson(Map<String, dynamic> json) =>
       _$ProjectListFromJson(json);
 }

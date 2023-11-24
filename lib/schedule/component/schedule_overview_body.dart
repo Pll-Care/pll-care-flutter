@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pllcare/common/component/default_layout.dart';
-import 'package:pllcare/schedule/model/schedule_model.dart';
+import 'package:pllcare/schedule/model/schedule_overview_model.dart';
 import 'package:pllcare/schedule/provider/schedule_provider.dart';
 import 'package:pllcare/theme.dart';
 
@@ -45,7 +45,7 @@ class _ScheduleOverViewScreenState
         child: CircularProgressIndicator(),
       );
     } else if (bModel is ErrorModel) {}
-    final model = bModel as ScheduleModel;
+    final model = bModel as ScheduleOverViewModel;
 
     return CustomScrollView(
       slivers: [

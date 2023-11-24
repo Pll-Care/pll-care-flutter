@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/dio/dio_interceptor.dart';
-import 'package:pllcare/dio/param/param.dart';
+import 'package:pllcare/project/param/param.dart';
 import 'package:pllcare/dio/provider/dio_provider.dart';
+import 'package:pllcare/project/param/project_create_param.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/project_model.dart';
@@ -40,4 +41,10 @@ abstract class ProjectRepository {
     'token': 'true',
   })
   Future<void> selfOutProject({@Path() required int projectId});
+
+  @POST('/api/auth/project')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> createProject({@Body() required ProjectCreateParam param});
 }

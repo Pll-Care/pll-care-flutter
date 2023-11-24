@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pllcare/dio/param/param.dart';
+import 'package:pllcare/project/param/param.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
-import 'package:pllcare/schedule/component/schedule_overview_body.dart';
 import 'package:pllcare/project/view/project_management_screen.dart';
 import 'package:pllcare/theme.dart';
+
+import '../../common/model/default_model.dart';
 
 class ProjectListCard extends ConsumerWidget {
   final int projectId;
@@ -16,7 +17,7 @@ class ProjectListCard extends ConsumerWidget {
   final String title;
   final String period;
   final String content;
-  final ProjectListType state;
+  final StateType state;
 
   const ProjectListCard({
     super.key,
@@ -86,7 +87,7 @@ class ProjectListCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  if (state != ProjectListType.COMPLETE)
+                  if (state != StateType.COMPLETE)
                     InkWell(
                       onTap: () {
                         customDialog(context, ref);
