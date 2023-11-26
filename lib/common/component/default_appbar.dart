@@ -21,7 +21,7 @@ class DefaultAppbar extends ConsumerWidget {
 
   Widget getLogoIcon() {
     return Image.asset(
-      'assets/images/logo2.png',
+      'assets/images/logo.png',
       width: 80.w,
       height: 20.h,
       fit: BoxFit.fitWidth,

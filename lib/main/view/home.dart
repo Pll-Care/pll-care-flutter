@@ -175,7 +175,7 @@ class _HomeFooter extends StatelessWidget {
     return Column(
       children: [
         Image.asset(
-          'assets/images/logo2.png',
+          'assets/images/logo.png',
           width: 100.w,
           height: 30.h,
           fit: BoxFit.fitWidth,
