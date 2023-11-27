@@ -55,6 +55,7 @@ dependencies:
   shimmer: ^3.0.0
 
   fl_chart: ^0.64.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

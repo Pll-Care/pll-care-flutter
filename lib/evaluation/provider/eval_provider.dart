@@ -7,7 +7,7 @@ import '../../common/model/default_model.dart';
 import '../repository/eval_repository.dart';
 
 class EvalProviderParam extends DefaultProviderType {
-  EvalProviderParam({required super.projectId});
+  const EvalProviderParam({required super.projectId});
 }
 
 final evalProvider = StateNotifierProvider.family

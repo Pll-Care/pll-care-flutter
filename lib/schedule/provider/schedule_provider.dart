@@ -6,7 +6,7 @@ import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
 
 class ScheduleProviderParam extends DefaultProviderType {
-  ScheduleProviderParam({
+  const ScheduleProviderParam({
     required super.projectId,
   });
 }
