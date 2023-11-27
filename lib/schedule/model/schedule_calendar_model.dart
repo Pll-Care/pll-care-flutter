@@ -23,7 +23,7 @@ class CalendarSchedule {
   final String content;
   final String startDate;
   final String endDate;
-  final List<Member> members;
+  final List<CalendarMember> members;
 
   CalendarSchedule({
     required this.scheduleId,
@@ -70,16 +70,16 @@ class Milestone extends CalendarSchedule {
 }
 
 @JsonSerializable()
-class Member {
+class CalendarMember {
   final int id;
   final String name;
   final String imageUrl;
 
-  Member({
+  CalendarMember({
     required this.id,
     required this.name,
     required this.imageUrl,
   });
 
-  factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
+  factory CalendarMember.fromJson(Map<String, dynamic> json) => _$CalendarMemberFromJson(json);
 }

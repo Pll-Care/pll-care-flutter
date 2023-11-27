@@ -4,14 +4,14 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/page/param/page_param.dart';
 import 'package:pllcare/dio/dio_interceptor.dart';
 import 'package:pllcare/dio/provider/dio_provider.dart';
+import 'package:pllcare/management/model/leader_model.dart';
 import 'package:pllcare/schedule/model/schedule_calendar_model.dart';
 import 'package:pllcare/schedule/param/schedule_param.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/apply_model.dart';
 import '../model/team_member_model.dart';
-import '../param/apply_param.dart';
-
+import '../param/management_param.dart';
 
 part 'management_repository.g.dart';
 
@@ -28,15 +28,13 @@ abstract class ManagementRepository {
   @Headers({
     'token': 'true',
   })
-  Future<List<TeamMemberModel>> getMemberList(
-      {@Path() required int projectId});
+  Future<List<TeamMemberModel>> getMemberList({@Path() required int projectId});
 
   @GET('/api/auth/project/{projectId}/applylist')
   @Headers({
     'token': 'true',
   })
-  Future<List<ApplyModel>> getApplyList(
-      {@Path() required int projectId});
+  Future<List<ApplyModel>> getApplyList({@Path() required int projectId});
 
   @POST('/api/auth/project/{projectId}/applyaccept')
   @Headers({
@@ -52,4 +50,31 @@ abstract class ManagementRepository {
   Future<void> applyReject(
       {@Path() required int projectId, @Body() required ApplyParam param});
 
+  @DELETE('/api/auth/project/{projectId}/kickout')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> kickOut(
+      {@Path() required int projectId, @Body() required KickOutParam param});
+
+  @PUT('/api/auth/project/{projectId}/leaderchange')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> changeLeader(
+      {@Path() required int projectId, @Body() required ChangeLeaderParam param});
+
+  @PUT('/api/auth/project/{projectId}/positionchange')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> changePosition(
+      {@Path() required int projectId, @Body() required ChangePositionParam param});
+
+  @GET('/api/auth/project/{projectId}/isleader')
+  @Headers({
+    'token': 'true',
+  })
+  Future<LeaderModel> getIsLeader(
+      {@Path() required int projectId});
 }

@@ -1,14 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pllcare/common/provider/default_provider_type.dart';
 import 'package:pllcare/schedule/repository/schedule_repository.dart';
 
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
 
+class ScheduleProviderParam extends DefaultProviderType {
+  ScheduleProviderParam({
+    required super.projectId,
+  });
+}
+
 final scheduleOverviewProvider =
-    StateNotifierProvider.family<ScheduleOverviewStateNotifier, BaseModel, int>(
-        (ref, projectId) {
+    StateNotifierProvider.family<ScheduleOverviewStateNotifier, BaseModel, ScheduleProviderParam>(
+        (ref, type) {
   final repository = ref.watch(scheduleRepositoryProvider);
-  return ScheduleOverviewStateNotifier(repository: repository, projectId:  projectId);
+  return ScheduleOverviewStateNotifier(
+      repository: repository, projectId: type.projectId);
 });
 
 class ScheduleOverviewStateNotifier extends StateNotifier<BaseModel> {

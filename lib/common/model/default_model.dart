@@ -65,34 +65,7 @@ class ListModel<T> extends BaseModel {
   ListModel({required this.data});
 }
 
-/*
-{
-  "content": [
-    {
-      "projectId": 0,
-      "title": "string",
-      "description": "string",
-      "startDate": "2023-11-17",
-      "endDate": "2023-11-17",
-      "state": "TBD",
-      "imageUrl": "string"
-    }
-  ],
-  "pageNumber": 0,
-  "totalElements": 0,
-  "totalPages": 0,
-  "last": true,
-  "size": 0,
-  "sort": {
-    "empty": true,
-    "sorted": true,
-    "unsorted": true
-  },
-  "numberOfElements": 0,
-  "first": true,
-  "empty": true
-}
- */
+
 @JsonSerializable(
   genericArgumentFactories: true,
 )

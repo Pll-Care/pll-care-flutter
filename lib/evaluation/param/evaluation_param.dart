@@ -1,0 +1,79 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:pllcare/evaluation/model/midterm_model.dart';
+
+part 'evaluation_param.g.dart';
+
+@JsonSerializable()
+class CreateMidTermParam {
+  final int projectId;
+  final int votedId;
+  final int scheduleId;
+  final BadgeType evaluationBadge;
+
+  CreateMidTermParam({
+    required this.projectId,
+    required this.votedId,
+    required this.scheduleId,
+    required this.evaluationBadge,
+  });
+
+  Map<String, dynamic> toJson() => _$CreateMidTermParamToJson(this);
+}
+
+@JsonSerializable()
+class CreateFinalTermParam {
+  final int projectId;
+  final int evaluatedId;
+  final ScoreModel score;
+  final String content;
+
+  CreateFinalTermParam({
+    required this.projectId,
+    required this.evaluatedId,
+    required this.score,
+    required this.content,
+  });
+
+  Map<String, dynamic> toJson() => _$CreateFinalTermParamToJson(this);
+}
+
+@JsonSerializable()
+class ScoreModel {
+  final int sincerity;
+  final int jobPerformance;
+  final int punctuality;
+  final int communication;
+
+  ScoreModel({
+    required this.sincerity,
+    required this.jobPerformance,
+    required this.punctuality,
+    required this.communication,
+  });
+
+  factory ScoreModel.fromJson(Map<String, dynamic> json) => _$ScoreModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ScoreModelToJson(this);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

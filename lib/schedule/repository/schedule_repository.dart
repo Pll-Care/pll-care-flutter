@@ -8,6 +8,7 @@ import 'package:pllcare/schedule/param/schedule_param.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/schedule_daily_model.dart';
+import '../model/schedule_detail_model.dart';
 import '../model/schedule_filter_model.dart';
 import '../model/schedule_overview_model.dart';
 
@@ -50,4 +51,40 @@ abstract class ScheduleRepository {
   Future<ScheduleFilterList> getScheduleFilter(
       {@Queries() required PageParams param,
       @Queries() required ScheduleParams condition});
+
+  @GET('/api/auth/schedule/{scheduleId}')
+  @Headers({
+    'token': 'true',
+  })
+  Future<ScheduleDetailModel> getSchedule(
+      {@Path() required int scheduleId,
+      @Query('project_id') required int projectId});
+
+  @POST('/api/auth/schedule')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> createSchedule({@Body() required ScheduleCreateParam param});
+
+  @POST('/api/auth/schedule/{scheduleId}/state')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> updateScheduleState(
+      {@Path() required int scheduleId,
+      @Body() required ScheduleStateUpdateParam param});
+
+  @PUT('/api/auth/schedule/{scheduleId}')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> updateSchedule({@Body() required ScheduleUpdateParam param});
+
+  @DELETE('/api/auth/schedule/{scheduleId}')
+  @Headers({
+    'token': 'true',
+  })
+  Future<void> deleteSchedule(
+      {@Path() required int scheduleId,
+      @Query('project_id') required int projectId});
 }

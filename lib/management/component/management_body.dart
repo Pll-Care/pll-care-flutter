@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pllcare/management/component/team_member_card.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
-import 'package:pllcare/management/param/apply_param.dart';
+import 'package:pllcare/management/param/management_param.dart';
 import 'package:pllcare/management/provider/management_provider.dart';
 import 'package:pllcare/theme.dart';
 
@@ -144,7 +144,7 @@ class ManagementBody extends StatelessWidget {
   void onAccept(WidgetRef ref, ListModel<ApplyModel> model, int idx) async {
     await ref.read(applyProvider.notifier).applyAccept(
         projectId: projectId,
-        param: ApplyParam(applyId: model.data[idx].applyId));
+        param: ApplyParam(id: model.data[idx].applyId));
     await ref.read(managementProvider(projectId).notifier).getMemberList();
     await ref.read(applyListProvider(projectId).notifier).getApplyList();
   }
@@ -152,7 +152,7 @@ class ManagementBody extends StatelessWidget {
   void onReject(WidgetRef ref, ListModel<ApplyModel> model, int idx) async {
     await ref.read(applyProvider.notifier).applyReject(
         projectId: projectId,
-        param: ApplyParam(applyId: model.data[idx].applyId));
+        param: ApplyParam(id: model.data[idx].applyId));
     await ref.read(applyListProvider(projectId).notifier).getApplyList();
   }
 }

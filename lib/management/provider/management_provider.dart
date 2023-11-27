@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
-import 'package:pllcare/management/param/apply_param.dart';
+import 'package:pllcare/management/param/management_param.dart';
 import 'package:pllcare/management/repository/management_repository.dart';
 
 import '../../common/logger/custom_logger.dart';

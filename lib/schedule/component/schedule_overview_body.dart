@@ -14,32 +14,31 @@ import '../../common/model/default_model.dart';
 class ScheduleOverViewBody extends ConsumerStatefulWidget {
   final int projectId;
 
-   const ScheduleOverViewBody({ super. key , required this.projectId});
+  const ScheduleOverViewBody({super.key, required this.projectId});
 
   @override
   ConsumerState<ScheduleOverViewBody> createState() =>
       _ScheduleOverViewScreenState();
 }
 
-class _ScheduleOverViewScreenState
-    extends ConsumerState<ScheduleOverViewBody> {
+class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(scheduleOverviewProvider(widget.projectId).notifier)
-          .getOverview(projectId: widget.projectId);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   ref
+    //       .read(scheduleOverviewProvider(widget.projectId).notifier)
+    //       .getOverview(projectId: widget.projectId);
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    log(' GoRouterState.of(context).name ${ GoRouterState.of(context).name}');
+    log(' GoRouterState.of(context).name ${GoRouterState.of(context).name}');
 
     log(' MediaQuery.of(context).size.width / 2 ${MediaQuery.of(context).size.width / 2}');
-    final bModel = ref.watch(scheduleOverviewProvider(widget.projectId));
+    final bModel = ref.watch(scheduleOverviewProvider(
+        ScheduleProviderParam(projectId: widget.projectId)));
     if (bModel is LoadingModel) {
       return const Center(
         child: CircularProgressIndicator(),
