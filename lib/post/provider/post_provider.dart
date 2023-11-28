@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/logger/custom_logger.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/post/model/post_model.dart';
+import 'package:pllcare/project/model/project_model.dart';
 
 import '../../common/page/param/page_param.dart';
 import '../../common/provider/default_provider_type.dart';
@@ -32,6 +36,12 @@ class PostProviderParam extends Equatable {
   List<Object?> get props => [type, postId];
 }
 
+final postProvider = StateNotifierProvider.family<PostStateNotifier, BaseModel,
+    PostProviderParam>((ref, param) {
+  final repository = ref.watch(postRepositoryProvider);
+  return PostStateNotifier(repository: repository, param: param);
+});
+
 class PostStateNotifier extends StateNotifier<BaseModel> {
   final PostProviderParam param;
   final PostRepository repository;
@@ -47,7 +57,7 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         getPost();
         break;
       case PostProviderType.getList:
-        getPostList(param: PageParams(page: 0, size: 6, direction: 'DESC'));
+        getPostList(param: PageParams(page: 1, size: 4, direction: 'ASC'));
         break;
       default:
         break;
@@ -114,6 +124,11 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     state = LoadingModel();
     repository.likePost(postId: param.postId!).then((value) {
       logger.i('post like!');
+      final pState = state as PostList;
+      state = pState.data!.map((e) {
+        return e.postId == param.postId! ? e.copyWith(liked: !e.liked) : e;
+      }).toList() as BaseModel; // todo 상태 관리 변경
+      log("갱신!");
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);

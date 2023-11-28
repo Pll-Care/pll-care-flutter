@@ -6,8 +6,9 @@ import '../../common/component/default_appbar.dart';
 class RecruitScreen extends StatelessWidget {
   static String get routeName => 'recruit';
 
-
-  const RecruitScreen({super.key, });
+  const RecruitScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class RecruitScreen extends StatelessWidget {
           const DefaultAppbar(),
         ];
       },
-      body:  const RecruitBody(),
+      body: const RecruitBody(),
     );
   }
 }

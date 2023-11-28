@@ -23,7 +23,7 @@ import '../../util/custom_form_bottom_sheet.dart';
 final isSelectAllProvider = StateProvider.autoDispose<bool>((ref) => true);
 
 class ProjectBody extends ConsumerWidget {
-  ProjectBody({super.key});
+  const ProjectBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -7,16 +7,18 @@ part 'team_member_model.g.dart';
 
 enum PositionType {
   @JsonValue('프론트엔드')
-  FRONTEND,
+  FRONTEND('프론트엔드'),
   @JsonValue('백엔드')
-  BACKEND,
+  BACKEND('백엔드'),
   @JsonValue('미정')
-  NONE,
+  NONE('미정'),
   @JsonValue('디자인')
-  DESIGN,
+  DESIGN('디자인'),
   @JsonValue('기획')
-  PLANNER,
+  PLANNER('기획')
   ;
+   const PositionType(this.name);
+  final String name;
 }
 
 @JsonSerializable()

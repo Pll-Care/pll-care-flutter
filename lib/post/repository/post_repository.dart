@@ -69,5 +69,5 @@ abstract class PostRepository {
   //   'token': 'true',
   // })
   Future<PostList> getPostList(
-      { @Body() required PageParams param});
+      { @Queries() required PageParams param});
 }

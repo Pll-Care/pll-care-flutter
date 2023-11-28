@@ -90,19 +90,18 @@ class RecruitModel {
   Map<String, dynamic> toJson() => _$RecruitModelToJson(this);
 }
 
-
 @JsonSerializable()
 class PostListModel {
   final int postId;
-  final String projectName;
-  final String projectImageUrl;
-  final String title;
-  final String recruitStartDate;
-  final String recruitEndDate;
+  final String? projectName;
+  final String? projectImageUrl;
+  final String? title;
+  final String? recruitStartDate;
+  final String? recruitEndDate;
   final List<TechStack> techStackList;
   final List<RecruitModel> recruitInfoList;
-  final String createdDate;
-  final String modifiedDate;
+  final String? createdDate;
+  final String? modifiedDate;
   final int likeCount;
   final bool liked;
 
@@ -120,6 +119,36 @@ class PostListModel {
     required this.likeCount,
     required this.liked,
   });
+
+  PostListModel copyWith({
+    final int? postId,
+    final String? projectName,
+    final String? projectImageUrl,
+    final String? title,
+    final String? recruitStartDate,
+    final String? recruitEndDate,
+    final List<TechStack>? techStackList,
+    final List<RecruitModel>? recruitInfoList,
+    final String? createdDate,
+    final String? modifiedDate,
+    final int? likeCount,
+    final bool? liked,
+  }) {
+    return PostListModel(
+      postId: postId ?? this.postId,
+      projectName: projectName ?? this.projectName,
+      projectImageUrl: projectImageUrl ?? this.projectImageUrl,
+      title: title ?? this.title,
+      recruitStartDate: recruitStartDate ?? this.recruitStartDate,
+      recruitEndDate: recruitEndDate ?? this.recruitEndDate,
+      techStackList: techStackList ?? this.techStackList,
+      recruitInfoList: recruitInfoList ?? this.recruitInfoList,
+      createdDate: createdDate ?? this.createdDate,
+      modifiedDate: modifiedDate ?? this.modifiedDate,
+      likeCount: likeCount ?? this.likeCount,
+      liked: liked ?? this.liked,
+    );
+  }
 
   factory PostListModel.fromJson(Map<String, dynamic> json) =>
       _$PostListModelFromJson(json);
