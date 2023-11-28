@@ -1,6 +1,6 @@
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
+
 part 'chart_rank_model.g.dart';
 
 @JsonSerializable(
@@ -28,7 +28,7 @@ class ChartRankModel<T, U> extends BaseModel {
 @JsonSerializable(genericArgumentFactories: true)
 class ChartModel<T> {
   final int memberId;
-  final int name;
+  final String name;
   final List<T> evaluation;
 
   ChartModel({
@@ -43,7 +43,6 @@ class ChartModel<T> {
   ) =>
       _$ChartModelFromJson(json, fromJsonT);
 }
-
 
 @JsonSerializable()
 class RankModel {
@@ -60,5 +59,3 @@ class RankModel {
   factory RankModel.fromJson(Map<String, dynamic> json) =>
       _$RankModelFromJson(json);
 }
-
-

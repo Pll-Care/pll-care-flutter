@@ -12,11 +12,13 @@ class FinalEvalProviderParam extends DefaultProviderType {
   final FinalProviderType type;
   final int? evaluationId;
 
-  FinalEvalProviderParam({
+  const FinalEvalProviderParam({
     required super.projectId,
     required this.type,
     this.evaluationId,
   });
+  @override
+  List<Object?> get props => [projectId, type, evaluationId];
 }
 
 final finalEvalProvider = StateNotifierProvider.autoDispose

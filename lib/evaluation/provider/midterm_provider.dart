@@ -12,11 +12,13 @@ class MidEvalProviderParam extends DefaultProviderType {
   final MidProviderType type;
   final int? scheduleId;
 
-  MidEvalProviderParam({
+  const MidEvalProviderParam({
     required super.projectId,
     required this.type,
     this.scheduleId,
   });
+  @override
+  List<Object?> get props => [projectId, type, scheduleId];
 }
 
 final midEvalProvider = StateNotifierProvider.autoDispose

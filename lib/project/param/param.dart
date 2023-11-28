@@ -17,6 +17,6 @@ class ProjectParams  extends PageParams{
     required super.direction,
     required this.state,
   });
-
+  @override
   Map<String, dynamic> toJson() => _$ProjectParamsToJson(this);
 }
