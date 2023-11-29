@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../post/model/post_model.dart';
 import '../../theme.dart';
 
-class RecruitCard extends StatelessWidget {
+class PostCard extends StatelessWidget {
   final int postId;
   final String imageUrl;
   final String title;
@@ -20,7 +20,7 @@ class RecruitCard extends StatelessWidget {
   final bool liked;
   final VoidCallback onTapLike;
 
-  const RecruitCard({
+  const PostCard({
     super.key,
     required this.postId,
     required this.imageUrl,
@@ -34,9 +34,9 @@ class RecruitCard extends StatelessWidget {
     required this.onTapLike,
   });
 
-  factory RecruitCard.fromModel(
+  factory PostCard.fromModel(
       {required PostListModel model, required VoidCallback onTapLike}) {
-    return RecruitCard(
+    return PostCard(
       postId: model.postId,
       imageUrl: model.projectImageUrl ?? '',
       title: model.title ?? '',

@@ -5,16 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pllcare/common/page/component/bottom_page_count.dart';
 import 'package:pllcare/common/page/param/page_param.dart';
+import 'package:pllcare/post/component/post_card.dart';
 import 'package:pllcare/post/model/post_model.dart';
 import 'package:pllcare/post/provider/post_provider.dart';
-import 'package:pllcare/recruit/component/recruit_card.dart';
 
 import '../../common/model/default_model.dart';
 import '../../project/component/project_body.dart';
 import '../../theme.dart';
 
-class RecruitBody extends ConsumerWidget {
-  const RecruitBody({super.key});
+class PostBody extends ConsumerWidget {
+  const PostBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -103,7 +103,7 @@ class _RecruitList extends ConsumerWidget {
                 delegate: SliverChildBuilderDelegate(
                   childCount: pModelList.data!.length,
                   (_, idx) {
-                    return RecruitCard.fromModel(
+                    return PostCard.fromModel(
                       model: pModelList.data![idx],
                       onTapLike: () {
                         ref

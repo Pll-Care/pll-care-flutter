@@ -172,6 +172,32 @@ class PostList extends PaginationModel<PostListModel> {
       required super.first,
       required super.empty});
 
+  PostList copyWith({
+    final List<PostListModel>? data,
+    final int? pageNumber,
+    final int? totalElements,
+    final int? totalPages,
+    final bool? last,
+    final int? size,
+    final PaginationSort? sort,
+    final int? numberOfElements,
+    final bool? first,
+    final bool? empty,
+  }) {
+    return PostList(
+      data: data ?? this.data,
+      pageNumber: pageNumber ?? this.pageNumber,
+      totalElements: totalElements ?? this.totalElements,
+      totalPages: totalPages ?? this.totalPages,
+      last: last ?? this.last,
+      size: size ?? this.size,
+      sort: sort ?? this.sort,
+      numberOfElements: numberOfElements ?? this.numberOfElements,
+      first: first ?? this.first,
+      empty: empty ?? this.empty,
+    );
+  }
+
   factory PostList.fromJson(Map<String, dynamic> json) =>
       _$PostListFromJson(json);
 }

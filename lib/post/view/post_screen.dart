@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pllcare/recruit/component/recruit_body.dart';
 
 import '../../common/component/default_appbar.dart';
+import '../component/post_body.dart';
 
-class RecruitScreen extends StatelessWidget {
-  static String get routeName => 'recruit';
+class PostScreen extends StatelessWidget {
+  static String get routeName => 'post';
 
-  const RecruitScreen({
+  const PostScreen({
     super.key,
   });
 
@@ -18,7 +18,7 @@ class RecruitScreen extends StatelessWidget {
           const DefaultAppbar(),
         ];
       },
-      body: const RecruitBody(),
+      body: const PostBody(),
     );
   }
 }

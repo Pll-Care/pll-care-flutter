@@ -1,21 +1,12 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pllcare/main/view/home.dart';
-import 'package:pllcare/project/component/project_body.dart';
-import 'package:pllcare/project/component/project_header.dart';
-import 'package:pllcare/recruit/component/recruit_body.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../home_screen.dart';
+import '../../post/view/post_screen.dart';
 import '../../project/view/project_list_screen.dart';
-import '../../recruit/view/recruit_screen.dart';
-import 'default_appbar.dart';
 
 class DefaultLayout extends ConsumerStatefulWidget {
   final bool hasInfiniteScroll;
@@ -117,7 +108,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
           } else if (index == 1) {
             context.goNamed(HomeScreen.routeName);
           } else {
-            context.goNamed(RecruitScreen.routeName);
+            context.goNamed(PostScreen.routeName);
           }
         },
         currentIndex: getIndex(context),

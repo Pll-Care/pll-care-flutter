@@ -121,14 +121,17 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
   }
 
   Future<void> likePost() async {
-    state = LoadingModel();
+    // Optimistic Response
+    final pState = state as PostList;
+    final List<PostListModel> model = pState.data!.map((e) {
+      return e.postId == param.postId! ? e.copyWith(liked: !e.liked) : e;
+    }).toList();
+    state = pState.copyWith(data: model);
+    log("갱신!");
+    // state = LoadingModel();
+
     repository.likePost(postId: param.postId!).then((value) {
       logger.i('post like!');
-      final pState = state as PostList;
-      state = pState.data!.map((e) {
-        return e.postId == param.postId! ? e.copyWith(liked: !e.liked) : e;
-      }).toList() as BaseModel; // todo 상태 관리 변경
-      log("갱신!");
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);
