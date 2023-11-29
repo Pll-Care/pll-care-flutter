@@ -90,7 +90,7 @@ class ProjectForm extends ConsumerWidget {
                 ),
               ),
               cursorColor: GREEN_400,
-              validator: (val) {
+              validator: (String? val) {
                 if (val == null || val.isEmpty) {
                   return '이름은 필수사항입니다.';
                 }

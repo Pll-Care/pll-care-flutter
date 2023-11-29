@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pllcare/management/component/management_body.dart';
 
 import '../../common/model/default_model.dart';
 

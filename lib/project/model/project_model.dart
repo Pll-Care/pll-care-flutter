@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
-import 'package:pllcare/project/param/param.dart';
 
 part 'project_model.g.dart';
 

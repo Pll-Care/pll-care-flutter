@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,16 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
 import 'package:pllcare/common/component/default_layout.dart';
-import 'package:pllcare/main/view/home.dart';
 import 'package:pllcare/project/view/project_list_screen.dart';
-import 'package:pllcare/schedule/component/schedule_overview_body.dart';
 import 'package:pllcare/project/view/project_management_screen.dart';
-import 'package:pllcare/theme.dart';
 
 import '../home_screen.dart';
 import '../post/view/post_screen.dart';
-import '../project/component/project_body.dart';
-import '../project/component/project_header.dart';
 import '../test_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();

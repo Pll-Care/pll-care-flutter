@@ -1,12 +1,8 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:pllcare/common/page/param/page_param.dart';
 import 'package:pllcare/dio/dio_interceptor.dart';
 import 'package:pllcare/dio/provider/dio_provider.dart';
 import 'package:pllcare/management/model/leader_model.dart';
-import 'package:pllcare/schedule/model/schedule_calendar_model.dart';
-import 'package:pllcare/schedule/param/schedule_param.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/apply_model.dart';

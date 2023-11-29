@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/dio/dio_interceptor.dart';
 import 'package:pllcare/dio/provider/dio_provider.dart';
 import 'package:pllcare/evaluation/model/chart_rank_model.dart';
-import 'package:pllcare/evaluation/model/participant_model.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/finalterm_model.dart';
-import '../model/midterm_model.dart';
 import '../param/evaluation_param.dart';
 
 part 'final_eval_repository.g.dart';

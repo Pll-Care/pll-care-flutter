@@ -1,16 +1,12 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
-import 'package:pllcare/common/component/default_appbar.dart';
-import 'package:pllcare/common/component/default_layout.dart';
 
 import '../../project/component/project_main_card.dart';
 

@@ -10,7 +10,6 @@ import 'package:pllcare/post/model/post_model.dart';
 import 'package:pllcare/post/provider/post_provider.dart';
 
 import '../../common/model/default_model.dart';
-import '../../project/component/project_body.dart';
 import '../../theme.dart';
 
 class PostBody extends ConsumerWidget {

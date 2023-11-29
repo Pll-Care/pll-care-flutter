@@ -106,6 +106,5 @@ class ApplyPostParam {
     required this.position,
   });
 
-  @override
   Map<String, dynamic> toJson() => _$ApplyPostParamToJson(this);
 }

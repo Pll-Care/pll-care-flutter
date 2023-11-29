@@ -1,13 +1,10 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:pllcare/auth/view/login_screen.dart';
 import 'package:pllcare/common/provider/provider_observer.dart';
 import 'package:pllcare/theme.dart';
-import 'package:pllcare/main/view/home.dart';
 
 import 'config/router_provider.dart';
 

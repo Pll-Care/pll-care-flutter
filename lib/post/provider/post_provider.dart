@@ -5,10 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/logger/custom_logger.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/post/model/post_model.dart';
-import 'package:pllcare/project/model/project_model.dart';
 
 import '../../common/page/param/page_param.dart';
-import '../../common/provider/default_provider_type.dart';
 import '../param/post_param.dart';
 import '../repository/post_repository.dart';
 
