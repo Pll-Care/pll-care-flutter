@@ -4,17 +4,17 @@ import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/common/page/param/page_param.dart';
 import 'package:pllcare/dio/dio_interceptor.dart';
 import 'package:pllcare/dio/provider/dio_provider.dart';
-import 'package:pllcare/user/model/profile_eval_chart_model.dart';
-import 'package:pllcare/user/param/user_param.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/profile_apply_model.dart';
+import '../model/profile_eval_chart_model.dart';
 import '../model/profile_eval_model.dart';
 import '../model/profile_model.dart';
 import '../model/profile_post_model.dart';
 import '../model/project_experience_model.dart';
+import '../param/profile_param.dart';
 
-part 'user_repository.g.dart';
+part 'profile_repository.g.dart';
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   final dio = ref.watch(dioProvider);

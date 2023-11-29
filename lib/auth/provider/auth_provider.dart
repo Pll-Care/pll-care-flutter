@@ -1,10 +1,12 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pllcare/auth/model/auth_model.dart';
 import 'package:pllcare/auth/param/auth_param.dart';
 import 'package:pllcare/auth/repository/auth_repository.dart';
+import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/common/provider/secure_storage_provider.dart';
+
+import '../../common/logger/custom_logger.dart';
 
 final authProvider =
     StateNotifierProvider<AuthStateNotifier, AuthModel?>((ref) {
@@ -31,5 +33,28 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
   void logout() async {
     state = null;
     await storage.deleteAll();
+  }
+}
+
+final memberProvider = StateNotifierProvider((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return MemberStateNotifier(repository: repository);
+});
+
+class MemberStateNotifier extends StateNotifier<BaseModel> {
+  final AuthRepository repository;
+
+  MemberStateNotifier({
+    required this.repository,
+  }) : super(LoadingModel());
+
+  Future<void> getProfileImage() async {
+    await repository.getProfile().then((value) {
+      logger.i(value);
+      state = value;
+    }).catchError((e) {
+      logger.e(e);
+      state = ErrorModel.respToError(e);
+    });
   }
 }

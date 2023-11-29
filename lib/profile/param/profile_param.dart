@@ -8,7 +8,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
 
-part 'user_param.g.dart';
+part 'profile_param.g.dart';
 
 @JsonSerializable()
 class UpdateIntroParam {
