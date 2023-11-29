@@ -55,7 +55,8 @@ class PostCard extends StatelessWidget {
     String position = recruitInfoList
         .map((e) => e.position.name)
         .reduce((value, element) => '$value, $element');
-    log(position);
+    log("title ${title}");
+    log("liked ${liked}");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

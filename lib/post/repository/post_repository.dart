@@ -20,9 +20,9 @@ abstract class PostRepository {
   factory PostRepository(Dio dio) = _PostRepository;
 
   @GET('/api/auth/post/{postId}')
-  // @Headers({
-  //   'token': 'true',
-  // })
+  @Headers({
+    'token': 'true',
+  })
   Future<PostModel> getPost({@Path() required int postId});
 
   @PUT('/api/auth/post/{postId}')
@@ -65,9 +65,9 @@ abstract class PostRepository {
       {@Path() required int postId, @Body() required ApplyPostParam param});
 
   @GET('/api/auth/post/list')
-  // @Headers({
-  //   'token': 'true',
-  // })
+  @Headers({
+    'token': 'true',
+  })
   Future<PostList> getPostList(
       { @Queries() required PageParams param});
 }

@@ -9,12 +9,18 @@ part 'midterm_model.g.dart';
 enum BadgeType {
   @JsonValue('열정적인_참여자')
   PASSIONATE,
+  @JsonValue('아이디어_뱅크')
+  BANK,
+  @JsonValue('탁월한_리더')
+  LEADER,
+  @JsonValue('최고의_서포터')
+  SUPPORTER,
 }
 
 @JsonSerializable()
-class BadgeModel {
+class BadgeModel { // todo 차트 json 수정
   final BadgeType evaluationBadge;
-  final int quantity;
+  final int? quantity;
 
   BadgeModel({required this.evaluationBadge, required this.quantity});
   factory BadgeModel.fromJson(Map<String, dynamic> json) => _$BadgeModelFromJson(json);

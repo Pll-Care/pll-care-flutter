@@ -4,6 +4,7 @@ import 'package:pllcare/evaluation/param/evaluation_param.dart';
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
 import '../../common/provider/default_provider_type.dart';
+import '../model/midterm_model.dart';
 import '../repository/mid_eval_repository.dart';
 
 enum MidProviderType { modal, create, getEval, getChart }
@@ -17,6 +18,7 @@ class MidEvalProviderParam extends DefaultProviderType {
     required this.type,
     this.scheduleId,
   });
+
   @override
   List<Object?> get props => [projectId, type, scheduleId];
 }
@@ -80,6 +82,7 @@ class MidEvalStateNotifier extends StateNotifier<BaseModel> {
     state = LoadingModel();
     repository.getMidTerm(projectId: param.projectId).then((value) {
       logger.i(value);
+      state = ListModel<BadgeModel>(data: value);
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);
@@ -90,6 +93,7 @@ class MidEvalStateNotifier extends StateNotifier<BaseModel> {
     state = LoadingModel();
     repository.getMidTermChart(projectId: param.projectId).then((value) {
       logger.i(value);
+      state = value;
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);

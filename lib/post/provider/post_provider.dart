@@ -55,7 +55,7 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         getPost();
         break;
       case PostProviderType.getList:
-        getPostList(param: PageParams(page: 1, size: 4, direction: 'ASC'));
+        getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
         break;
       default:
         break;
@@ -118,17 +118,22 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> likePost() async {
+  Future<void> likePost({required int postId}) async {
     // Optimistic Response
     final pState = state as PostList;
     final List<PostListModel> model = pState.data!.map((e) {
-      return e.postId == param.postId! ? e.copyWith(liked: !e.liked) : e;
+      if (e.postId == postId) {
+        return e.liked
+            ? e.copyWith(liked: false, likeCount: e.likeCount - 1)
+            : e.copyWith(liked: true, likeCount: e.likeCount + 1);
+      }
+      return e;
     }).toList();
     state = pState.copyWith(data: model);
     log("갱신!");
     // state = LoadingModel();
 
-    repository.likePost(postId: param.postId!).then((value) {
+    repository.likePost(postId: postId).then((value) {
       logger.i('post like!');
     }).catchError((e) {
       logger.e(e);

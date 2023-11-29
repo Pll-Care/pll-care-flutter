@@ -7,7 +7,7 @@ class ParticipantModel {
   final String name;
   final String imageUrl;
   final List<BadgeModel> badgeDtos;
-  final int finalEvalId;
+  final int? finalEvalId;
   final bool me;
 
   ParticipantModel({

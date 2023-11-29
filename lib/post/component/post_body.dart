@@ -109,10 +109,10 @@ class _RecruitList extends ConsumerWidget {
                             .read(
                               postProvider(PostProviderParam(
                                       type: PostProviderType.getList,
-                                      postId: pModelList.data![idx].postId))
+                                      ))
                                   .notifier,
                             )
-                            .likePost();
+                            .likePost(postId: pModelList.data![idx].postId);
                       },
                     );
                   },
