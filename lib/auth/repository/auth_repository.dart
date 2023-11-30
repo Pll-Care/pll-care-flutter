@@ -26,4 +26,10 @@ abstract class AuthRepository {
   @GET('/api/auth/member/image')
   @Headers({'token':'true'})
   Future<MemberModel> getProfile();
+
+  @GET('/api/auth/util/reissuetoken')
+  @Headers({
+    'refreshToken': 'true',
+  })
+  Future<AuthModel> getReIssueToken();
 }

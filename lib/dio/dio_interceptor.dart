@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pllcare/auth/provider/auth_provider.dart';
+import 'package:pllcare/util/repository/util_repository.dart';
 
+import '../auth/model/auth_model.dart';
 import '../common/logger/custom_logger.dart';
 
 const String serverURL = "http://59.6.173.110:8080";
@@ -62,20 +65,20 @@ class CustomDioInterceptor extends Interceptor {
     }
     errorLog.add('[Headers] ${err.requestOptions.headers}');
     logger.w(errorLog.reduce((value, element) => value + element));
-
     // 어세스 토큰이 만료되 경우
     if (err.response!.statusCode == 401 &&
-        err.requestOptions.uri.path != '/dmt-auth/oauth2/token') {
+        err.requestOptions.uri.path != '/api/auth/util/reissuetoken') {
       try {
-        Dio dio = Dio();
-        // Map<String, String> queryParameter = await loadTokenCredential(storage);
-        // dio.options.queryParameters.addAll(queryParameter);
 
-        dio.options.headers['Content-Type'] =
-        'application/x-www-form-urlencoded';
-        var response = await dio.post('$serverURL/dmt-auth/oauth2/token');
-        String newAccessToken = response.data["accessToken"]["tokenValue"];
-        await storage.write(key: "token", value: newAccessToken);
+        Dio dio = Dio();
+        // dio.options.headers['Content-Type'] =
+        // 'application/x-www-form-urlencoded';
+        // var response = await dio.get('$serverURL/api/auth/util/reissuetoken');
+        // String newAccessToken = response.data["accessToken"]["tokenValue"];
+        // await storage.write(key: "token", value: newAccessToken);
+
+        ref.read(authProvider.notifier).reIssueToken();
+        final newAccessToken = ref.read(authProvider)?.accessToken;
 
         err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
         log("[RE-REQUEST] [${err.requestOptions.method}] ${err.requestOptions.baseUrl}${err.requestOptions.path}");
@@ -88,6 +91,7 @@ class CustomDioInterceptor extends Interceptor {
       } on DioException catch (e) {
         // 리프레쉬 토큰 만료 된 경우
         log("리프레쉬 만료 언어선택으로 이동 !!");
+        await ref.read(authProvider.notifier).logout();
         // await ref.read(authProvider.notifier).logout();
         return;
         // handler.reject(e);

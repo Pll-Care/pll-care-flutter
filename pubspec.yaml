@@ -57,6 +57,8 @@ dependencies:
   fl_chart: ^0.64.0
   equatable: ^2.0.5
 
+  debounce_throttle: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

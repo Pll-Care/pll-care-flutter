@@ -40,7 +40,7 @@ abstract class MidEvalRepository {
   @Headers({
     'token': 'true',
   })
-  Future<ChartRankModel<BadgeModel, MidTermRankModel>> getMidTermChart({
+  Future<ChartRankModel<ChartBadgeModel, MidTermRankModel>> getMidTermChart({
     @Query('project_id') required int projectId,
   });
 

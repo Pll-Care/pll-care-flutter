@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
 
@@ -18,16 +17,41 @@ enum BadgeType {
 }
 
 @JsonSerializable()
-class BadgeModel { // todo 차트 json 수정
+class BadgeModel {
   final BadgeType evaluationBadge;
   final int? quantity;
 
   BadgeModel({required this.evaluationBadge, required this.quantity});
-  factory BadgeModel.fromJson(Map<String, dynamic> json) => _$BadgeModelFromJson(json);
+
+  factory BadgeModel.fromJson(Map<String, dynamic> json) =>
+      _$BadgeModelFromJson(json);
 }
 
 @JsonSerializable()
-class MidTermModel extends BaseModel{
+class ChartBadgeModel {
+  // todo 차트 json 수정
+  @JsonKey(name: '열정적인_참여자')
+  final int passionateCnt;
+  @JsonKey(name: '아이디어_뱅크')
+  final int bankCnt;
+  @JsonKey(name: '탁월한_리더')
+  final int leaderCnt;
+  @JsonKey(name: '최고의_서포터')
+  final int supporterCnt;
+
+  ChartBadgeModel({
+    required this.passionateCnt,
+    required this.bankCnt,
+    required this.leaderCnt,
+    required this.supporterCnt,
+  });
+
+  factory ChartBadgeModel.fromJson(Map<String, dynamic> json) =>
+      _$ChartBadgeModelFromJson(json);
+}
+
+@JsonSerializable()
+class MidTermModel extends BaseModel {
   final String title;
   final String startDate;
   final String endDate;
@@ -48,10 +72,8 @@ class MidTermModel extends BaseModel{
       _$MidTermModelFromJson(json);
 }
 
-
-
 @JsonSerializable()
-class MidTermRankModel extends RankModel{
+class MidTermRankModel extends RankModel {
   MidTermRankModel({
     required super.rank,
     required super.name,
@@ -61,4 +83,3 @@ class MidTermRankModel extends RankModel{
   factory MidTermRankModel.fromJson(Map<String, dynamic> json) =>
       _$MidTermRankModelFromJson(json);
 }
-

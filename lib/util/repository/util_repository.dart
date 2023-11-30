@@ -21,9 +21,5 @@ abstract class UtilRepository {
   @GET('/api/auth/util/techstack')
   Future<TechStackList> getTechStack({@Query('tech') required String tech});
 
-  @GET('/api/auth/util/reissuetoken')
-  @Headers({
-    'refreshToken': 'true',
-  })
-  Future<AuthModel> getReIssueToken();
+
 }

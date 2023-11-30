@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pllcare/auth/model/auth_model.dart';
 import 'package:pllcare/auth/param/auth_param.dart';
 import 'package:pllcare/auth/repository/auth_repository.dart';
@@ -30,7 +33,13 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     await storage.write(key: 'refreshToken', value: state!.refreshToken);
   }
 
-  void logout() async {
+  Future<void> reIssueToken() async {
+    state = await repository.getReIssueToken();
+    await storage.write(key: 'accessToken', value: state!.accessToken);
+    await storage.write(key: 'refreshToken', value: state!.refreshToken);
+  }
+
+  Future<void> logout() async {
     state = null;
     await storage.deleteAll();
   }
