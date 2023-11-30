@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 import 'package:pllcare/evaluation/component/participant_card.dart';
+import 'package:pllcare/evaluation/component/rank_card.dart';
 import 'package:pllcare/evaluation/provider/eval_provider.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
@@ -31,7 +35,26 @@ class _EvaluationBodyState extends State<EvaluationBody> {
     final barGroups = data.map((e) => BarChartGroupData(x: e)).toList();
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+              padding: EdgeInsets.only(left: 25.w, top: 14.h, bottom: 14.h),
+              child: Text(
+                '뱃지 개수 차트',
+                style: m_Heading_02.copyWith(color: GREEN_400),
+              )),
+        ),
         ChartComponent(
+          projectId: widget.projectId,
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+              padding: EdgeInsets.only(left: 25.w, bottom: 14.h),
+              child: Text(
+                '기여도 랭킹',
+                style: m_Heading_02.copyWith(color: GREEN_400),
+              )),
+        ),
+        RankCard(
           projectId: widget.projectId,
         ),
         SliverToBoxAdapter(
@@ -49,6 +72,7 @@ class _EvaluationBodyState extends State<EvaluationBody> {
             final pModel = ref.watch(projectFamilyProvider(ProjectProviderParam(
                 type: ProjectProviderType.isCompleted,
                 projectId: widget.projectId)));
+            log("pModel ${pModel.runtimeType}");
 
             if (model is LoadingModel) {
               return const SliverToBoxAdapter(
@@ -57,7 +81,8 @@ class _EvaluationBodyState extends State<EvaluationBody> {
                 ),
               );
             }
-            if (model is ListModel<ParticipantModel> && pModel is ProjectIsCompleted) {
+            if (model is ListModel<ParticipantModel> &&
+                pModel is ProjectIsCompleted) {
               return SliverList.separated(
                   itemBuilder: (_, idx) {
                     return ParticipantCard.fromModel(

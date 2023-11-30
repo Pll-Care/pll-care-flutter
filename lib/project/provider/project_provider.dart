@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/logger/custom_logger.dart';
@@ -155,7 +157,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
   ProjectStateNotifier({
     required this.repository,
     required this.param,
-  }) : super(null);
+  }) : super(LoadingModel()) {
+    init();
+  }
 
   void init() {
     switch (param.type) {
@@ -166,6 +170,7 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
         // getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
         break;
       case ProjectProviderType.isCompleted:
+        log("completed!!");
         getIsCompleted();
         break;
       default:
@@ -201,9 +206,10 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     });
   }
 
-  Future<void> updateProject(
-      { required UpdateProjectFormParam param}) async {
-    repository.updateProject(param: param, projectId: this.param.projectId!).then((value) {
+  Future<void> updateProject({required UpdateProjectFormParam param}) async {
+    repository
+        .updateProject(param: param, projectId: this.param.projectId!)
+        .then((value) {
       logger.i('project update');
     }).catchError((e) {
       logger.e(e);

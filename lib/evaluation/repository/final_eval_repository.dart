@@ -32,7 +32,7 @@ abstract class FinalEvalRepository {
   @Headers({
     'token': 'true',
   })
-  Future<ChartRankModel<ScoreModel, FinalTermRankModel>> getFinalTermChart({
+  Future<FinalChartRankModel<ScoreModel, FinalTermRankModel>> getFinalTermChart({
     @Query('project_id') required int projectId,
   });
 

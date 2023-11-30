@@ -39,7 +39,7 @@ final TextStyle Heading_03 = TextStyle(fontFamily: 'IBMPlexSansKR',fontWeight: F
 final TextStyle Heading_04 = TextStyle(fontFamily: 'IBMPlexSansKR', fontWeight: FontWeight.w600, fontSize: 28.sp);
 final TextStyle Heading_05 = TextStyle(fontFamily: 'IBMPlexSansKR', fontWeight: FontWeight.w600, fontSize: 22.sp);
 final TextStyle Heading_06 = TextStyle(fontFamily: 'NotoSansKR', fontWeight: FontWeight.w500, fontSize: 20.sp); // -4
-final TextStyle Heading_07 = TextStyle(fontFamily: 'NotoSansKR', fontWeight: FontWeight.w900, fontSize: 22.sp);
+final TextStyle Heading_07 = TextStyle(fontFamily: 'NotoSansKR', fontWeight: FontWeight.w900, fontSize: 18.sp); // -4
 
 final TextStyle m_Heading_01 = TextStyle(fontFamily: 'NotoSansKR', fontWeight: FontWeight.w700, fontSize: 16.sp); // -6
 final TextStyle m_Heading_02 = TextStyle(fontFamily: 'IBMPlexSansKR', fontWeight: FontWeight.w700, fontSize: 20.sp);
