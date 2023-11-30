@@ -170,8 +170,11 @@ class ProjectListCard extends ConsumerWidget {
             child: TextButton(
               onPressed: () {
                 ref
-                    .read(projectProvider.notifier)
-                    .selfOut(projectId: projectId);
+                    .read(projectFamilyProvider(ProjectProviderParam(
+                            type: ProjectProviderType.selfOut,
+                            projectId: projectId))
+                        .notifier)
+                    .selfOut();
                 context.pop();
               },
               style: CustomDialog.textButtonStyle,
@@ -195,6 +198,5 @@ class ProjectListCard extends ConsumerWidget {
                 )),
           )
         ]);
-
   }
 }

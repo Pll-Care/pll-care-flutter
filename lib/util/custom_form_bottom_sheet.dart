@@ -114,16 +114,29 @@ class CustomFormBottomSheet {
           imageUrl: ref.read(imageUrlProvider) ?? '');
 
       isCreate
-          ? await ref.read(projectProvider.notifier).createProject(param: param)
-          : await ref.read(projectProvider.notifier).updateProject(
-              param: UpdateProjectFormParam(
-                  title: title!,
-                  description: description!,
-                  startDate: startDate,
-                  endDate: endDate,
-                  imageUrl: ref.read(imageUrlProvider) ?? ''),
-              projectId: projectId!);
-      final state = ref.read(projectProvider);
+          ? await ref
+              .read(projectFamilyProvider(const ProjectProviderParam(
+                type: ProjectProviderType.create,
+              )).notifier)
+              .createProject(param: param)
+          : await ref
+              .read(projectFamilyProvider(ProjectProviderParam(
+                      type: ProjectProviderType.update, projectId: projectId))
+                  .notifier)
+              .updateProject(
+                param: UpdateProjectFormParam(
+                    title: title!,
+                    description: description!,
+                    startDate: startDate,
+                    endDate: endDate,
+                    imageUrl: ref.read(imageUrlProvider) ?? ''),
+              );
+      final state = isCreate
+          ? ref.read(projectFamilyProvider(const ProjectProviderParam(
+              type: ProjectProviderType.create,
+            )))
+          : ref.read(projectFamilyProvider(ProjectProviderParam(
+              type: ProjectProviderType.update, projectId: projectId)));
       if (state is ErrorModel) {
         log('프로젝트를 생성하지 못했습니다.');
       } else {

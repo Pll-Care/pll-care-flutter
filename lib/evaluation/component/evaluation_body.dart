@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pllcare/evaluation/component/participant_card.dart';
 import 'package:pllcare/evaluation/provider/eval_provider.dart';
+import 'package:pllcare/project/model/project_model.dart';
+import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../common/model/default_model.dart';
@@ -36,14 +38,18 @@ class _EvaluationBodyState extends State<EvaluationBody> {
           child: Padding(
               padding: EdgeInsets.only(left: 25.w, bottom: 14.h),
               child: Text(
-            '참여자 보기',
-            style: m_Heading_02.copyWith(color: GREEN_400),
-          )),
+                '참여자 보기',
+                style: m_Heading_02.copyWith(color: GREEN_400),
+              )),
         ),
         Consumer(
           builder: (_, ref, __) {
             final model = ref.watch(
                 evalProvider(EvalProviderParam(projectId: widget.projectId)));
+            final pModel = ref.watch(projectFamilyProvider(ProjectProviderParam(
+                type: ProjectProviderType.isCompleted,
+                projectId: widget.projectId)));
+
             if (model is LoadingModel) {
               return const SliverToBoxAdapter(
                 child: Center(
@@ -51,10 +57,13 @@ class _EvaluationBodyState extends State<EvaluationBody> {
                 ),
               );
             }
-            if (model is ListModel<ParticipantModel>) {
+            if (model is ListModel<ParticipantModel> && pModel is ProjectIsCompleted) {
               return SliverList.separated(
                   itemBuilder: (_, idx) {
-                    return  ParticipantCard.fromModel(model: model.data[idx], isCompleted: false,); // todo completed 가져오기
+                    return ParticipantCard.fromModel(
+                      model: model.data[idx],
+                      isCompleted: pModel.completed,
+                    ); // todo completed 가져오기
                   },
                   separatorBuilder: (_, idx) {
                     return SizedBox(

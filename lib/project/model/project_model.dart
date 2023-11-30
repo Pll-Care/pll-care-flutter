@@ -167,31 +167,15 @@ class ProjectUpdateResponse extends BaseModel {
       _$ProjectUpdateResponseFromJson(json);
 }
 
+@JsonSerializable()
+class ProjectIsCompleted extends BaseModel {
+  final bool completed;
 
-/*
-    {
-      "postId": 0,
-      "projectName": "string",
-      "projectImageUrl": "string",
-      "title": "string",
-      "recruitStartDate": "2023-11-28",
-      "recruitEndDate": "2023-11-28",
-      "techStackList": [
-        {
-          "name": "string",
-          "imageUrl": "string"
-        }
-      ],
-      "recruitInfoList": [
-        {
-          "position": "미정",
-          "currentCnt": 0,
-          "totalCnt": 1
-        }
-      ],
-      "createdDate": "2023-11-28T07:51:31.815Z",
-      "modifiedDate": "2023-11-28T07:51:31.815Z",
-      "likeCount": 0,
-      "liked": true
-    }
- */
+  ProjectIsCompleted({
+    required this.completed,
+  });
+
+  @override
+  factory ProjectIsCompleted.fromJson(Map<String, dynamic> json) =>
+      _$ProjectIsCompletedFromJson(json);
+}

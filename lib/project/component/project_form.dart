@@ -41,7 +41,8 @@ class ProjectForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ProjectModel? projectModel;
     if (projectId != null) {
-      final bModel = ref.watch(projectFamilyProvider(projectId!));
+      final bModel = ref.watch(projectFamilyProvider(ProjectProviderParam(
+          type: ProjectProviderType.get, projectId: projectId!)));
 
       if (bModel is ProjectModel) {
         projectModel = bModel as ProjectModel;
@@ -181,8 +182,9 @@ class ProjectForm extends ConsumerWidget {
                       Expanded(
                         child: TextFormField(
                           cursorColor: GREEN_400,
-                          initialValue: projectModel != null ? projectModel.description : null,
-
+                          initialValue: projectModel != null
+                              ? projectModel.description
+                              : null,
                           maxLines: null,
                           maxLength: 500,
                           expands: true,

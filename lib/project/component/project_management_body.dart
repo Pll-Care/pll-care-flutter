@@ -25,7 +25,6 @@ class ProjectManagementBody extends ConsumerWidget {
 
   const ProjectManagementBody({super.key, required this.projectId});
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
@@ -59,9 +58,14 @@ class ProjectManagementBody extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              await ref.read(projectProvider.notifier).completeProject(
-                  projectId: projectId);
-              final state = ref.read(projectProvider);
+              await ref
+                  .read(projectFamilyProvider(ProjectProviderParam(
+                          type: ProjectProviderType.complete,
+                          projectId: projectId))
+                      .notifier)
+                  .completeProject();
+              final state = ref.read(projectFamilyProvider(ProjectProviderParam(
+                  type: ProjectProviderType.complete, projectId: projectId)));
               if (context.mounted && state is! ErrorModel) {
                 context.pop();
                 context.goNamed(ProjectListScreen.routeName);
@@ -99,9 +103,14 @@ class ProjectManagementBody extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              await ref.read(projectProvider.notifier).deleteProject(
-                  projectId: projectId);
-              final state = ref.read(projectProvider);
+              await ref
+                  .read(projectFamilyProvider(ProjectProviderParam(
+                          type: ProjectProviderType.delete,
+                          projectId: projectId))
+                      .notifier)
+                  .deleteProject();
+              final state = ref.read(projectFamilyProvider(ProjectProviderParam(
+                  type: ProjectProviderType.delete, projectId: projectId)));
               if (context.mounted && state is! ErrorModel) {
                 context.pop();
                 context.goNamed(ProjectListScreen.routeName);
@@ -126,18 +135,19 @@ class ProjectManagementBody extends ConsumerWidget {
         ]);
   }
 
-  void onTapUpdate({required BuildContext context, required WidgetRef ref}) async {
-   await ref.read(projectFamilyProvider(projectId).notifier).getProject(projectId: projectId);
-    final bModel = ref.read(projectFamilyProvider(projectId));
-    if(bModel is ProjectModel){
-      if(context.mounted) {
+  void onTapUpdate(
+      {required BuildContext context, required WidgetRef ref}) async {
+    await ref
+        .read(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)).notifier)
+        .getProject();
+    final bModel = ref.read(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)));
+    if (bModel is ProjectModel) {
+      if (context.mounted) {
         CustomFormBottomSheet.showCustomFormBottomSheet(
-          context: context, ref: ref, isCreate: false, projectId: projectId);
+            context: context, ref: ref, isCreate: false, projectId: projectId);
       }
     }
-
   }
-
 }
 
 class _ManageCard extends ConsumerWidget {
