@@ -42,6 +42,6 @@ abstract class FinalEvalRepository {
   })
   Future<FinalTermModel> getFinalTerm({
     @Query('project_id') required int projectId,
-    @Query('evaluationId') required int evaluationId,
+    @Path('evaluationId') required int evaluationId,
   });
 }

@@ -39,10 +39,10 @@ class CreateFinalTermParam {
 
 @JsonSerializable()
 class ScoreModel {
-  final int sincerity;
-  final int jobPerformance;
-  final int punctuality;
-  final int communication;
+  final num sincerity;
+  final num jobPerformance;
+  final num punctuality;
+  final num communication;
 
   ScoreModel({
     required this.sincerity,
@@ -51,29 +51,22 @@ class ScoreModel {
     required this.communication,
   });
 
-  factory ScoreModel.fromJson(Map<String, dynamic> json) => _$ScoreModelFromJson(json);
+  ScoreModel copyWith({
+    num? sincerity,
+    num? jobPerformance,
+    num? punctuality,
+    num? communication,
+  }) {
+    return ScoreModel(
+      sincerity: sincerity ?? this.sincerity,
+      jobPerformance: jobPerformance ?? this.jobPerformance,
+      punctuality: punctuality ?? this.punctuality,
+      communication: communication ?? this.communication,
+    );
+  }
+
+  factory ScoreModel.fromJson(Map<String, dynamic> json) =>
+      _$ScoreModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$ScoreModelToJson(this);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

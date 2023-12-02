@@ -7,13 +7,15 @@ part 'midterm_model.g.dart';
 
 enum BadgeType {
   @JsonValue('열정적인_참여자')
-  PASSIONATE,
+  PASSIONATE('열정적인 참여자'),
   @JsonValue('아이디어_뱅크')
-  BANK,
+  BANK('아이디어 뱅크'),
   @JsonValue('탁월한_리더')
-  LEADER,
+  LEADER('탁월한 리더'),
   @JsonValue('최고의_서포터')
-  SUPPORTER,
+  SUPPORTER('최고의 서포터');
+  const BadgeType(this.name);
+  final String name;
 }
 
 @JsonSerializable()

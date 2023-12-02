@@ -119,7 +119,7 @@ class CustomDioInterceptor extends Interceptor {
 
     }
 
-    // handler.reject(err);
+    handler.reject(err);
     // return handler.resolve(err.response!);
   }
 

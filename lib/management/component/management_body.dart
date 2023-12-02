@@ -5,9 +5,12 @@ import 'package:pllcare/management/component/team_member_card.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
 import 'package:pllcare/management/param/management_param.dart';
 import 'package:pllcare/management/provider/management_provider.dart';
+import 'package:pllcare/project/model/project_model.dart';
+import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../common/model/default_model.dart';
+import '../../dio/error/error_type.dart';
 import '../model/apply_model.dart';
 import 'apply_card.dart';
 
@@ -94,6 +97,16 @@ class ManagementBody extends StatelessWidget {
         ),
         Consumer(
           builder: (_, ref, child) {
+            // final pModel = ref.watch(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.isCompleted, projectId: projectId)));
+            // if(pModel is LoadingModel){
+            //
+            // }else if(pModel is ErrorModel){
+            //
+            // }
+            // if((pModel as ProjectIsCompleted).completed){
+            //   return
+            // }
+
             final bModel = ref.watch(applyListProvider(projectId));
             if (bModel is LoadingModel) {
               return const SliverToBoxAdapter(
@@ -102,6 +115,7 @@ class ManagementBody extends StatelessWidget {
                 ),
               );
             } else if (bModel is ErrorModel) {
+              // bModel.code == ProjectErrorType.message;
               return const SliverToBoxAdapter(
                 child: Center(
                   child: Text("에러"),

@@ -144,7 +144,7 @@ class ProjectProviderParam extends Equatable {
   List<Object?> get props => [type, projectId];
 }
 
-final projectFamilyProvider = StateNotifierProvider.family<ProjectStateNotifier,
+final projectFamilyProvider = StateNotifierProvider.family.autoDispose<ProjectStateNotifier,
     BaseModel?, ProjectProviderParam>((ref, param) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectStateNotifier(repository: repository, param: param);

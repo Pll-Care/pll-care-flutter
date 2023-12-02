@@ -89,7 +89,7 @@ class FinalChartModel<T> {
 class RankModel {
   final int rank;
   final String name;
-  final int quantity;
+  final num quantity;
 
   RankModel({
     required this.rank,

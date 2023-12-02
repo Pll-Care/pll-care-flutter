@@ -31,8 +31,6 @@ class EvaluationBody extends StatefulWidget {
 class _EvaluationBodyState extends State<EvaluationBody> {
   @override
   Widget build(BuildContext context) {
-    final data = [12, 5, 4, 8, 10];
-    final barGroups = data.map((e) => BarChartGroupData(x: e)).toList();
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -48,7 +46,7 @@ class _EvaluationBodyState extends State<EvaluationBody> {
         ),
         SliverToBoxAdapter(
           child: Padding(
-              padding: EdgeInsets.only(left: 25.w, bottom: 14.h),
+              padding: EdgeInsets.only(left: 25.w, bottom: 14.h, top: 25.h),
               child: Text(
                 '기여도 랭킹',
                 style: m_Heading_02.copyWith(color: GREEN_400),
@@ -72,7 +70,6 @@ class _EvaluationBodyState extends State<EvaluationBody> {
             final pModel = ref.watch(projectFamilyProvider(ProjectProviderParam(
                 type: ProjectProviderType.isCompleted,
                 projectId: widget.projectId)));
-            log("pModel ${pModel.runtimeType}");
 
             if (model is LoadingModel) {
               return const SliverToBoxAdapter(
@@ -85,17 +82,21 @@ class _EvaluationBodyState extends State<EvaluationBody> {
                 pModel is ProjectIsCompleted) {
               return SliverList.separated(
                   itemBuilder: (_, idx) {
-                    return ParticipantCard.fromModel(
-                      model: model.data[idx],
-                      isCompleted: pModel.completed,
-                    ); // todo completed 가져오기
+                    if (model.data.length > idx) {
+                      return ParticipantCard.fromModel(
+                        model: model.data[idx],
+                        isCompleted: pModel.completed,
+                        projectId: widget.projectId,
+                      );
+                    }
+                    return null;
                   },
                   separatorBuilder: (_, idx) {
                     return SizedBox(
                       height: 15.h,
                     );
                   },
-                  itemCount: model.data.length);
+                  itemCount: model.data.length + 1);
             }
             // final pModel = model as ListModel<ParticipantModel>;
             return const SliverToBoxAdapter(child: Text("error"));
