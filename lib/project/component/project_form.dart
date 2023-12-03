@@ -83,7 +83,7 @@ class ProjectForm extends ConsumerWidget {
             padding: EdgeInsets.only(top: 34.h, bottom: 14.h),
             child: TextFormField(
               maxLength: 20,
-              initialValue: projectModel != null ? projectModel.title : null,
+              initialValue: projectModel?.title,
               decoration: inputDecoration.copyWith(
                 hintText: '프로젝트 이름을 입력하세요',
                 hintStyle: m_Heading_01.copyWith(
@@ -98,6 +98,7 @@ class ProjectForm extends ConsumerWidget {
                 if (val.length < 5) {
                   return '이름은 다섯 글자 이상 입력 해주셔야 합니다.';
                 }
+                return null;
               },
               onSaved: onSavedTitle,
             ),
@@ -182,9 +183,7 @@ class ProjectForm extends ConsumerWidget {
                       Expanded(
                         child: TextFormField(
                           cursorColor: GREEN_400,
-                          initialValue: projectModel != null
-                              ? projectModel.description
-                              : null,
+                          initialValue: projectModel?.description,
                           maxLines: null,
                           maxLength: 500,
                           expands: true,
@@ -193,6 +192,7 @@ class ProjectForm extends ConsumerWidget {
                             if (val == null || val.isEmpty) {
                               return '내용은 필수사항입니다.';
                             }
+                            return null;
                           },
                           onSaved: onSavedDesc,
                         ),

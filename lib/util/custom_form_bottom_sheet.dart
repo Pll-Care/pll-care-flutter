@@ -112,6 +112,8 @@ class CustomFormBottomSheet {
           startDate: startDate,
           endDate: endDate,
           imageUrl: ref.read(imageUrlProvider) ?? '');
+      log("title $title");
+      log("description $description");
 
       isCreate
           ? await ref

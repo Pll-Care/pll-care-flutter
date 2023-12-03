@@ -164,7 +164,7 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
   void init() {
     switch (param.type) {
       case ProjectProviderType.get:
-        getProject();
+        // getProject();
         break;
       case ProjectProviderType.getList:
         // getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
@@ -187,10 +187,10 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     });
   }
 
-  Future<void> getProject() async {
+  Future<BaseModel?> getProject() async {
     await repository.getProject(projectId: param.projectId!).then((value) {
       logger.i(value);
-      state = value;
+      return state = value;
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);
