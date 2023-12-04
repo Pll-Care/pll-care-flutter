@@ -55,6 +55,8 @@ dependencies:
   shimmer: ^3.0.0
 
   fl_chart: ^0.64.0
+
+  table_calendar: ^3.0.9
   equatable: ^2.0.5
 
   debounce_throttle: ^2.0.0

@@ -5,6 +5,7 @@ import 'package:pllcare/schedule/component/schedule_overview_body.dart';
 import '../../common/component/default_appbar.dart';
 import '../../evaluation/component/evaluation_body.dart';
 import '../../management/component/management_body.dart';
+import '../../schedule/component/schedule_body.dart';
 import '../component/project_management_body.dart';
 
 class ProjectManagementScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _ProjectManagementScreenState extends State<ProjectManagementScreen>
         children: [
           ScheduleOverViewBody(projectId: widget.projectId),
           ScheduleOverViewBody(projectId: widget.projectId),
-          ScheduleOverViewBody(projectId: widget.projectId),
+          ScheduleBody(projectId: widget.projectId),
           EvaluationBody(projectId: widget.projectId),
           ManagementBody(projectId: widget.projectId),
           ProjectManagementBody(projectId: widget.projectId),
