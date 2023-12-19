@@ -25,7 +25,7 @@ part 'schedule_daily_model.g.dart';
 enum ScheduleCategory { MILESTONE, MEETING }
 
 @JsonSerializable()
-class ScheduleDailyModel{
+class ScheduleDailyModel {
   final int scheduleId;
   final String title;
   final String startDate;

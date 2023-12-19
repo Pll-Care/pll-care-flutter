@@ -36,8 +36,8 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
     log(' GoRouterState.of(context).name ${GoRouterState.of(context).name}');
 
     log(' MediaQuery.of(context).size.width / 2 ${MediaQuery.of(context).size.width / 2}');
-    final bModel = ref.watch(scheduleOverviewProvider(
-        ScheduleProviderParam(projectId: widget.projectId)));
+    final bModel = ref.watch(scheduleOverviewProvider(ScheduleProviderParam(
+        projectId: widget.projectId, type: ScheduleProviderType.getOverview)));
     if (bModel is LoadingModel) {
       return const Center(
         child: CircularProgressIndicator(),

@@ -97,27 +97,27 @@ class CustomDioInterceptor extends Interceptor {
         // handler.reject(e);
       }
     }
-    switch (err.response?.statusCode) {
-      case 400:
-        if (err.response!.data['_metadata']['exception'] ==
-            'java.rmi.NoSuchObjectException') {
-          // showToast(
-          //     context: null, message: tr("data_null"), type: ToastType.ERROR);
-          log("400 Error = ${err.response!}");
-          // return handler.resolve(err.response!);
-        }
-    // case 401:
-    // case 404:
-    // case 409:
-    // case 500:
-    }
-    log("err.type = ${err.type}");
-    if (err.type == DioExceptionType.badResponse) {
-      print(
-          "err.response!.data['_metadata'] ${err.response!.data}");
-      // return handler.resolve(err.response!);
-
-    }
+    // switch (err.response?.statusCode) {
+    //   case 400:
+    //     if (err.response!.data['_metadata']['exception'] ==
+    //         'java.rmi.NoSuchObjectException') {
+    //       // showToast(
+    //       //     context: null, message: tr("data_null"), type: ToastType.ERROR);
+    //       log("400 Error = ${err.response!}");
+    //       // return handler.resolve(err.response!);
+    //     }
+    // // case 401:
+    // // case 404:
+    // // case 409:
+    // // case 500:
+    // }
+    // log("err.type = ${err.type}");
+    // if (err.type == DioExceptionType.badResponse) {
+    //   print(
+    //       "err.response!.data['_metadata'] ${err.response!.data}");
+    //   // return handler.resolve(err.response!);
+    //
+    // }
 
     handler.reject(err);
     // return handler.resolve(err.response!);

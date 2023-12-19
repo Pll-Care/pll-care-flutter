@@ -30,7 +30,7 @@ abstract class ScheduleRepository {
   Future<ScheduleOverViewModel> getScheduleOverview(
       {@Query('project_id') required int projectId});
 
-  @GET('/api/auth/schedule/calendarlist')
+  @GET('/api/auth/schedule/calenderlist')
   @Headers({
     'token': 'true',
   })
