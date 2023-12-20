@@ -140,6 +140,8 @@ class ScheduleFilterFetch extends _$ScheduleFilterFetch{
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = (state as ErrorModel);
+      logger.e('error code ${error.code}, ${error.message}');
     });
   }
 }

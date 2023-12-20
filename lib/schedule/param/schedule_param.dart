@@ -16,13 +16,13 @@ class ScheduleParams {
   final int? projectId;
   final int? memberId;
   final ScheduleCategory? scheduleCategory;
-  final bool? previous;
+  // final bool? previous; // todo previous null issue 해결 => convert error string to boolean
 
   ScheduleParams({
     this.projectId,
     this.memberId,
     this.scheduleCategory,
-    this.previous,
+    // this.previous,
   });
 
   Map<String, dynamic> toJson() => _$ScheduleParamsToJson(this);

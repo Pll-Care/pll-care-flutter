@@ -1,5 +1,6 @@
 // final scheduleFilterProvider =
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/management/provider/management_provider.dart';
@@ -13,14 +14,15 @@ enum FilterType {
   ALL,
   PLAN,
   MEETING,
-  PREVIOUS,
+  PREVIOUS;
+
 }
 
-class ScheduleFilterModel {
+class ScheduleFilterModel extends Equatable{
   final FilterType filterType;
   final int? memberId;
 
-  ScheduleFilterModel({
+  const ScheduleFilterModel({
     required this.filterType,
     required this.memberId,
   });
@@ -34,6 +36,13 @@ class ScheduleFilterModel {
       memberId: memberId ?? this.memberId,
     );
   }
+
+  @override
+  List<Object?> get props => [filterType, memberId];
+
+  @override
+  bool? get stringify => true;
+
 }
 
 // @Riverpod()
@@ -70,7 +79,7 @@ class ScheduleFilterStateNotifier extends StateNotifier<ScheduleFilterModel> {
   final int? memberId;
 
   ScheduleFilterStateNotifier({this.memberId})
-      : super(ScheduleFilterModel(
+      : super(const ScheduleFilterModel(
           filterType: FilterType.ALL,
           memberId: null,
         ));

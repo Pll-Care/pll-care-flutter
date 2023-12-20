@@ -229,7 +229,6 @@ class _ProjectList extends ConsumerWidget {
   }
 
   void _onTapPage(WidgetRef ref, int page) {
-    // todo page 넘어가는지 확인
     log("page = $page");
     final List<StateType> state = ref.read(isSelectAllProvider)
         ? [StateType.COMPLETE, StateType.ONGOING]
