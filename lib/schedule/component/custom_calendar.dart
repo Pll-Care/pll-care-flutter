@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/project/model/project_model.dart';
+import 'package:pllcare/schedule/component/schedule_create_form.dart';
 import 'package:pllcare/schedule/provider/schedule_provider.dart';
+import 'package:pllcare/schedule/provider/widget/schedule_create_form_provider.dart';
 import 'package:pllcare/theme.dart';
+import 'package:pllcare/util/custom_dialog.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:developer';
 import 'package:collection/collection.dart';
+import '../../project/provider/project_provider.dart';
 import '../model/schedule_calendar_model.dart';
+import '../model/schedule_daily_model.dart';
+import '../param/schedule_param.dart';
+import 'calendar_component.dart';
 
 class CustomCalendar extends ConsumerStatefulWidget {
   final int projectId;
@@ -29,50 +38,8 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
   Map<DateTime, List<Event>> events = {};
   List<CalendarSchedule> calendarSchedule = [];
   List<CalendarSchedule> calendarMark = [];
-
-  final HeaderStyle headerStyle = HeaderStyle(
-    formatButtonVisible: false,
-    titleCentered: true,
-    titleTextStyle: m_Heading_03.copyWith(color: GREY_500),
-  );
-  CalendarStyle calendarStyle = CalendarStyle(
-    rangeHighlightScale: 1.0,
-    rangeHighlightColor: GREEN_200,
-    selectedDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    rangeStartDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    rangeEndDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    markerDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    todayDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    withinRangeDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    rangeEndTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    rangeStartTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    withinRangeTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    defaultTextStyle: m_Heading_03.copyWith(color: GREY_500),
-    outsideTextStyle: m_Heading_03.copyWith(color: GREY_400),
-    holidayTextStyle: m_Heading_03.copyWith(color: Colors.red),
-    weekendTextStyle: m_Heading_03.copyWith(color: GREY_500),
-    selectedTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    canMarkersOverflow: false,
-  );
-
+  late String title;
+  late String content;
   DateTime getOnlyYMd(DateTime day) {
     return DateTime(day.year, day.month, day.day);
   }
@@ -102,6 +69,7 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
       calendarMark = [...calendar.milestones!, ...calendar.meetings!];
     }
 
+
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       sliver: SliverToBoxAdapter(
@@ -113,6 +81,7 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
               focusedDay: selectedDay,
               firstDay: DateTime(2020, 1, 1),
               lastDay: DateTime(2999),
+              daysOfWeekHeight: 24.h,
               locale: 'ko_KR',
               calendarFormat: CalendarFormat.month,
               onRangeSelected: (start, end, focusedDay) {
@@ -187,20 +156,36 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                               },
                               itemCount: calendarSchedule.length),
                         ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            backgroundColor: GREY_100,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(48.r),
-                                side: const BorderSide(
-                                    color: GREEN_200, width: 2)),
-                          ),
-                          child: Text(
-                            '새 일정 생성',
-                            style: m_Button_03.copyWith(color: GREEN_400),
+                      Consumer(
+                        builder: (BuildContext context, WidgetRef ref,
+                            Widget? child) {
+                          final isCompleted = ref.watch(projectFamilyProvider(
+                              ProjectProviderParam(
+                                  type: ProjectProviderType.isCompleted,
+                                  projectId: widget.projectId)));
+                          if (isCompleted is ProjectIsCompleted &&
+                              !isCompleted.completed) {
+                            return child!;
+                          } else {
+                            return Container();
+                          }
+                        },
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () =>
+                                createSchedule(ref, widget.projectId),
+                            style: TextButton.styleFrom(
+                              backgroundColor: GREY_100,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(48.r),
+                                  side: const BorderSide(
+                                      color: GREEN_200, width: 2)),
+                            ),
+                            child: Text(
+                              '새 일정 생성',
+                              style: m_Button_03.copyWith(color: GREEN_400),
+                            ),
                           ),
                         ),
                       ),
@@ -217,12 +202,89 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
       ),
     );
   }
+  void onSavedTitle(String? newValue) {
+    title = newValue!;
+  }
+  void onSavedContent(String? newValue) {
+    content = newValue!;
+  }
 
   List<CalendarSchedule> _getEventsForDay(DateTime day) {
     return calendarMark
         .where((e) => isRangeDate(e.startDate, e.endDate, day))
         .toList();
   }
+  void createSchedule(WidgetRef ref, projectId) {
+    final formKey = GlobalKey<FormState>();
+    final textButtonStyle = TextButton.styleFrom(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(48.r)));
+    CustomDialog.showCustomDialog(
+        context: context,
+        backgroundColor: GREY_100,
+        content: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.r),
+            color: GREY_100,
+          ),
+          width: MediaQuery.of(context).size.width / 10 * 8,
+          child: ScheduleFormComponent(
+            projectId: widget.projectId,
+            formKey: formKey, onSavedTitle: onSavedTitle, onSavedContent: onSavedContent,
+          ),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  final form = ref.read(scheduleCreateFormProvider);
+                  log('formKey.currentState!.validate() ${formKey.currentState!.validate()}');
+                  log(' form.memberIds.isNotEmpty ${ form.memberIds.isNotEmpty}');
+                  formKey.currentState!.save();
+                  if (formKey.currentState!.validate() && form.memberIds.isNotEmpty) {
+                    final format = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    final ScheduleCreateParam param = ScheduleCreateParam(
+                        projectId: projectId,
+                        startDate: format.format(form.startDateTime),
+                        endDate: format.format(form.endDateTime),
+                        category: form.category,
+                        memberIds: form.memberIds,
+                        title: title,
+                        content: content,
+                        address: form.address);
+                    await ref
+                        .read(scheduleProvider(ScheduleProviderParam(
+                                projectId: projectId,
+                                type: ScheduleProviderType.create))
+                            .notifier)
+                        .createSchedule(param: param);
+
+                    if (context.mounted) {
+                      context.pop();
+                    }
+                  }
+                },
+                style: textButtonStyle,
+                child: Text(
+                  '작성완료',
+                  style: m_Button_00.copyWith(color: GREY_100),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              TextButton(
+                  onPressed: () => context.pop(),
+                  style: textButtonStyle,
+                  child:
+                      Text('취소', style: m_Button_00.copyWith(color: GREY_100))),
+              SizedBox(width: 20.w),
+            ],
+          )
+        ]);
+  }
+
+
 }
 
 class CalendarContent extends StatelessWidget {

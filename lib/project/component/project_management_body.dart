@@ -51,7 +51,7 @@ class ProjectManagementBody extends ConsumerWidget {
   void onTapComplete({required BuildContext context, required WidgetRef ref}) {
     CustomDialog.showCustomDialog(
         context: context,
-        ref: ref,
+        backgroundColor: GREEN_200,
         content: Text(
           '정말 완료하시겠습니까?\n완료 후에는 복구가 불가합니다.',
           style: Heading_06.copyWith(
@@ -96,7 +96,7 @@ class ProjectManagementBody extends ConsumerWidget {
   void onTapDelete({required BuildContext context, required WidgetRef ref}) {
     CustomDialog.showCustomDialog(
         context: context,
-        ref: ref,
+        backgroundColor: GREEN_200,
         content: Text(
           '정말 삭제하시겠습니까?\n삭제 후에는 복구가 불가합니다.',
           style: Heading_06.copyWith(

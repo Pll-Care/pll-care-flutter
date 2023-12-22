@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
 
+import '../../auth/model/member_model.dart';
 import '../../theme.dart';
+import '../model/default_model.dart';
 
 class DefaultAppbar extends ConsumerWidget {
   // final List<Widget>? actions;
@@ -42,7 +43,7 @@ class DefaultAppbar extends ConsumerWidget {
       actions: [
         Container(
           width: 80.w,
-          padding: EdgeInsets.symmetric(vertical: 12.h),
+          padding: EdgeInsets.symmetric(vertical: 10.h),
           child: TextButton(
             onPressed: () {
               isLogin == null
@@ -60,13 +61,39 @@ class DefaultAppbar extends ConsumerWidget {
             ),
           ),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: GREEN_200,
-          ),
+        SizedBox(width:10.w),
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final model = ref.watch(memberProvider);
+            if (model is MemberModel) {
+              if(ref.watch(authProvider) == null){
+                ref.read(authProvider.notifier).autoLogin();
+              }
+              return Padding(
+                padding: EdgeInsets.only(right: 10.w),
+                child: GestureDetector(
+                  onTap: (){
+                    model.memberId;
+                  },
+                  child: CircleAvatar(
+                    radius: 18.r,
+                    backgroundImage: NetworkImage(model.imageUrl),
+                  ),
+                ),
+              );
+            }else if(model is ErrorModel){
+              ref.read(authProvider.notifier).logout();
+            }
+            return Container();
+          },
         ),
+        // IconButton(
+        //   onPressed: () {},
+        //   icon: const Icon(
+        //     Icons.menu,
+        //     color: GREEN_200,
+        //   ),
+        // ),
       ],
     );
   }

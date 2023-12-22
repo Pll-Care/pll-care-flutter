@@ -149,7 +149,7 @@ class FinalDialog extends ConsumerWidget {
     {
       CustomDialog.showCustomDialog(
           context: context,
-          ref: ref,
+          backgroundColor: GREEN_200,
           content: Text(
             "작성 완료한 평가는 수정 또는 삭제할 수 없습니다.\n작성 완료 하시겠습니까?",
             style: Heading_06.copyWith(

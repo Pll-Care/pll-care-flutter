@@ -14,7 +14,7 @@ class CustomDialog{
   );
   static void showCustomDialog({
     required BuildContext context,
-    required WidgetRef ref,
+    required Color backgroundColor,
     Widget? content,
     List<Widget>? actions,
   }) {
@@ -24,7 +24,7 @@ class CustomDialog{
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.r)),
-            backgroundColor: GREEN_200,
+            backgroundColor: backgroundColor,
             content: content,
             actionsAlignment: MainAxisAlignment.spaceEvenly,
             actionsPadding: const EdgeInsets.only(bottom: 24),

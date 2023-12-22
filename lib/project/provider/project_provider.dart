@@ -30,8 +30,9 @@ class ProjectMostLikedStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = ListModel<ProjectMostLiked>(data: value);
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }
@@ -57,8 +58,9 @@ class ProjectCloseDeadLineStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = ListModel<ProjectCloseDeadLine>(data: value);
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }
@@ -84,8 +86,9 @@ class ProjectUpToDateStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = ListModel<ProjectUpToDate>(data: value);
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }
@@ -114,8 +117,9 @@ class ProjectListStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }
@@ -182,8 +186,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     repository.selfOutProject(projectId: param.projectId!).then((value) {
       logger.i('project selfOut');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -192,8 +197,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
       logger.i(value);
       return state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -201,8 +207,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     repository.createProject(param: param).then((value) {
       logger.i('project create');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -212,8 +219,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
         .then((value) {
       logger.i('project update');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -221,8 +229,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     repository.completeProject(projectId: param.projectId!).then((value) {
       logger.i('project complete');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -230,8 +239,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     repository.deleteProject(projectId: param.projectId!).then((value) {
       logger.i('project complete');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -241,8 +251,9 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }

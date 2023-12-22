@@ -68,8 +68,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -79,8 +80,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -91,8 +93,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('post create!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -103,8 +106,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('post update!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -113,8 +117,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     repository.deletePost(postId: param.postId!).then((value) {
       logger.i('post delete!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -136,8 +141,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     repository.likePost(postId: postId).then((value) {
       logger.i('post like!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -146,8 +152,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     repository.applyCancelPost(postId: param.postId!).then((value) {
       logger.i('post apply cancel!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -158,8 +165,9 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('post apply!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }

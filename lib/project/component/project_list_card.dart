@@ -156,7 +156,7 @@ class ProjectListCard extends ConsumerWidget {
   void onTapSelfOut({required BuildContext context, required WidgetRef ref}) {
     CustomDialog.showCustomDialog(
         context: context,
-        ref: ref,
+        backgroundColor: GREEN_200,
         content: Text(
           '정말 팀 탈퇴하시겠습니까?\n팀 탈퇴 후에는 복구가 불가합니다.',
           style: Heading_06.copyWith(

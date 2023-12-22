@@ -68,8 +68,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -80,8 +81,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('memo update!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -92,8 +94,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('memo delete!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -102,8 +105,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
     repository.createMemo(param: param).then((value) {
       logger.i('memo create!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -114,8 +118,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('memo bookmark!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -126,8 +131,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('memo list!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -138,8 +144,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         .then((value) {
       logger.i('memo bookmark list!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }

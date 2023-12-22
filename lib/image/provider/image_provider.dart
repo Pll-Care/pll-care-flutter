@@ -35,8 +35,9 @@ class ImageStateNotifier extends StateNotifier<BaseModel> {
         logger.i(value);
         state = value;
       }).catchError((e) {
-        logger.e(e);
-        state = ErrorModel.respToError(e);
+       state = ErrorModel.respToError(e);
+       final error = state as ErrorModel;
+       logger.e('code = ${error.code}\nmessage = ${error.message}');
       });
     }
   }
@@ -48,8 +49,9 @@ class ImageStateNotifier extends StateNotifier<BaseModel> {
         logger.i('image delete!!');
         state = LoadingModel();
       }).catchError((e) {
-        logger.e(e);
         state = ErrorModel.respToError(e);
+        final error = state as ErrorModel;
+        logger.e('code = ${error.code}\nmessage = ${error.message}');
       });
     }
 

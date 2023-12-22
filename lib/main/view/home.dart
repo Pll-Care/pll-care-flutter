@@ -137,7 +137,6 @@ class _MainContent extends ConsumerWidget {
         break;
       case MainCareType.MOSTLIKE:
         title = '실시간 인기 프로젝트';
-
         break;
       case MainCareType.UPTODATE:
         title = '최근 올라온 프로젝트';

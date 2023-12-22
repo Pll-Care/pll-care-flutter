@@ -2,10 +2,12 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/management/provider/management_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../auth/model/member_model.dart';
 import '../../management/model/team_member_model.dart';
 
 // part 'widget_provider.g.dart';
@@ -15,12 +17,11 @@ enum FilterType {
   PLAN,
   MEETING,
   PREVIOUS;
-
 }
 
-class ScheduleFilterModel extends Equatable{
+class ScheduleFilterModel extends Equatable {
   final FilterType filterType;
-  final int? memberId;
+  final int memberId;
 
   const ScheduleFilterModel({
     required this.filterType,
@@ -42,7 +43,6 @@ class ScheduleFilterModel extends Equatable{
 
   @override
   bool? get stringify => true;
-
 }
 
 // @Riverpod()
@@ -68,20 +68,15 @@ class ScheduleFilterModel extends Equatable{
 final scheduleFilterProvider = StateNotifierProvider.family
     .autoDispose<ScheduleFilterStateNotifier, ScheduleFilterModel, int>(
         (ref, projectId) {
-  final state = ref.watch(managementProvider(projectId));
-  if (state is ListModel<TeamMemberModel>) {
-    return ScheduleFilterStateNotifier(memberId: state.data.first.memberId);
-  }
-  return ScheduleFilterStateNotifier(memberId: null);
+  final member = ref.read(memberProvider) as MemberModel;
+  return ScheduleFilterStateNotifier(memberId: member.memberId);
 });
 
 class ScheduleFilterStateNotifier extends StateNotifier<ScheduleFilterModel> {
-  final int? memberId;
-
-  ScheduleFilterStateNotifier({this.memberId})
-      : super(const ScheduleFilterModel(
+  ScheduleFilterStateNotifier({required int memberId})
+      : super(ScheduleFilterModel(
           filterType: FilterType.ALL,
-          memberId: null,
+          memberId: memberId,
         ));
 
   void selectFilter({FilterType? filterType, int? memberId}) {

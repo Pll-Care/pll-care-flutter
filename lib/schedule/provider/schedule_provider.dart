@@ -8,9 +8,10 @@ import '../../common/model/default_model.dart';
 import '../../common/page/param/page_param.dart';
 import '../model/schedule_daily_model.dart';
 import '../param/schedule_param.dart';
+
 part 'schedule_provider.g.dart';
 
-enum ScheduleProviderType { getCalendar, getOverview, getDaily, getFilter }
+enum ScheduleProviderType { getCalendar, getOverview, getDaily, create }
 
 class ScheduleProviderParam extends DefaultProviderType {
   final ScheduleProviderType type;
@@ -50,8 +51,9 @@ class ScheduleOverviewStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }
@@ -82,17 +84,20 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
       case ScheduleProviderType.getDaily:
         getDaily();
         break;
-      // case ScheduleProviderType.getFilter:
-      //   getFilter(
-      //       params: PageParams(page: 1, size: 4, direction: 'DESC'),
-      //       condition: ScheduleParams(
-      //         projectId: ,
-      //         memberId:,
-      //       ));
-      //   break;
       default:
         break;
     }
+  }
+
+  Future<void> createSchedule({required ScheduleCreateParam param}) async {
+    repository
+        .createSchedule(param: param)
+        .then((value) => null)
+        .catchError((e) {
+      state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+    });
   }
 
   Future<void> getCalendar() async {
@@ -101,8 +106,9 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -112,36 +118,38 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value as ListModel<ScheduleDailyModel>;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
-
-
 }
 
-
 @Riverpod()
-class ScheduleFilterFetch extends _$ScheduleFilterFetch{
+class ScheduleFilterFetch extends _$ScheduleFilterFetch {
   @override
-  BaseModel build({required PageParams params, required ScheduleParams condition}){
+  BaseModel build({required ScheduleParams condition}) {
+    final PageParams params = PageParams(page: 1, size: 4, direction: 'DESC');
     getFilter(params: params, condition: condition);
     return LoadingModel();
   }
-  Future<void> getFilter(
+
+  Future<BaseModel> getFilter(
       {required PageParams params, required ScheduleParams condition}) async {
     state = LoadingModel();
     final repository = ref.watch(scheduleRepositoryProvider);
-    repository
+    return repository
         .getScheduleFilter(param: params, condition: condition)
         .then((value) {
       logger.i(value);
       state = value;
+      return state;
     }).catchError((e) {
       logger.e(e);
       state = ErrorModel.respToError(e);
       final error = (state as ErrorModel);
       logger.e('error code ${error.code}, ${error.message}');
+      return state;
     });
   }
 }

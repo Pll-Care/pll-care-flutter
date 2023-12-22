@@ -55,8 +55,9 @@ class FinalEvalStateNotifier extends StateNotifier<BaseModel> {
     repository.createFinalTerm(param: param).then((value) {
       logger.i('create final eval!');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -68,8 +69,9 @@ class FinalEvalStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
@@ -79,8 +81,9 @@ class FinalEvalStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = value;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }

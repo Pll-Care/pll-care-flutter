@@ -21,17 +21,22 @@ final managementProvider =
     StateNotifierProvider.family<ManagementStateNotifier, BaseModel, int>(
         (ref, projectId) {
   final repository = ref.watch(managementRepositoryProvider);
-  return ManagementStateNotifier(repository: repository, manageParam: ManageParam(projectId: projectId, isManagement: true));
+  return ManagementStateNotifier(
+      repository: repository,
+      manageParam: ManageParam(projectId: projectId, isManagement: true));
 });
 
 final applyListProvider =
     StateNotifierProvider.family<ManagementStateNotifier, BaseModel, int>(
         (ref, projectId) {
   final repository = ref.watch(managementRepositoryProvider);
-  return ManagementStateNotifier(repository: repository, manageParam:  ManageParam(projectId: projectId, isManagement: false));
+  return ManagementStateNotifier(
+      repository: repository,
+      manageParam: ManageParam(projectId: projectId, isManagement: false));
 });
 
-final applyProvider = StateNotifierProvider<ApplyStateNotifier, BaseModel>((ref) {
+final applyProvider =
+    StateNotifierProvider<ApplyStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(managementRepositoryProvider);
   return ApplyStateNotifier(repository: repository);
 });
@@ -47,14 +52,19 @@ class ManagementStateNotifier extends StateNotifier<BaseModel> {
     manageParam.isManagement ? getMemberList() : getApplyList();
   }
 
-  Future<void> getMemberList() async {
+  Future<BaseModel> getMemberList() async {
     state = LoadingModel();
-    repository.getMemberList(projectId: manageParam.projectId).then((value) {
+    return await repository
+        .getMemberList(projectId: manageParam.projectId)
+        .then((value) {
       logger.i(value);
       state = ListModel<TeamMemberModel>(data: value);
+      return state;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return state;
     });
   }
 
@@ -64,38 +74,41 @@ class ManagementStateNotifier extends StateNotifier<BaseModel> {
       logger.i(value);
       state = ListModel<ApplyModel>(data: value);
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }
-
-
 
 class ApplyStateNotifier extends StateNotifier<BaseModel> {
   final ManagementRepository repository;
 
   ApplyStateNotifier({
     required this.repository,
-  }) : super(LoadingModel()) ;
+  }) : super(LoadingModel());
 
-  Future<void> applyAccept({required int projectId, required ApplyParam param}) async {
+  Future<void> applyAccept(
+      {required int projectId, required ApplyParam param}) async {
     state = LoadingModel();
     repository.applyAccept(projectId: projectId, param: param).then((value) {
       logger.i('apply accept');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 
-  Future<void> applyReject({required int projectId, required ApplyParam param}) async {
+  Future<void> applyReject(
+      {required int projectId, required ApplyParam param}) async {
     state = LoadingModel();
     repository.applyReject(projectId: projectId, param: param).then((value) {
       logger.i('apply reject');
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
   }
 }

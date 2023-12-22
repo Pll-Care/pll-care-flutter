@@ -15,7 +15,7 @@ void main() async {
     nativeAppKey: '4f2e05ad16de5afc28b263da1980b5a1',
     javaScriptAppKey: 'af256746c2a504b44720df430decd9d3',
   );
-  await initializeDateFormatting();
+  await initializeDateFormatting('ko');
   runApp(
     ProviderScope(
       observers: [CustomProviderObserver(),],

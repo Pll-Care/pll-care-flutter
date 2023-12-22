@@ -5,6 +5,7 @@
 // "previous": true
 // }
 
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/schedule/model/schedule_daily_model.dart';
@@ -12,20 +13,25 @@ import 'package:pllcare/schedule/model/schedule_daily_model.dart';
 part 'schedule_param.g.dart';
 
 @JsonSerializable()
-class ScheduleParams {
+class ScheduleParams extends Equatable {
   final int? projectId;
   final int? memberId;
   final ScheduleCategory? scheduleCategory;
-  // final bool? previous; // todo previous null issue 해결 => convert error string to boolean
+  final bool?
+      previous; // todo previous null issue 해결 => convert error string to boolean
 
-  ScheduleParams({
+  const ScheduleParams({
     this.projectId,
     this.memberId,
     this.scheduleCategory,
-    // this.previous,
+    this.previous,
   });
 
   Map<String, dynamic> toJson() => _$ScheduleParamsToJson(this);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [projectId, memberId, scheduleCategory, previous];
 }
 
 @JsonSerializable()

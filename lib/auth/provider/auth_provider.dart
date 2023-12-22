@@ -11,20 +11,26 @@ import 'package:pllcare/common/provider/secure_storage_provider.dart';
 
 import '../../common/logger/custom_logger.dart';
 
-final authProvider =
-    StateNotifierProvider<AuthStateNotifier, AuthModel?>((ref) {
+final authProvider = StateNotifierProvider<AuthStateNotifier, AuthModel?>(
+    (StateNotifierProviderRef<AuthStateNotifier, AuthModel?> ref) {
   final repository = ref.watch(authRepositoryProvider);
   final storage = ref.watch(secureStorageProvider);
-  return AuthStateNotifier(repository: repository, storage: storage);
+  return AuthStateNotifier(
+    repository: repository,
+    storage: storage,
+    ref:ref,
+  );
 });
 
 class AuthStateNotifier extends StateNotifier<AuthModel?> {
   final AuthRepository repository;
   final FlutterSecureStorage storage;
+  final StateNotifierProviderRef<AuthStateNotifier, AuthModel?> ref;
 
   AuthStateNotifier({
     required this.repository,
     required this.storage,
+    required this. ref,
   }) : super(null);
 
   Future<void> signUp({required AuthParameter param}) async {
@@ -37,6 +43,13 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     state = await repository.getReIssueToken();
     await storage.write(key: 'accessToken', value: state!.accessToken);
     await storage.write(key: 'refreshToken', value: state!.refreshToken);
+  }
+
+  Future<void> autoLogin() async{
+    final storage = ref.read(secureStorageProvider);
+    final accessToken = await storage.read(key: 'accessToken');
+    final refreshToken = await storage.read(key: 'refreshToken');
+    state = AuthModel(accessToken: accessToken, refreshToken: refreshToken);
   }
 
   Future<void> logout() async {
@@ -55,15 +68,21 @@ class MemberStateNotifier extends StateNotifier<BaseModel> {
 
   MemberStateNotifier({
     required this.repository,
-  }) : super(LoadingModel());
+  }) : super(LoadingModel()) {
+    getProfileImage();
+  }
 
-  Future<void> getProfileImage() async {
-    await repository.getProfile().then((value) {
+  Future<bool> getProfileImage() async {
+    return await repository.getProfile().then((value) {
       logger.i(value);
       state = value;
+      return true;
     }).catchError((e) {
-      logger.e(e);
       state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+
+      return false;
     });
   }
 }
