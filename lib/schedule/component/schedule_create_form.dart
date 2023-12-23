@@ -152,7 +152,7 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                                 width: 10.w,
                               ),
                               Text(
-                                format.format(form.startDateTime),
+                                format.format(form.startDateTime!),
                                 style: Body_01.copyWith(color: GREY_500),
                               ),
                             ],
@@ -164,7 +164,7 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                                 width: 10.w,
                               ),
                               Text(
-                                format.format(form.endDateTime),
+                                form.endDateTime == null ? '' : format.format(form.endDateTime!),
                                 style: Body_01.copyWith(color: GREY_500),
                               ),
                             ],

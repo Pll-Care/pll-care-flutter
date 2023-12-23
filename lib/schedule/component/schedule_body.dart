@@ -1,10 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pllcare/schedule/component/schedule_filter.dart';
-import 'package:pllcare/theme.dart';
-
+import 'package:pllcare/schedule/component/filter/schedule_filter.dart';
 import 'custom_calendar.dart';
 
 class ScheduleBody extends StatefulWidget {

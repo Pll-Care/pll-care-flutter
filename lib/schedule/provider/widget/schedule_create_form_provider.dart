@@ -7,8 +7,8 @@ part 'schedule_create_form_provider.g.dart';
 class ScheduleForm {
   final String title;
   final ScheduleCategory category;
-  final DateTime startDateTime;
-  final DateTime endDateTime;
+  final DateTime? startDateTime;
+  final DateTime? endDateTime;
   final String? address;
   final List<int> memberIds;
   final String content;
@@ -41,9 +41,20 @@ class ScheduleForm {
       content: content ?? this.content,
     );
   }
+
+  ScheduleForm updateDay({required DateTime? startDay, required DateTime? endDay}) {
+    return ScheduleForm(
+      title: title,
+      category: category,
+      startDateTime: startDay,
+      endDateTime: endDay,
+      memberIds: memberIds,
+      content: content,
+    );
+  }
 }
 
-@Riverpod(keepAlive: true) // todo auto dispose 해결
+@Riverpod(keepAlive: false)
 class ScheduleCreateForm extends _$ScheduleCreateForm {
   @override
   ScheduleForm build() {

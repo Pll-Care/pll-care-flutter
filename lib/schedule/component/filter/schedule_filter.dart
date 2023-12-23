@@ -3,18 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pllcare/common/page/param/page_param.dart';
 import 'package:pllcare/management/provider/management_provider.dart';
-import 'package:pllcare/schedule/component/schedule_filter_card.dart';
-import 'package:pllcare/schedule/component/schedule_filter_content.dart';
-import 'package:pllcare/schedule/model/schedule_daily_model.dart';
-import 'package:pllcare/schedule/provider/schedule_provider.dart';
+import 'package:pllcare/schedule/component/filter/schedule_filter_content.dart';
 import 'package:pllcare/schedule/provider/widget_provider.dart';
 
-import '../../common/model/default_model.dart';
-import '../../management/model/team_member_model.dart';
-import '../../theme.dart';
-import '../param/schedule_param.dart';
+import '../../../common/model/default_model.dart';
+import '../../../management/model/team_member_model.dart';
+import '../../../theme.dart';
+import '../../param/schedule_param.dart';
 
 class ScheduleFilter extends ConsumerWidget {
   final int projectId;
@@ -47,7 +43,6 @@ class ScheduleFilter extends ConsumerWidget {
     } else {
       teamMembers = model as ListModel<TeamMemberModel>;
     }
-    log("teamMembers.length ${teamMembers.data.length}");
 
     return SliverToBoxAdapter(
       child: Padding(

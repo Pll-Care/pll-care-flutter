@@ -50,6 +50,45 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
         getOnlyYMd(DateTime.parse(startDate)).isAtSameMomentAs(validDay) ||
         getOnlyYMd(DateTime.parse(endDate)).isAtSameMomentAs(validDay);
   }
+  final CalendarStyle calendarStyle = CalendarStyle(
+    rangeHighlightScale: 1.0,
+    rangeHighlightColor: GREEN_200,
+    selectedDecoration: const BoxDecoration(
+      color: GREEN_200,
+      shape: BoxShape.circle,
+    ),
+    rangeStartDecoration: const BoxDecoration(
+      color: GREEN_200,
+      shape: BoxShape.circle,
+    ),
+    rangeEndDecoration: const BoxDecoration(
+      color: GREEN_200,
+      shape: BoxShape.circle,
+    ),
+    markerDecoration: const BoxDecoration(
+      color: GREEN_200,
+      shape: BoxShape.circle,
+    ),
+    // todayDecoration: const BoxDecoration(
+    //   color: GREEN_200,
+    //   shape: BoxShape.circle,
+    // ),
+    isTodayHighlighted: false,
+    withinRangeDecoration: const BoxDecoration(
+      color: GREEN_200,
+      shape: BoxShape.circle,
+    ),
+    rangeEndTextStyle: m_Heading_03.copyWith(color: GREY_100),
+    rangeStartTextStyle: m_Heading_03.copyWith(color: GREY_100),
+    withinRangeTextStyle: m_Heading_03.copyWith(color: GREY_100),
+    defaultTextStyle: m_Heading_03.copyWith(color: GREY_500),
+    outsideTextStyle: m_Heading_03.copyWith(color: GREY_400),
+    holidayTextStyle: m_Heading_03.copyWith(color: Colors.red),
+    weekendTextStyle: m_Heading_03.copyWith(color: GREY_500),
+    selectedTextStyle: m_Heading_03.copyWith(color: GREY_100),
+    todayTextStyle: m_Heading_03.copyWith(color: GREY_100),
+    canMarkersOverflow: false,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +198,12 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                       Consumer(
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
+
                           final isCompleted = ref.watch(projectFamilyProvider(
                               ProjectProviderParam(
                                   type: ProjectProviderType.isCompleted,
                                   projectId: widget.projectId)));
+
                           if (isCompleted is ProjectIsCompleted &&
                               !isCompleted.completed) {
                             return child!;
@@ -247,8 +288,8 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                     final format = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
                     final ScheduleCreateParam param = ScheduleCreateParam(
                         projectId: projectId,
-                        startDate: format.format(form.startDateTime),
-                        endDate: format.format(form.endDateTime),
+                        startDate: format.format(form.startDateTime!),
+                        endDate: format.format(form.endDateTime!),
                         category: form.category,
                         memberIds: form.memberIds,
                         title: title,

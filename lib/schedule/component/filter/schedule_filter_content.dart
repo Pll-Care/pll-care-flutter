@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
-import 'package:pllcare/schedule/component/schedule_filter_card.dart';
+import 'package:pllcare/schedule/component/filter/schedule_filter_card.dart';
 
-import '../../common/model/default_model.dart';
-import '../../common/page/component/bottom_page_count.dart';
-import '../../common/page/param/page_param.dart';
-import '../../project/model/project_model.dart';
-import '../../theme.dart';
-import '../model/schedule_daily_model.dart';
-import '../model/schedule_filter_model.dart';
-import '../param/schedule_param.dart';
-import '../provider/schedule_provider.dart';
-import '../provider/widget_provider.dart';
+import '../../../common/model/default_model.dart';
+import '../../../common/page/component/bottom_page_count.dart';
+import '../../../common/page/param/page_param.dart';
+import '../../../project/model/project_model.dart';
+import '../../../theme.dart';
+import '../../../util/custom_dialog.dart';
+import '../../model/schedule_daily_model.dart';
+import '../../model/schedule_filter_model.dart';
+import '../../param/schedule_param.dart';
+import '../../provider/schedule_provider.dart';
+import '../../provider/widget_provider.dart';
+import '../schedule_dialog_component.dart';
 
 class ScheduleFilterContent extends ConsumerStatefulWidget {
   final int projectId;
@@ -92,6 +94,16 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
                       isCompleted: (isCompleted is ProjectIsCompleted)
                           ? isCompleted.completed
                           : false,
+                      onTap: () {
+                        CustomDialog.showCustomDialog(
+                          context: context,
+                          backgroundColor: GREY_100,
+                          content: ScheduleDialogComponent(
+                            projectId: widget.projectId,
+                            scheduleId: modelList[idx].scheduleId,
+                          ),
+                        );
+                      },
                     );
                   },
                   separatorBuilder: (_, idx) {
@@ -134,7 +146,6 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
   }
 
   void _onTapPage(WidgetRef ref, int page, int projectId) {
-    // todo page 넘어가는지 확인
     log("page = $page");
     final PageParams params =
         PageParams(page: page, size: 4, direction: 'DESC');

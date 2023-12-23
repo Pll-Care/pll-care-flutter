@@ -86,5 +86,5 @@ abstract class ScheduleRepository {
   })
   Future<void> deleteSchedule(
       {@Path() required int scheduleId,
-      @Query('project_id') required int projectId});
+      @Body() required ScheduleDeleteParam projectId});
 }

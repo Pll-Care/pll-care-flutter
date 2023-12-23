@@ -14,13 +14,19 @@ import '../../dio/error/error_type.dart';
 import '../model/apply_model.dart';
 import 'apply_card.dart';
 
-class ManagementBody extends StatelessWidget {
+class ManagementBody extends ConsumerWidget {
   final int projectId;
 
   const ManagementBody({super.key, required this.projectId});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool isCompleted = true;
+    final state = ref.watch(projectFamilyProvider(ProjectProviderParam(
+        type: ProjectProviderType.complete, projectId: projectId)));
+    if (state is ProjectIsCompleted) {
+      isCompleted = state.completed;
+    }
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -33,6 +39,7 @@ class ManagementBody extends StatelessWidget {
                   '팀원 관리',
                   style: m_Heading_02.copyWith(color: GREEN_400),
                 ),
+                if(!isCompleted)
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
@@ -81,6 +88,7 @@ class ManagementBody extends StatelessWidget {
                 ));
           },
         ),
+        if(!isCompleted)
         SliverPadding(
           padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 20.w),
           sliver: SliverToBoxAdapter(
@@ -95,6 +103,7 @@ class ManagementBody extends StatelessWidget {
             ),
           ),
         ),
+        if(!isCompleted)
         Consumer(
           builder: (_, ref, child) {
             // final pModel = ref.watch(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.isCompleted, projectId: projectId)));
@@ -123,6 +132,7 @@ class ManagementBody extends StatelessWidget {
               );
             }
             final model = bModel as ListModel<ApplyModel>;
+
             return SliverMainAxisGroup(slivers: [
               SliverList.separated(
                 itemBuilder: (_, idx) {

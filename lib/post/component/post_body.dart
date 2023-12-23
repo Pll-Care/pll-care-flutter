@@ -138,7 +138,6 @@ class _RecruitList extends ConsumerWidget {
   }
 
   void _onTapPage(WidgetRef ref, int page) {
-    // todo page 넘어가는지 확인
     log("page = $page");
     ref
         .read(postProvider(

@@ -18,7 +18,7 @@ class ScheduleParams extends Equatable {
   final int? memberId;
   final ScheduleCategory? scheduleCategory;
   final bool?
-      previous; // todo previous null issue 해결 => convert error string to boolean
+      previous;
 
   const ScheduleParams({
     this.projectId,
@@ -30,7 +30,6 @@ class ScheduleParams extends Equatable {
   Map<String, dynamic> toJson() => _$ScheduleParamsToJson(this);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [projectId, memberId, scheduleCategory, previous];
 }
 
@@ -96,4 +95,15 @@ class ScheduleStateUpdateParam {
   });
 
   Map<String, dynamic> toJson() => _$ScheduleStateUpdateParamToJson(this);
+}
+
+@JsonSerializable()
+class ScheduleDeleteParam {
+  final int projectId;
+
+  ScheduleDeleteParam({
+    required this.projectId,
+  });
+
+  Map<String, dynamic> toJson() => _$ScheduleDeleteParamToJson(this);
 }

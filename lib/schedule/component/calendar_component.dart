@@ -15,46 +15,6 @@ final HeaderStyle headerStyle = HeaderStyle(
   titleCentered: true,
   titleTextStyle: m_Heading_03.copyWith(color: GREY_500),
 );
-final CalendarStyle calendarStyle = CalendarStyle(
-  rangeHighlightScale: 1.0,
-  rangeHighlightColor: GREEN_200,
-  selectedDecoration: const BoxDecoration(
-    color: GREEN_200,
-    shape: BoxShape.circle,
-  ),
-  rangeStartDecoration: const BoxDecoration(
-    color: GREEN_200,
-    shape: BoxShape.circle,
-  ),
-  rangeEndDecoration: const BoxDecoration(
-    color: GREEN_200,
-    shape: BoxShape.circle,
-  ),
-  markerDecoration: const BoxDecoration(
-    color: GREEN_200,
-    shape: BoxShape.circle,
-  ),
-  // todayDecoration: const BoxDecoration(
-  //   color: GREEN_200,
-  //   shape: BoxShape.circle,
-  // ),
-  isTodayHighlighted: false,
-  withinRangeDecoration: const BoxDecoration(
-    color: GREEN_200,
-    shape: BoxShape.circle,
-  ),
-  rangeEndTextStyle: m_Heading_03.copyWith(color: GREY_100),
-  rangeStartTextStyle: m_Heading_03.copyWith(color: GREY_100),
-  withinRangeTextStyle: m_Heading_03.copyWith(color: GREY_100),
-  defaultTextStyle: m_Heading_03.copyWith(color: GREY_500),
-  outsideTextStyle: m_Heading_03.copyWith(color: GREY_400),
-  holidayTextStyle: m_Heading_03.copyWith(color: Colors.red),
-  weekendTextStyle: m_Heading_03.copyWith(color: GREY_500),
-  selectedTextStyle: m_Heading_03.copyWith(color: GREY_100),
-  todayTextStyle: m_Heading_03.copyWith(color: GREY_100),
-
-  canMarkersOverflow: false,
-);
 
 class CalendarComponent extends ConsumerStatefulWidget {
   const CalendarComponent({super.key});
@@ -64,30 +24,68 @@ class CalendarComponent extends ConsumerStatefulWidget {
 }
 
 class _CalendarComponentState extends ConsumerState<CalendarComponent> {
-  DateTime selectedDay = DateTime.now();
+  DateTime? selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
   DateTime? rangeStartDay;
   DateTime? rangeEndDay;
+  bool validRangeStartDay = true;
+  bool validRangeEndDay = true;
+  bool validSelectDay = true;
+  bool validRangeHighlight = true;
 
   @override
   Widget build(BuildContext context) {
+    final defaultTextStyle = m_Heading_03.copyWith(color: GREY_500);
     final form = ref.watch(scheduleCreateFormProvider);
-    if (form.category == ScheduleCategory.MEETING) {
-      rangeStartDay = null;
-      rangeEndDay = null;
-      focusedDay = form.startDateTime;
-      selectedDay = form.startDateTime;
-    } else {
-      rangeStartDay = form.startDateTime;
-      rangeEndDay = form.endDateTime;
-      selectedDay = DateTime.now();
-    }
+    validDay(form);
+    final CalendarStyle calendarStyle = CalendarStyle(
+      rangeHighlightScale: 1.0,
+      rangeHighlightColor: validRangeHighlight ? GREEN_200 : Colors.red,
+      selectedDecoration: BoxDecoration(
+        color: validSelectDay ? GREEN_200 : Colors.red,
+        shape: BoxShape.circle,
+      ),
+      rangeStartDecoration: BoxDecoration(
+        color: validRangeStartDay ? GREEN_200 : Colors.red,
+        shape: BoxShape.circle,
+      ),
+      rangeEndDecoration: BoxDecoration(
+        color: validRangeEndDay ? GREEN_200 : Colors.red,
+        shape: BoxShape.circle,
+      ),
+      markerDecoration: const BoxDecoration(
+        color: GREEN_200,
+        shape: BoxShape.circle,
+      ),
+      // todayDecoration: const BoxDecoration(
+      //   color: GREEN_200,
+      //   shape: BoxShape.circle,
+      // ),
+      isTodayHighlighted: false,
+      withinRangeDecoration: BoxDecoration(
+        color: validRangeHighlight ? GREEN_200 : Colors.red,
+        shape: BoxShape.circle,
+      ),
+      rangeEndTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      rangeStartTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      withinRangeTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      defaultTextStyle: defaultTextStyle,
+      outsideTextStyle: m_Heading_03.copyWith(color: GREY_400),
+      holidayTextStyle: m_Heading_03.copyWith(color: Colors.red),
+      weekendTextStyle: defaultTextStyle,
+      selectedTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      todayTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      canMarkersOverflow: false,
+    );
 
     log('rangeStartDay ${rangeStartDay}');
     log('rangeEndDay ${rangeEndDay}');
 
     return TableCalendar(
       // currentDay: now,
+      daysOfWeekStyle: DaysOfWeekStyle(
+          weekdayStyle:defaultTextStyle,
+          weekendStyle: defaultTextStyle),
       focusedDay: focusedDay,
       firstDay: DateTime(2020, 1, 1),
       lastDay: DateTime(2999),
@@ -102,8 +100,10 @@ class _CalendarComponentState extends ConsumerState<CalendarComponent> {
         // rangeEndDay = end;
         this.focusedDay = focusedDay;
         final form = ref.read(scheduleCreateFormProvider);
-        ref.read(scheduleCreateFormProvider.notifier).updateForm(
-            form: form.copyWith(startDateTime: start, endDateTime: end));
+        ref
+            .read(scheduleCreateFormProvider.notifier)
+            .updateForm(form: form.updateDay(startDay: start, endDay: end));
+
         setState(() {});
       },
       onDaySelected: form.category == ScheduleCategory.MEETING
@@ -130,6 +130,29 @@ class _CalendarComponentState extends ConsumerState<CalendarComponent> {
       // eventLoader: _getEventsForDay,
       pageJumpingEnabled: true,
     );
+  }
+
+  void validDay(ScheduleForm form) {
+    if (form.category == ScheduleCategory.MEETING) {
+      rangeStartDay = null;
+      rangeEndDay = null;
+      focusedDay = form.startDateTime!;
+      selectedDay = form.startDateTime!;
+      validSelectDay = selectedDay!.isAfter(DateTime.now());
+    } else {
+      rangeStartDay = form.startDateTime;
+      rangeEndDay = form.endDateTime;
+      selectedDay = null;// DateTime.now();
+      log('form.startDateTime ${form.startDateTime}');
+      log('form.endDateTime ${form.endDateTime}');
+      if (rangeStartDay != null) {
+        validRangeStartDay = rangeStartDay!.isAfter(DateTime.now());
+      }
+      if (rangeEndDay != null) {
+        validRangeEndDay = rangeEndDay!.isAfter(DateTime.now());
+      }
+      validRangeHighlight = validRangeStartDay && validRangeEndDay;
+    }
   }
 
 // List<CalendarSchedule> _getEventsForDay(DateTime day) {

@@ -11,14 +11,23 @@ import '../param/schedule_param.dart';
 
 part 'schedule_provider.g.dart';
 
-enum ScheduleProviderType { getCalendar, getOverview, getDaily, create }
+enum ScheduleProviderType {
+  getCalendar,
+  getOverview,
+  getDaily,
+  create,
+  getSchedule,
+  delete,
+}
 
 class ScheduleProviderParam extends DefaultProviderType {
   final ScheduleProviderType type;
+  final int? scheduleId;
 
   const ScheduleProviderParam({
     required super.projectId,
     required this.type,
+    this.scheduleId,
   });
 
   @override
@@ -84,6 +93,8 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
       case ScheduleProviderType.getDaily:
         getDaily();
         break;
+      case ScheduleProviderType.getSchedule:
+        getSchedule();
       default:
         break;
     }
@@ -94,6 +105,34 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
         .createSchedule(param: param)
         .then((value) => null)
         .catchError((e) {
+      state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+    });
+  }
+
+  Future<void> getSchedule() async {
+    state = LoadingModel();
+    repository
+        .getSchedule(scheduleId: param.scheduleId!, projectId: param.projectId)
+        .then((value) {
+      logger.i(value);
+      state = value;
+    }).catchError((e) {
+      state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+    });
+  }
+
+  Future<void> deleteSchedule() async {
+    repository
+        .deleteSchedule(
+            scheduleId: param.scheduleId!,
+            projectId: ScheduleDeleteParam(projectId: param.projectId))
+        .then((value) {
+      logger.i('schedule delete!');
+    }).catchError((e) {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');

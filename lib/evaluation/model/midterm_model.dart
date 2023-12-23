@@ -31,7 +31,6 @@ class BadgeModel {
 
 @JsonSerializable()
 class ChartBadgeModel {
-  // todo 차트 json 수정
   @JsonKey(name: '열정적인_참여자')
   final int passionateCnt;
   @JsonKey(name: '아이디어_뱅크')
