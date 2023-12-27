@@ -1,6 +1,8 @@
+import 'package:pllcare/project/component/project_form.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../model/schedule_daily_model.dart';
+import '../../model/schedule_detail_model.dart';
 
 part 'schedule_create_form_provider.g.dart';
 
@@ -42,7 +44,18 @@ class ScheduleForm {
     );
   }
 
-  ScheduleForm updateDay({required DateTime? startDay, required DateTime? endDay}) {
+  factory ScheduleForm.fromModel({required ScheduleDetailModel model}) {
+    return ScheduleForm(
+        title: model.title,
+        category: model.scheduleCategory,
+        startDateTime: DateTime.parse(model.startDate),
+        endDateTime: DateTime.parse(model.endDate),
+        memberIds: model.members.map((e) => e.id).toList(),
+        content: model.content);
+  }
+
+  ScheduleForm updateDay(
+      {required DateTime? startDay, required DateTime? endDay}) {
     return ScheduleForm(
       title: title,
       category: category,
@@ -73,5 +86,9 @@ class ScheduleCreateForm extends _$ScheduleCreateForm {
 
   bool hasMember({required int memberId}) {
     return state.memberIds.contains(memberId);
+  }
+
+  void initForm({required ScheduleForm form}) {
+    state = form;
   }
 }

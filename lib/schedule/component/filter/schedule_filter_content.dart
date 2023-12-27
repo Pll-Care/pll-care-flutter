@@ -3,16 +3,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/schedule/component/filter/schedule_filter_card.dart';
 
 import '../../../common/model/default_model.dart';
 import '../../../common/page/component/bottom_page_count.dart';
 import '../../../common/page/param/page_param.dart';
+import '../../../evaluation/component/mid_eval_card.dart';
 import '../../../project/model/project_model.dart';
 import '../../../theme.dart';
 import '../../../util/custom_dialog.dart';
 import '../../model/schedule_daily_model.dart';
+import '../../model/schedule_detail_model.dart';
 import '../../model/schedule_filter_model.dart';
 import '../../param/schedule_param.dart';
 import '../../provider/schedule_provider.dart';
@@ -36,16 +39,17 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
   @override
   Widget build(BuildContext context) {
     ref.listen(scheduleFilterProvider(widget.projectId),
-        (previous, next) async {
-      final PageParams params = PageParams(page: 1, size: 4, direction: 'DESC');
-      condition = getFilterParam(next);
-      await ref
-          .read(scheduleFilterFetchProvider(condition: condition!).notifier)
-          .getFilter(params: params, condition: condition!);
-      // ref.read(scheduleProvider(ScheduleProviderParam(
-      //     projectId: projectId, type: ScheduleProviderType.getFilter)).notifier)
-      //     .getFilter(params: PageParams(page: page, size: 4, direction: 'DESC'), condition: condition);
-    });
+            (previous, next) async {
+          final PageParams params = PageParams(
+              page: 1, size: 4, direction: 'DESC');
+          condition = getFilterParam(next);
+          await ref
+              .read(scheduleFilterFetchProvider(condition: condition!).notifier)
+              .getFilter(params: params, condition: condition!);
+          // ref.read(scheduleProvider(ScheduleProviderParam(
+          //     projectId: projectId, type: ScheduleProviderType.getFilter)).notifier)
+          //     .getFilter(params: PageParams(page: page, size: 4, direction: 'DESC'), condition: condition);
+        });
     final filter = ref.watch(scheduleFilterProvider(widget.projectId));
     condition = getFilterParam(filter);
     final model = ref.watch(scheduleFilterFetchProvider(condition: condition!));
@@ -57,6 +61,7 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
       ),
       child: Container(
         constraints: BoxConstraints(maxHeight: 740.h, minHeight: 140.h),
+        // todo 개수에 맞게 높이 조절
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
           color: GREY_100,
@@ -73,8 +78,8 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
           vertical: 25.h,
         ),
         child:
-            // ScheduleFilterCard.fromModel(model: modelList[0])
-            Consumer(
+        // ScheduleFilterCard.fromModel(model: modelList[0])
+        Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             if (model is LoadingModel) {
               return CircularProgressIndicator();
@@ -102,6 +107,16 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
                             projectId: widget.projectId,
                             scheduleId: modelList[idx].scheduleId,
                           ),
+                        );
+                      },
+                      onComplete: () {
+                        onComplete(context, modelList, idx);
+                      },
+                      onEval: () {
+                        CustomDialog.showCustomDialog(
+                            context: context,
+                            backgroundColor: GREEN_200,
+                            content: MidEvalCard.fromModel(model: modelList[idx])
                         );
                       },
                     );
@@ -145,10 +160,57 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
     );
   }
 
+  Future<void> onPressed(WidgetRef ref, List<ScheduleFilter> modelList, int idx,
+      BuildContext context) async {
+    await ref
+        .read(scheduleProvider(ScheduleProviderParam(
+        projectId: widget.projectId,
+        type: ScheduleProviderType.updateState,
+        scheduleId: modelList[idx].scheduleId))
+        .notifier)
+        .updateState(
+        param: ScheduleStateUpdateParam(
+            projectId: widget.projectId, state: StateType.COMPLETE));
+    if (context.mounted) {
+      context.pop();
+    }
+  }
+
+  void onComplete(BuildContext context, List<ScheduleFilter> modelList,
+      int idx) {
+    final String content =
+    DateTime.now().isBefore(DateTime.parse(modelList[idx].endDate))
+        ? '예정된 종료 일자보다 먼저 일정이 완료되었습니까?'
+        : '일정을 완료하시겠습니까?';
+    CustomDialog.showCustomDialog(
+        context: context,
+        backgroundColor: GREEN_200,
+        content: Text(
+          content,
+          style: Body_01.copyWith(color: GREY_100),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await onPressed(ref, modelList, idx, context);
+            },
+            style: CustomDialog.textButtonStyle,
+            child: Text(
+              '네',
+              style: m_Button_00.copyWith(color: GREEN_200),
+            ),
+          ),
+          TextButton(
+              onPressed: () => context.pop(),
+              style: CustomDialog.textButtonStyle,
+              child: Text('아니오', style: m_Button_00.copyWith(color: GREEN_200)))
+        ]);
+  }
+
   void _onTapPage(WidgetRef ref, int page, int projectId) {
     log("page = $page");
     final PageParams params =
-        PageParams(page: page, size: 4, direction: 'DESC');
+    PageParams(page: page, size: 4, direction: 'DESC');
     ScheduleParams? condition;
     final filter = ref.read(scheduleFilterProvider(projectId));
     condition = getFilterParam(filter);

@@ -19,10 +19,10 @@
  */
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/schedule/model/schedule_calendar_model.dart';
+import 'package:pllcare/schedule/model/schedule_detail_model.dart';
 
 part 'schedule_daily_model.g.dart';
 
-enum ScheduleCategory { MILESTONE, MEETING }
 
 @JsonSerializable()
 class ScheduleDailyModel {

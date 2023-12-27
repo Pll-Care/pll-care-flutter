@@ -70,7 +70,7 @@ class ScheduleDialogComponent extends ConsumerWidget {
       content = newValue!;
     }
 
-    void createSchedule(WidgetRef ref, projectId) {
+    void updateSchedule(WidgetRef ref, projectId) {
       final formKey = GlobalKey<FormState>();
       final textButtonStyle = TextButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -89,6 +89,7 @@ class ScheduleDialogComponent extends ConsumerWidget {
               formKey: formKey,
               onSavedTitle: onSavedTitle,
               onSavedContent: onSavedContent,
+              model: model,
             ),
           ),
           actions: [
@@ -96,7 +97,7 @@ class ScheduleDialogComponent extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () async {
+                  onPressed: () async { // todo detail 캐시 값 변경
                     final form = ref.read(scheduleCreateFormProvider);
                     log('formKey.currentState!.validate() ${formKey.currentState!.validate()}');
                     log(' form.memberIds.isNotEmpty ${form.memberIds.isNotEmpty}');
@@ -104,7 +105,11 @@ class ScheduleDialogComponent extends ConsumerWidget {
                     if (formKey.currentState!.validate() &&
                         form.memberIds.isNotEmpty) {
                       final format = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                      final ScheduleCreateParam param = ScheduleCreateParam(
+                      final state = DateTime.now().isAfter(form.startDateTime!)
+                          ? StateType.ONGOING
+                          : StateType.TBD;
+                      log('state ${state}');
+                      final ScheduleUpdateParam param = ScheduleUpdateParam(
                           projectId: projectId,
                           startDate: format.format(form.startDateTime!),
                           endDate: format.format(form.endDateTime!),
@@ -112,13 +117,15 @@ class ScheduleDialogComponent extends ConsumerWidget {
                           memberIds: form.memberIds,
                           title: title,
                           content: content,
-                          address: form.address);
+                          address: form.address,
+                          state: state);
                       await ref
                           .read(scheduleProvider(ScheduleProviderParam(
                                   projectId: projectId,
-                                  type: ScheduleProviderType.create))
+                                  type: ScheduleProviderType.create,
+                                  scheduleId: scheduleId))
                               .notifier)
-                          .createSchedule(param: param);
+                          .updateSchedule(param: param);
 
                       if (context.mounted) {
                         context.pop();
@@ -127,7 +134,7 @@ class ScheduleDialogComponent extends ConsumerWidget {
                   },
                   style: textButtonStyle,
                   child: Text(
-                    '작성완료',
+                    '수정완료',
                     style: m_Button_00.copyWith(color: GREY_100),
                   ),
                 ),
@@ -330,7 +337,7 @@ class ScheduleDialogComponent extends ConsumerWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      createSchedule(ref, projectId); // todo 일정 수정 dialog
+                      updateSchedule(ref, projectId);
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: GREEN_200,

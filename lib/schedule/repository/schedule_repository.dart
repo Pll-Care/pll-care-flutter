@@ -78,7 +78,7 @@ abstract class ScheduleRepository {
   @Headers({
     'token': 'true',
   })
-  Future<void> updateSchedule({@Body() required ScheduleUpdateParam param});
+  Future<void> updateSchedule({@Body() required ScheduleUpdateParam param, @Path() required int scheduleId,});
 
   @DELETE('/api/auth/schedule/{scheduleId}')
   @Headers({

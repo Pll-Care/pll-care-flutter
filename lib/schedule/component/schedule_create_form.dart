@@ -9,7 +9,7 @@ import 'package:pllcare/management/provider/management_provider.dart';
 import '../../common/model/default_model.dart';
 import '../../management/model/team_member_model.dart';
 import '../../theme.dart';
-import '../model/schedule_daily_model.dart';
+import '../model/schedule_detail_model.dart';
 import '../provider/widget/schedule_create_form_provider.dart';
 import 'calendar_component.dart';
 
@@ -20,6 +20,7 @@ class ScheduleFormComponent extends ConsumerStatefulWidget {
   final FormFieldSetter<String?>? onSavedTitle;
   final FormFieldSetter<String?>? onSavedContent;
   final int projectId;
+  final ScheduleDetailModel? model;
 
   const ScheduleFormComponent({
     super.key,
@@ -27,6 +28,7 @@ class ScheduleFormComponent extends ConsumerStatefulWidget {
     required this.formKey,
     required this.onSavedTitle,
     required this.onSavedContent,
+    this.model,
   });
 
   @override
@@ -36,13 +38,25 @@ class ScheduleFormComponent extends ConsumerStatefulWidget {
 
 class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.model != null) {
+        final ScheduleForm form = ScheduleForm.fromModel(model: widget.model!);
+        ref.read(scheduleCreateFormProvider.notifier).initForm(form: form);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dropTextStyle = m_Body_01.copyWith(color: GREEN_400);
     final textStyle = m_Button_00.copyWith(color: GREEN_400);
     final titleTextStyle = Heading_05.copyWith(color: GREY_500);
-    final form = ref.watch(scheduleCreateFormProvider);
+    final ScheduleForm form = ref.watch(scheduleCreateFormProvider);
     final view = ref.watch(calendarViewProvider);
     final memberList = ref.watch(managementProvider(widget.projectId));
+
 
     final format = DateFormat('yy-MM-dd HH:mm');
     List<DropdownMenuItem> categoryItems = [
@@ -75,10 +89,13 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: '일정 제목을 입력하세요',
-                    hintStyle: titleTextStyle,
-                    border: const UnderlineInputBorder(
-                        borderSide: BorderSide.none)),
+                  hintText: '일정 제목을 입력하세요',
+                  hintStyle: titleTextStyle,
+                  border: const UnderlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                initialValue: widget.model?.title ?? '',
                 cursorColor: GREEN_200,
                 style: titleTextStyle,
                 validator: (String? val) {
@@ -164,7 +181,9 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                                 width: 10.w,
                               ),
                               Text(
-                                form.endDateTime == null ? '' : format.format(form.endDateTime!),
+                                form.endDateTime == null
+                                    ? ''
+                                    : format.format(form.endDateTime!),
                                 style: Body_01.copyWith(color: GREY_500),
                               ),
                             ],
@@ -287,6 +306,7 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                     border:
                         const UnderlineInputBorder(borderSide: BorderSide.none),
                   ),
+                  initialValue: widget.model?.content ?? '',
                   cursorColor: GREEN_200,
                   style: textStyle.copyWith(color: GREY_500),
                   validator: (String? val) {

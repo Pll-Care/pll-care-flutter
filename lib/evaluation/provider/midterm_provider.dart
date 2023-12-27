@@ -9,6 +9,8 @@ import '../repository/mid_eval_repository.dart';
 
 enum MidProviderType { modal, create, getEval, getChart }
 
+final badgeProvider = StateProvider.autoDispose<BadgeType>((ref) => BadgeType.PASSIONATE);
+
 class MidEvalProviderParam extends DefaultProviderType {
   final MidProviderType type;
   final int? scheduleId;

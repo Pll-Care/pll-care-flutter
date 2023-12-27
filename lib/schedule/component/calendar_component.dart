@@ -9,6 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../theme.dart';
 import '../model/schedule_calendar_model.dart';
+import '../model/schedule_detail_model.dart';
 
 final HeaderStyle headerStyle = HeaderStyle(
   formatButtonVisible: false,

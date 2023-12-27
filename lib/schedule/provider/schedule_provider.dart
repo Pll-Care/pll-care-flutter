@@ -16,6 +16,8 @@ enum ScheduleProviderType {
   getOverview,
   getDaily,
   create,
+  update,
+  updateState,
   getSchedule,
   delete,
 }
@@ -103,6 +105,28 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
   Future<void> createSchedule({required ScheduleCreateParam param}) async {
     repository
         .createSchedule(param: param)
+        .then((value) => null)
+        .catchError((e) {
+      state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+    });
+  }
+
+  Future<void> updateSchedule({required ScheduleUpdateParam param}) async {
+    repository
+        .updateSchedule(param: param, scheduleId: this.param.scheduleId!)
+        .then((value) => null)
+        .catchError((e) {
+      state = ErrorModel.respToError(e);
+      final error = state as ErrorModel;
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+    });
+  }
+
+  Future<void> updateState({required ScheduleStateUpdateParam param}) async {
+    repository
+        .updateScheduleState(scheduleId: this.param.scheduleId!, param: param)
         .then((value) => null)
         .catchError((e) {
       state = ErrorModel.respToError(e);

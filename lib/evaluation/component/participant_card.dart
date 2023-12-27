@@ -193,7 +193,6 @@ class ParticipantCard extends StatelessWidget {
         break;
       case BadgeType.SUPPORTER:
         icon = Icons.handshake;
-
         break;
     }
 

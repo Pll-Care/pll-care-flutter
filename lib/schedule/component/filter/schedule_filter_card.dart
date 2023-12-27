@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/schedule/model/schedule_daily_model.dart';
+import 'package:pllcare/schedule/param/schedule_param.dart';
+import 'package:pllcare/schedule/provider/schedule_provider.dart';
+import 'package:pllcare/util/custom_dialog.dart';
 
 import '../../../theme.dart';
 import 'package:collection/collection.dart';
 
 import '../../model/schedule_calendar_model.dart';
+import '../../model/schedule_detail_model.dart';
 import '../../model/schedule_filter_model.dart';
 
-class ScheduleFilterCard extends StatelessWidget {
+class ScheduleFilterCard extends ConsumerWidget {
+  final int scheduleId;
   final String day;
   final String dayOfWeek;
   final String period;
@@ -21,9 +29,11 @@ class ScheduleFilterCard extends StatelessWidget {
   final bool? check;
   final bool isCompleted;
   final GestureTapCallback onTap;
+  final GestureTapCallback onComplete;
+  final VoidCallback onEval;
 
-  const ScheduleFilterCard({
-    super.key,
+  const ScheduleFilterCard({super.key,
+    required this.scheduleId,
     required this.day,
     required this.dayOfWeek,
     required this.period,
@@ -35,12 +45,15 @@ class ScheduleFilterCard extends StatelessWidget {
     required this.check,
     required this.isCompleted,
     required this.onTap,
-  });
+    required this.onComplete, required this.onEval,});
 
-  factory ScheduleFilterCard.fromModel(
-      {required ScheduleFilter model,
-      required bool isCompleted,
-      required GestureTapCallback onTap}) {
+  factory ScheduleFilterCard.fromModel({
+    required ScheduleFilter model,
+    required bool isCompleted,
+    required GestureTapCallback onTap,
+    required GestureTapCallback onComplete,
+    required VoidCallback onEval,
+  }) {
     final dateFormat = model.scheduleCategory == ScheduleCategory.MILESTONE
         ? DateFormat('MM-dd')
         : DateFormat('HH:mm');
@@ -50,11 +63,12 @@ class ScheduleFilterCard extends StatelessWidget {
     final period = '$startDate ~ $endDate';
     final day = onlyDayFormat.format(DateTime.parse(model.startDate));
     final dayOfWeek =
-        DateFormat('EEEE', 'ko').format(DateTime.parse(model.startDate));
+    DateFormat('EEEE', 'ko').format(DateTime.parse(model.startDate));
     final remainingDay =
-        DateTime.parse(model.startDate).difference(DateTime.now());
+    DateTime.parse(model.startDate).difference(DateTime.now());
 
     return ScheduleFilterCard(
+      scheduleId: model.scheduleId,
       day: day,
       dayOfWeek: dayOfWeek,
       period: period,
@@ -66,11 +80,13 @@ class ScheduleFilterCard extends StatelessWidget {
       check: model.check,
       isCompleted: isCompleted,
       onTap: onTap,
+      onComplete: onComplete,
+      onEval: onEval,
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       height: 150.h,
       child: Row(
@@ -95,7 +111,7 @@ class ScheduleFilterCard extends StatelessWidget {
                 ),
                 if (evaluationRequired && !isCompleted)
                   TextButton(
-                    onPressed: () {},
+                    onPressed: onEval,
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           side: const BorderSide(color: GREEN_200, width: 2),
@@ -162,12 +178,12 @@ class ScheduleFilterCard extends StatelessWidget {
                                     child: Tooltip(
                                       message: e.name,
                                       textStyle:
-                                          m_Body_01.copyWith(color: GREY_100),
+                                      m_Body_01.copyWith(color: GREY_100),
                                       showDuration: const Duration(seconds: 1),
                                       triggerMode: TooltipTriggerMode.longPress,
                                       child: CircleAvatar(
                                         backgroundImage:
-                                            NetworkImage(e.imageUrl),
+                                        NetworkImage(e.imageUrl),
                                         radius: 15.r,
                                       ),
                                     ),
@@ -202,8 +218,8 @@ class ScheduleFilterCard extends StatelessWidget {
                             remainingDay == 0
                                 ? 'd-day'
                                 : remainingDay > 0
-                                    ? 'd-$remainingDay'
-                                    : 'd+${remainingDay.abs()}',
+                                ? 'd-$remainingDay'
+                                : 'd+${remainingDay.abs()}',
                             style: m_Button_03.copyWith(
                               color: GREEN_400,
                             ),
@@ -212,14 +228,14 @@ class ScheduleFilterCard extends StatelessWidget {
                           elevation: 3,
                           shadowColor: Colors.black54,
                           materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                          MaterialTapTargetSize.shrinkWrap,
                         ),
                         if (!evaluationRequired) SizedBox(height: 10.h),
                         if (!evaluationRequired &&
                             !isCompleted &&
                             remainingDay <= 0)
                           InkWell(
-                            onTap: () {},
+                            onTap: onComplete,
                             child: Chip(
                               label: Text(
                                 "완료하기",
@@ -227,7 +243,7 @@ class ScheduleFilterCard extends StatelessWidget {
                               ),
                               backgroundColor: GREEN_200,
                               materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
+                              MaterialTapTargetSize.shrinkWrap,
                             ),
                           ),
                       ],

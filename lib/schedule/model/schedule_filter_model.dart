@@ -39,6 +39,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/schedule/model/schedule_calendar_model.dart';
 import 'package:pllcare/schedule/model/schedule_daily_model.dart';
+import 'package:pllcare/schedule/model/schedule_detail_model.dart';
 
 
 part 'schedule_filter_model.g.dart';
