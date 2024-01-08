@@ -3,28 +3,36 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/evaluation/param/evaluation_param.dart';
 import 'package:pllcare/evaluation/provider/midterm_provider.dart';
 import 'package:pllcare/theme.dart';
 import 'package:pllcare/util/custom_dialog.dart';
 
+import '../../common/model/default_model.dart';
 import '../../schedule/model/schedule_calendar_model.dart';
 import '../../schedule/model/schedule_detail_model.dart';
 import '../../schedule/model/schedule_filter_model.dart';
 import '../model/midterm_model.dart';
 
-class MidEvalCard extends StatelessWidget {
+class MidEvalCard extends ConsumerWidget {
+  final int scheduleId;
+  final int projectId;
   final String title;
   final String period;
   final List<CalendarMember> members;
 
   const MidEvalCard(
       {super.key,
+      required this.scheduleId,
+      required this.projectId,
       required this.title,
       required this.period,
       required this.members});
 
-  factory MidEvalCard.fromModel({required ScheduleFilter model}) {
+  factory MidEvalCard.fromModel(
+      {required ScheduleFilter model, required int projectId}) {
     final dateFormat = model.scheduleCategory == ScheduleCategory.MILESTONE
         ? DateFormat('MM-dd')
         : DateFormat('MM-dd HH:mm');
@@ -35,11 +43,13 @@ class MidEvalCard extends StatelessWidget {
       title: model.title,
       period: period,
       members: model.members,
+      scheduleId: model.scheduleId,
+      projectId: projectId,
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // final IconData icon;
     // switch (badge.evaluationBadge) {
     //   case BadgeType.PASSIONATE:
@@ -103,24 +113,47 @@ class MidEvalCard extends StatelessWidget {
                             '참여자 선택',
                             style: m_Heading_02.copyWith(color: GREEN_400),
                           ),
-                          Container(
-                            constraints: BoxConstraints(
-                              maxHeight: 70.h,
-                            ),
-                            child: Wrap(
-                              spacing: 7.w,
-                              children: [
-                                ...members
-                                    .map(
-                                      (e) => Chip(
-                                        label: Text(
-                                          e.name,
-                                        ),
-                                      ),
-                                    )
-                                    .toList()
-                              ],
-                            ),
+                          Consumer(
+                            builder: (BuildContext context, WidgetRef ref,
+                                Widget? child) {
+                              final votedId = ref.watch(midVotedProvider);
+                              return Container(
+                                constraints: BoxConstraints(
+                                  maxHeight: 70.h,
+                                ),
+                                child: Wrap(
+                                  spacing: 7.w,
+                                  children: [
+                                    ...members
+                                        .map(
+                                          (e) => GestureDetector(
+                                            onTap: () {
+                                              ref
+                                                  .read(
+                                                      midVotedProvider.notifier)
+                                                  .update((state) => e.id);
+                                            },
+                                            child: Chip(
+                                              label: Text(
+                                                e.name,
+                                                style: m_Button_00.copyWith(
+                                                    color: e.id == votedId
+                                                        ? GREY_100
+                                                        : GREEN_400),
+                                              ),
+                                              backgroundColor: e.id == votedId
+                                                  ? GREEN_200
+                                                  : GREY_100,
+                                              side: const BorderSide(
+                                                  color: GREEN_200, width: 2),
+                                            ),
+                                          ),
+                                        )
+                                        .toList()
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           SizedBox(height: 14.h),
                           Text(
@@ -153,7 +186,33 @@ class MidEvalCard extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
+              onPressed: ref.watch(midVotedProvider) != null
+                  ? () async {
+                      final param = CreateMidTermParam(
+                          projectId: projectId,
+                          votedId: ref.read(midVotedProvider)!,
+                          scheduleId: scheduleId,
+                          evaluationBadge: ref.read(badgeProvider));
+                      final isSuccess = await ref
+                          .read(midEvalProvider(MidEvalProviderParam(
+                                  projectId: projectId,
+                                  type: MidProviderType.create))
+                              .notifier)
+                          .createEval(param: param);
+                      if (isSuccess is! ErrorModel && context.mounted) {
+                        context.pop();
+                      } else {
+                        const snackBar = SnackBar(
+                          content: Text('자기 자신의 평가를 할 수 없습니다.'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        isSuccess as ErrorModel;
+                        log("실패 = ${isSuccess.code}"); //todo 실패 핸들링
+                      }
+                    }
+                  : () {
+                      log("안됨");
+                    },
               style: CustomDialog.textButtonStyle,
               child: Text(
                 '작성 완료',

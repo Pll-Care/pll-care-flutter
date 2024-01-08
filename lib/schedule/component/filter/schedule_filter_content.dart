@@ -39,17 +39,16 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
   @override
   Widget build(BuildContext context) {
     ref.listen(scheduleFilterProvider(widget.projectId),
-            (previous, next) async {
-          final PageParams params = PageParams(
-              page: 1, size: 4, direction: 'DESC');
-          condition = getFilterParam(next);
-          await ref
-              .read(scheduleFilterFetchProvider(condition: condition!).notifier)
-              .getFilter(params: params, condition: condition!);
-          // ref.read(scheduleProvider(ScheduleProviderParam(
-          //     projectId: projectId, type: ScheduleProviderType.getFilter)).notifier)
-          //     .getFilter(params: PageParams(page: page, size: 4, direction: 'DESC'), condition: condition);
-        });
+        (previous, next) async {
+      final PageParams params = PageParams(page: 1, size: 4, direction: 'DESC');
+      condition = getFilterParam(next);
+      await ref
+          .read(scheduleFilterFetchProvider(condition: condition!).notifier)
+          .getFilter(params: params, condition: condition!);
+      // ref.read(scheduleProvider(ScheduleProviderParam(
+      //     projectId: projectId, type: ScheduleProviderType.getFilter)).notifier)
+      //     .getFilter(params: PageParams(page: page, size: 4, direction: 'DESC'), condition: condition);
+    });
     final filter = ref.watch(scheduleFilterProvider(widget.projectId));
     condition = getFilterParam(filter);
     final model = ref.watch(scheduleFilterFetchProvider(condition: condition!));
@@ -78,8 +77,8 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
           vertical: 25.h,
         ),
         child:
-        // ScheduleFilterCard.fromModel(model: modelList[0])
-        Consumer(
+            // ScheduleFilterCard.fromModel(model: modelList[0])
+            Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             if (model is LoadingModel) {
               return CircularProgressIndicator();
@@ -116,8 +115,10 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
                         CustomDialog.showCustomDialog(
                             context: context,
                             backgroundColor: GREEN_200,
-                            content: MidEvalCard.fromModel(model: modelList[idx])
-                        );
+                            content: MidEvalCard.fromModel(
+                              model: modelList[idx],
+                              projectId: widget.projectId,
+                            ));
                       },
                     );
                   },
@@ -164,24 +165,24 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
       BuildContext context) async {
     await ref
         .read(scheduleProvider(ScheduleProviderParam(
-        projectId: widget.projectId,
-        type: ScheduleProviderType.updateState,
-        scheduleId: modelList[idx].scheduleId))
-        .notifier)
+                projectId: widget.projectId,
+                type: ScheduleProviderType.updateState,
+                scheduleId: modelList[idx].scheduleId))
+            .notifier)
         .updateState(
-        param: ScheduleStateUpdateParam(
-            projectId: widget.projectId, state: StateType.COMPLETE));
+            param: ScheduleStateUpdateParam(
+                projectId: widget.projectId, state: StateType.COMPLETE));
     if (context.mounted) {
       context.pop();
     }
   }
 
-  void onComplete(BuildContext context, List<ScheduleFilter> modelList,
-      int idx) {
+  void onComplete(
+      BuildContext context, List<ScheduleFilter> modelList, int idx) {
     final String content =
-    DateTime.now().isBefore(DateTime.parse(modelList[idx].endDate))
-        ? '예정된 종료 일자보다 먼저 일정이 완료되었습니까?'
-        : '일정을 완료하시겠습니까?';
+        DateTime.now().isBefore(DateTime.parse(modelList[idx].endDate))
+            ? '예정된 종료 일자보다 먼저 일정이 완료되었습니까?'
+            : '일정을 완료하시겠습니까?';
     CustomDialog.showCustomDialog(
         context: context,
         backgroundColor: GREEN_200,
@@ -210,7 +211,7 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
   void _onTapPage(WidgetRef ref, int page, int projectId) {
     log("page = $page");
     final PageParams params =
-    PageParams(page: page, size: 4, direction: 'DESC');
+        PageParams(page: page, size: 4, direction: 'DESC');
     ScheduleParams? condition;
     final filter = ref.read(scheduleFilterProvider(projectId));
     condition = getFilterParam(filter);

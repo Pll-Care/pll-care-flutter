@@ -8,7 +8,7 @@ import '../model/midterm_model.dart';
 import '../repository/mid_eval_repository.dart';
 
 enum MidProviderType { modal, create, getEval, getChart }
-
+final midVotedProvider = StateProvider.autoDispose<int?>((ref) => null);
 final badgeProvider = StateProvider.autoDispose<BadgeType>((ref) => BadgeType.PASSIONATE);
 
 class MidEvalProviderParam extends DefaultProviderType {
@@ -71,14 +71,16 @@ class MidEvalStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> createEval({required CreateMidTermParam param}) async {
+  Future<BaseModel> createEval({required CreateMidTermParam param}) async {
     state = LoadingModel();
-    repository.createMidTerm(param: param).then((value) {
+    return await repository.createMidTerm(param: param).then((value) {
       logger.i('create mid eval!');
+      return state;
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return ErrorModel.respToError(e);
+      state = ErrorModel.respToError(e);
     });
   }
 

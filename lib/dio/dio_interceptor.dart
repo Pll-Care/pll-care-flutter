@@ -9,7 +9,7 @@ import 'package:pllcare/util/repository/util_repository.dart';
 import '../auth/model/auth_model.dart';
 import '../common/logger/custom_logger.dart';
 
-const String serverURL = "http://59.6.152.49:8080";
+const String serverURL = "http://59.6.240.154:8080";
 // const String serverURL = "https://pll-care.store";
 
 class CustomDioInterceptor extends Interceptor {
