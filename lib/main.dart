@@ -34,7 +34,7 @@ class MyApp extends ConsumerWidget {
     final router = ref.read(routerProvider);
 
     return ScreenUtilInit(
-      designSize: const Size(411.42857142857144, 867.4285714285714),
+      designSize: const Size(432, 960),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {

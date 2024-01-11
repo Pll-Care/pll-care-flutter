@@ -40,6 +40,15 @@ class ScheduleOverViewModel extends BaseModel {
 
   factory ScheduleOverViewModel.fromJson(Map<String, dynamic> json) =>
       _$ScheduleOverViewModelFromJson(json);
+
+  int getMaxOrder(){
+    return schedules.last.order;
+  }
+
+  List<Schedule> getSchedulesByOrder({required int order}){
+    return schedules.where((e) => e.order == order).toList();
+  }
+
 }
 
 @JsonSerializable()

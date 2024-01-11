@@ -63,7 +63,7 @@ class PostCard extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: 120,
+          height: 120.h,
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: imageUrl.isNotEmpty
@@ -75,17 +75,17 @@ class PostCard extends StatelessWidget {
           ),
         ),
         Container(
-          height: 180,
+          height: 180.h,
           // width: double.infinity,
           decoration: BoxDecoration(
               color: GREY_100,
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                    color: Colors.black54,
+                    color: const Color(0xFF000000).withOpacity(0.25),
                     blurStyle: BlurStyle.outer,
-                    blurRadius: 10,
+                    blurRadius: 10.r,
                     // spreadRadius: 5,
-                    offset: Offset(0.0, 0.75))
+                    offset: Offset(0.0, 4.h))
               ],
               borderRadius:
                   BorderRadius.vertical(bottom: Radius.circular(30.r))),
@@ -114,18 +114,18 @@ class PostCard extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Container(
-                          width: 45,
-                          height: 45,
+                          width: 45.w,
+                          height: 45.w,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: GREEN_200, width: 2)),
+                              border: Border.all(color: GREEN_200, width: 2.w)),
                           child: Column(
                             children: [
                               SizedBox(height: 2.h),
                               Icon(
                                 liked ? Icons.favorite : Icons.favorite_border,
                                 color: GREEN_200,
-                                size: 15,
+                                size: 15.w,
                               ),
                               Text(
                                 likeCount.toString(),

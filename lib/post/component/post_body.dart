@@ -32,19 +32,23 @@ class PostBody extends ConsumerWidget {
           child: RecruitNav(),
         ),
         SliverPadding(
-          padding: EdgeInsets.only(left: 8.w),
+          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
           sliver: SliverToBoxAdapter(
-            child: TextButton(
-              onPressed: () {},
-              style: buttonStyle,
-              child: Text(
-                "작성하기",
-                style: m_Button_01.copyWith(color: GREY_100),
+            child: SizedBox(
+              width: 120.w,
+              height: 30.h,
+              child: TextButton(
+                onPressed: () {},
+                style: buttonStyle,
+                child: Text(
+                  "작성하기",
+                  style: m_Button_03.copyWith(color: GREY_100),
+                ),
               ),
             ),
           ),
         ),
-        _RecruitList(),
+        const _RecruitList(),
         // BottomPageCount(pModelList: pModelList, onTapPage: onTapPage),
       ],
     );
@@ -107,10 +111,9 @@ class _RecruitList extends ConsumerWidget {
                       onTapLike: () {
                         ref
                             .read(
-                              postProvider(PostProviderParam(
-                                      type: PostProviderType.getList,
-                                      ))
-                                  .notifier,
+                              postProvider(const PostProviderParam(
+                                type: PostProviderType.getList,
+                              )).notifier,
                             )
                             .likePost(postId: pModelList.data![idx].postId);
                       },
@@ -119,7 +122,7 @@ class _RecruitList extends ConsumerWidget {
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 15.h,
+                  mainAxisSpacing: 22.h,
                   crossAxisSpacing: 15.w,
                   mainAxisExtent: 300.h,
                 ),
