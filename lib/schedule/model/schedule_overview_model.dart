@@ -1,25 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import '../../common/model/default_model.dart';
-
 part 'schedule_overview_model.g.dart';
-
-/*
-{
-  "startDate": "2023-11-20",
-  "endDate": "2023-11-20",
-  "dateCategory": "MONTH",
-  "schedules": [
-    {
-      "id": 0,
-      "title": "string",
-      "startDate": "2023-11-20T13:45:32.200Z",
-      "endDate": "2023-11-20T13:45:32.200Z",
-      "order": 0
-    }
-  ]
-}
- */
 
 enum DateCategory{
   MONTH, WEEK,
@@ -42,6 +23,9 @@ class ScheduleOverViewModel extends BaseModel {
       _$ScheduleOverViewModelFromJson(json);
 
   int getMaxOrder(){
+    if(schedules.isEmpty){
+      return 0;
+    }
     return schedules.last.order;
   }
 

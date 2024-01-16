@@ -8,4 +8,11 @@ class DateTimeUtil {
     return int.parse(DateFormat('MM').format(DateTime.parse(dateTime)));
   }
 
+  static String getDateRange({required String start, required String end}){
+    final formatStart = DateFormat('MM월 dd일').format(DateTime.parse(start));
+    final formatEnd = DateFormat('MM월 dd일').format(DateTime.parse(end));
+
+    return '$formatStart ~ $formatEnd';
+  }
+
 }

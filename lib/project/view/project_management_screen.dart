@@ -43,7 +43,8 @@ class _ProjectManagementScreenState extends State<ProjectManagementScreen>
         controller: tabController,
         children: [
           ScheduleOverViewBody(projectId: widget.projectId),
-          ScheduleOverViewBody(projectId: widget.projectId),
+          RainyEffect(),
+          // ScheduleOverViewBody(projectId: widget.projectId),
           ScheduleBody(projectId: widget.projectId),
           EvaluationBody(projectId: widget.projectId),
           ManagementBody(projectId: widget.projectId),

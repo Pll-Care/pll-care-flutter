@@ -348,41 +348,45 @@ class _ScoreCard extends StatelessWidget {
               style: m_Heading_03.copyWith(color: GREY_500),
             ),
           if (scoreModel == null)
-            SizedBox(
-              width: 60.w,
-              height: 48.h,
-              child: InputDecorator(
-                decoration: InputDecoration(
-                    isDense: true,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: const BorderSide(color: GREEN_200)),
-                    disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: const BorderSide(color: GREEN_200)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: const BorderSide(color: GREEN_200))),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                      style: m_Heading_03.copyWith(
-                        color: GREEN_400,
-                      ),
-                      iconEnabledColor: GREEN_200,
-                      iconDisabledColor: GREEN_200,
-                      underline: null,
+            InputDecorator(
+              // expands: true,
+              decoration: InputDecoration(
+                  constraints: BoxConstraints.tight(Size(60.w, 25.h)),
+                  contentPadding: EdgeInsets.zero,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                      borderSide: const BorderSide(color: GREEN_200)),
+                  disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
-                      items: [
-                        ...evalDropItem
-                            .map((e) => DropdownMenuItem<int>(
-                                  value: e,
-                                  child: Text('$e'),
-                                ))
-                            .toList()
-                      ],
-                      value: selectedValue,
-                      onChanged: onChanged),
-                ),
+                      borderSide: const BorderSide(color: GREEN_200)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                      borderSide: const BorderSide(color: GREEN_200))),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                    style: m_Heading_03.copyWith(
+                      color: GREEN_400,
+                    ),
+                    borderRadius: BorderRadius.circular(15.r),
+                    iconEnabledColor: GREEN_200,
+                    iconDisabledColor: GREEN_200,
+                    isDense: true,
+                    isExpanded: true,
+                    underline: null,
+                    items: [
+                      ...evalDropItem
+                          .map((e) => DropdownMenuItem<int>(
+                                value: e,
+                                child: SizedBox(
+                                    width: double.infinity,
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text('$e'))),
+                              ))
+                          .toList()
+                    ],
+                    value: selectedValue,
+                    onChanged: onChanged),
               ),
             )
         ],
