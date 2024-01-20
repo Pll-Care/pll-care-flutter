@@ -52,11 +52,9 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
   Widget build(BuildContext context) {
     final dropTextStyle = m_Body_01.copyWith(color: GREEN_400);
     final textStyle = m_Button_00.copyWith(color: GREEN_400);
-    final titleTextStyle = Heading_05.copyWith(color: GREY_500);
     final ScheduleForm form = ref.watch(scheduleCreateFormProvider);
     final view = ref.watch(calendarViewProvider);
     final memberList = ref.watch(managementProvider(widget.projectId));
-
 
     final format = DateFormat('yy-MM-dd HH:mm');
     List<DropdownMenuItem> categoryItems = [
@@ -82,22 +80,20 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
       child: SingleChildScrollView(
         // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Form(
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: widget.formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                  hintText: '일정 제목을 입력하세요',
-                  hintStyle: titleTextStyle,
-                  border: const UnderlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                    hintText: '일정 제목을 입력해주세요.',
+                    hintStyle: titleFormTextStyle.copyWith(
+                      color: GREEN_400,
+                    )),
                 initialValue: widget.model?.title ?? '',
                 cursorColor: GREEN_200,
-                style: titleTextStyle,
+                style: titleFormTextStyle,
                 validator: (String? val) {
                   if (val == null || val.isEmpty) {
                     return '일정 제목은 필수사항입니다.';
@@ -108,44 +104,46 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                   return null;
                 },
                 onSaved: widget.onSavedTitle,
-                // onChanged: (value) {
-                //   if (widget.formKey.currentState!.validate()) {
-                //     ref
-                //         .read(scheduleCreateFormProvider.notifier)
-                //         .updateForm(form: form.copyWith(title: value));
-                //   }
-                // },
               ),
               SizedBox(height: 10.h),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: GREEN_200)),
+                    borderRadius: BorderRadius.circular(5.r),
+                    border: Border.all(color: GREEN_200, width: 2.w)),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         SizedBox(
-                          width: 80.w,
+                          width: 70.w,
                           child: Text(
                             '카테고리',
                             style: textStyle,
                           ),
                         ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            items: categoryItems,
-                            value: form.category,
-                            onChanged: (value) {
-                              ref
-                                  .read(scheduleCreateFormProvider.notifier)
-                                  .updateForm(
-                                      form: form.copyWith(category: value));
-                            },
-                            borderRadius: BorderRadius.circular(48.r),
+                        SizedBox(
+                          width: 130.w,
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                iconEnabledColor: GREEN_200,
+                                items: categoryItems,
+                                value: form.category,
+                                onChanged: (value) {
+                                  ref
+                                      .read(scheduleCreateFormProvider.notifier)
+                                      .updateForm(
+                                          form: form.copyWith(category: value));
+                                },
+                                isExpanded: true,
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                            ),
                           ),
                         ),
+                        Spacer(),
                       ],
                     ),
                     Row(
@@ -207,30 +205,29 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                       Row(
                         children: [
                           SizedBox(
-                            width: 80.w,
+                            width: 70.w,
                             child: Text(
                               '모임 위치',
                               style: textStyle,
                             ),
                           ),
                           Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  hintText: '모임 위치',
-                                  hintStyle: Body_02.copyWith(
-                                    color: GREY_400,
-                                  ),
-                                  border: const UnderlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                              cursorColor: GREEN_200,
-                              style: Body_02,
+                            child: SizedBox(
+                              height: 50.h,
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    hintText: '모임 위치를 입력해주세요.',
+                                    hintStyle: textStyle,
+                                    border: const UnderlineInputBorder(
+                                        borderSide: BorderSide.none)),
+                                cursorColor: GREEN_200,
+                                style: textStyle.copyWith(color: GREY_500),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    const Divider(
-                      color: GREY_400,
-                    ),
+                    Divider(color: GREY_400, thickness: 2.h),
                     Row(
                       children: [
                         SizedBox(
@@ -290,40 +287,26 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
               SizedBox(
                 height: 10.h,
               ),
-              Container(
+              SizedBox(
                 height: 200.h,
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: GREEN_200)),
                 child: TextFormField(
                   expands: true,
                   maxLength: 500,
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: '내용 입력',
-                    hintStyle: textStyle,
-                    border:
-                        const UnderlineInputBorder(borderSide: BorderSide.none),
+                    hintStyle: contentFormTextStyle.copyWith(color: GREEN_400),
                   ),
+                  textAlignVertical: TextAlignVertical.top,
                   initialValue: widget.model?.content ?? '',
                   cursorColor: GREEN_200,
-                  style: textStyle.copyWith(color: GREY_500),
+                  style: contentFormTextStyle,
                   validator: (String? val) {
                     if (val == null || val.isEmpty) {
                       return '내용은 필수사항입니다.';
                     }
                     return null;
                   },
-                  // onChanged: (value) {
-                  //   log('value $value');
-                  //   if (widget.formKey.currentState!.validate()) {
-                  //     log('value $value');
-                  //     ref
-                  //         .read(scheduleCreateFormProvider.notifier)
-                  //         .updateForm(form: form.copyWith(content: value));
-                  //   }
-                  // },
                   onSaved: widget.onSavedContent,
                 ),
               ),

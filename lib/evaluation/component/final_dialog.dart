@@ -62,7 +62,7 @@ class FinalDialog extends ConsumerWidget {
               height: MediaQuery.of(context).size.height * 0.9,
               child: Form(
                 key: finalFormKey,
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -301,7 +301,7 @@ class _ScoreComponent extends StatelessWidget {
           color: GREY_400,
           indent: 6.w,
           endIndent: 6.w,
-          thickness: 2,
+          thickness: 2.h,
         ),
       ],
     );
@@ -348,45 +348,48 @@ class _ScoreCard extends StatelessWidget {
               style: m_Heading_03.copyWith(color: GREY_500),
             ),
           if (scoreModel == null)
-            InputDecorator(
-              // expands: true,
-              decoration: InputDecoration(
-                  constraints: BoxConstraints.tight(Size(60.w, 25.h)),
-                  contentPadding: EdgeInsets.zero,
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.r),
-                      borderSide: const BorderSide(color: GREEN_200)),
-                  disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: const BorderSide(color: GREEN_200)),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: const BorderSide(color: GREEN_200))),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                    style: m_Heading_03.copyWith(
-                      color: GREEN_400,
-                    ),
-                    borderRadius: BorderRadius.circular(15.r),
-                    iconEnabledColor: GREEN_200,
-                    iconDisabledColor: GREEN_200,
-                    isDense: true,
-                    isExpanded: true,
-                    underline: null,
-                    items: [
-                      ...evalDropItem
-                          .map((e) => DropdownMenuItem<int>(
-                                value: e,
-                                child: SizedBox(
-                                    width: double.infinity,
-                                    child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text('$e'))),
-                              ))
-                          .toList()
-                    ],
-                    value: selectedValue,
-                    onChanged: onChanged),
+            ButtonTheme(
+              alignedDropdown: true,
+              child: InputDecorator(
+                // expands: true,
+                decoration: InputDecoration(
+                    constraints: BoxConstraints.tight(Size(60.w, 25.h)),
+                    contentPadding: EdgeInsets.zero,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.r),
+                        borderSide: const BorderSide(color: GREEN_200)),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: const BorderSide(color: GREEN_200)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: const BorderSide(color: GREEN_200))),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                      style: m_Heading_03.copyWith(
+                        color: GREEN_400,
+                      ),
+                      borderRadius: BorderRadius.circular(15.r),
+                      iconEnabledColor: GREEN_200,
+                      iconDisabledColor: GREEN_200,
+                      isDense: true,
+                      isExpanded: true,
+                      underline: null,
+                      items: [
+                        ...evalDropItem
+                            .map((e) => DropdownMenuItem<int>(
+                                  value: e,
+                                  child: SizedBox(
+                                      width: double.infinity,
+                                      child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text('$e'))),
+                                ))
+                            .toList()
+                      ],
+                      value: selectedValue,
+                      onChanged: onChanged),
+                ),
               ),
             )
         ],
@@ -440,7 +443,7 @@ class _BadgeComponent extends StatelessWidget {
           color: GREY_400,
           indent: 6.w,
           endIndent: 6.w,
-          thickness: 2,
+          thickness: 2.h,
         ),
       ],
     );

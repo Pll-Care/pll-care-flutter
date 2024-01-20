@@ -170,8 +170,8 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                           style: m_Heading_01.copyWith(color: GREY_100),
                         ),
                       ),
-                      const Divider(
-                        thickness: 2,
+                      Divider(
+                        thickness: 2.h,
                         color: GREY_100,
                       ),
                       if (calendarSchedule.isEmpty)

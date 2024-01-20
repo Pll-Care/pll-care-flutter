@@ -18,9 +18,9 @@ class PostBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ButtonStyle buttonStyle = TextButton.styleFrom(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      minimumSize: (Size(40.w, 5.h)),
-      maximumSize: Size(65.w, 30.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      minimumSize: Size(40.w, 5.h),
+      maximumSize: Size(120.w, 35.h),
       backgroundColor: GREEN_200,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(45.r),
@@ -32,17 +32,17 @@ class PostBody extends ConsumerWidget {
           child: RecruitNav(),
         ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
           sliver: SliverToBoxAdapter(
-            child: SizedBox(
-              width: 120.w,
-              height: 30.h,
-              child: TextButton(
-                onPressed: () {},
-                style: buttonStyle,
-                child: Text(
-                  "작성하기",
-                  style: m_Button_03.copyWith(color: GREY_100),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "작성하기",
+                    style: m_Button_03.copyWith(color: GREY_100),
+                  ),
                 ),
               ),
             ),
@@ -132,6 +132,8 @@ class _RecruitList extends ConsumerWidget {
                 onTapPage: (int page) {
                   _onTapPage(ref, page);
                 },
+                onPageStart: () => _onTapPage(ref, 1),
+                onPageLast: () => _onTapPage(ref, pModelList.totalPages!),
               ),
             ])
           : const SliverToBoxAdapter(

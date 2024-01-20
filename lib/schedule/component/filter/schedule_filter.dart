@@ -56,6 +56,7 @@ class ScheduleFilter extends ConsumerWidget {
               filterModel: filterModel,
               projectId: projectId,
             ),
+            SizedBox(height: 16.h),
             _FilterNames(
               teamMembers: teamMembers,
               projectId: projectId,
@@ -66,8 +67,6 @@ class ScheduleFilter extends ConsumerWidget {
       ),
     );
   }
-
-
 }
 
 class _FilterChip extends ConsumerWidget {

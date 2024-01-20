@@ -40,6 +40,30 @@ class MemoModel extends BaseModel {
     required this.bookmarked,
   });
 
+  MemoModel copyWith({
+    int? memoId,
+    String? author,
+    String? title,
+    String? content,
+    String? createdDate,
+    String? modifiedDate,
+    bool? deletable,
+    bool? editable,
+    bool? bookmarked,
+  }) {
+    return MemoModel(
+      memoId: memoId ?? this.memoId,
+      author: author ?? this.author,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      createdDate: createdDate ?? this.createdDate,
+      modifiedDate: modifiedDate ?? this.modifiedDate,
+      deletable: deletable ?? this.deletable,
+      editable: editable ?? this.editable,
+      bookmarked: bookmarked ?? this.bookmarked,
+    );
+  }
+
   factory MemoModel.fromJson(Map<String, dynamic> json) =>
       _$MemoModelFromJson(json);
 }
@@ -86,6 +110,7 @@ class MemoListModel {
     required this.createdDate,
     required this.modifiedDate,
   });
+
   factory MemoListModel.fromJson(Map<String, dynamic> json) =>
       _$MemoListModelFromJson(json);
 }

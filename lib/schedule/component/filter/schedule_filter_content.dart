@@ -58,105 +58,96 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
       padding: EdgeInsets.symmetric(
         vertical: 20.h,
       ),
-      child: Container(
-        constraints: BoxConstraints(maxHeight: 740.h, minHeight: 140.h),
-        // todo 개수에 맞게 높이 조절
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
-          color: GREY_100,
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.1),
-              blurStyle: BlurStyle.outer,
-              blurRadius: 20,
-            )
-          ],
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: 20.w,
-          vertical: 25.h,
-        ),
-        child:
-            // ScheduleFilterCard.fromModel(model: modelList[0])
-            Consumer(
-          builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            if (model is LoadingModel) {
-              return CircularProgressIndicator();
-            } else if (model is ErrorModel) {
-              return Text("error");
-            }
-            final pModelList = (model as PaginationModel<ScheduleFilter>);
-            final modelList = pModelList.data!;
-            cardCnt = modelList.length;
-            return CustomScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              slivers: [
-                SliverList.separated(
-                  itemBuilder: (_, idx) {
-                    return ScheduleFilterCard.fromModel(
-                      model: modelList[idx],
-                      isCompleted: (isCompleted is ProjectIsCompleted)
-                          ? isCompleted.completed
-                          : false,
-                      onTap: () {
-                        CustomDialog.showCustomDialog(
-                          context: context,
-                          backgroundColor: GREY_100,
-                          content: ScheduleDialogComponent(
-                            projectId: widget.projectId,
-                            scheduleId: modelList[idx].scheduleId,
-                          ),
-                        );
-                      },
-                      onComplete: () {
-                        onComplete(context, modelList, idx);
-                      },
-                      onEval: () {
-                        CustomDialog.showCustomDialog(
-                            context: context,
-                            backgroundColor: GREEN_200,
-                            content: MidEvalCard.fromModel(
-                              model: modelList[idx],
-                              projectId: widget.projectId,
-                            ));
-                      },
-                    );
-                  },
-                  separatorBuilder: (_, idx) {
-                    return SizedBox(
-                      height: 10.h,
-                    );
-                  },
-                  itemCount: modelList.length,
-                ),
-                BottomPageCount<ScheduleFilter>(
-                  pModelList: pModelList,
-                  onTapPage: (int page) {
-                    _onTapPage(ref, page, widget.projectId);
-                  },
-                ),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 760.h, minHeight: 140.h),
+          child: Container(
+            // todo 개수에 맞게 높이 조절
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r),
+              color: GREY_100,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color.fromRGBO(0, 0, 0, 0.25),
+                  blurRadius: 4.r,
+                  offset: Offset(0, 4.h)
+                )
               ],
-            );
-          },
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+              vertical: 25.h,
+            ),
+            child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                if (model is LoadingModel) {
+                  return CircularProgressIndicator();
+                } else if (model is ErrorModel) {
+                  return Text("error");
+                }
+                final pModelList = (model as PaginationModel<ScheduleFilter>);
+                final modelList = pModelList.data!;
+                cardCnt = modelList.length;
+                return Column(
+                  children: [
+                    Flexible(
+                      child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (_, idx) {
+                          return ScheduleFilterCard.fromModel(
+                            model: modelList[idx],
+                            isCompleted: (isCompleted is ProjectIsCompleted)
+                                ? isCompleted.completed
+                                : false,
+                            onTap: () {
+                              CustomDialog.showCustomDialog(
+                                context: context,
+                                backgroundColor: GREY_100,
+                                content: ScheduleDialogComponent(
+                                  projectId: widget.projectId,
+                                  scheduleId: modelList[idx].scheduleId,
+                                ),
+                              );
+                            },
+                            onComplete: () {
+                              onComplete(context, modelList, idx);
+                            },
+                            onEval: () {
+                              CustomDialog.showCustomDialog(
+                                  context: context,
+                                  backgroundColor: GREEN_200,
+                                  content: MidEvalCard.fromModel(
+                                    model: modelList[idx],
+                                    projectId: widget.projectId,
+                                  ));
+                            },
+                          );
+                        },
+                        separatorBuilder: (_, idx) {
+                          return SizedBox(
+                            height: 10.h,
+                          );
+                        },
+                        itemCount: modelList.length,
+                      ),
+                    ),
+                    BottomPageCount<ScheduleFilter>(
+                      pModelList: pModelList,
+                      onTapPage: (int page) {
+                        _onTapPage(ref, page, widget.projectId);
+                      },
+                      isSliver: false,
+                      onPageStart: () =>
+                          _onTapPage(ref, 1, widget.projectId),
+                      onPageLast: () => _onTapPage(ref, pModelList.totalPages!, widget.projectId),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         ),
-        // Column(
-        //   children: [
-        //     Expanded(
-        //       child: ListView.separated(
-        //           physics: const NeverScrollableScrollPhysics(),
-        //           itemBuilder: (_, idx) {
-        //             return ScheduleFilterCard.fromModel(
-        //                 model: modelList[idx]);
-        //           },
-        //           separatorBuilder: (_, idx) {
-        //             return SizedBox(
-        //               height: 10.h,
-        //             );
-        //           },
-        //           itemCount: modelList.length),
-        //     ),
-        //   ],
-        // ),
       ),
     );
   }

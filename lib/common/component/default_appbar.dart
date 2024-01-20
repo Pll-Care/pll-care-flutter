@@ -42,7 +42,7 @@ class DefaultAppbar extends ConsumerWidget {
       elevation: 0,
       actions: [
         Container(
-          width: 80.w,
+          width: 85.w,
           padding: EdgeInsets.symmetric(vertical: 10.h),
           child: TextButton(
             onPressed: () {
@@ -61,18 +61,18 @@ class DefaultAppbar extends ConsumerWidget {
             ),
           ),
         ),
-        SizedBox(width:10.w),
+        SizedBox(width: 10.w),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final model = ref.watch(memberProvider);
             if (model is MemberModel) {
-              if(ref.watch(authProvider) == null){
+              if (ref.watch(authProvider) == null) {
                 ref.read(authProvider.notifier).autoLogin();
               }
               return Padding(
                 padding: EdgeInsets.only(right: 10.w),
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     model.memberId;
                   },
                   child: CircleAvatar(
@@ -81,7 +81,7 @@ class DefaultAppbar extends ConsumerWidget {
                   ),
                 ),
               );
-            }else if(model is ErrorModel){
+            } else if (model is ErrorModel) {
               ref.read(authProvider.notifier).logout();
             }
             return Container();

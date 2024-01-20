@@ -1,7 +1,7 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/memo/model/memo_model.dart';
 import 'package:pllcare/memo/repository/memo_repository.dart';
 
 import '../../common/logger/custom_logger.dart';
@@ -15,6 +15,7 @@ enum MemoProviderType {
   update,
   delete,
   bookmark,
+  bookmarkList,
 }
 
 class MemoProviderParam extends Equatable {
@@ -24,7 +25,7 @@ class MemoProviderParam extends Equatable {
 
   const MemoProviderParam({
     this.projectId,
-    required this.memoId,
+    this.memoId,
     required this.type,
   });
 
@@ -32,17 +33,21 @@ class MemoProviderParam extends Equatable {
   List<Object?> get props => [projectId, memoId, type];
 }
 
+final memoDropdownProvider = StateProvider.autoDispose((ref) => '전체');
+
 final memoProvider = StateNotifierProvider.family<MemoStateNotifier, BaseModel,
     MemoProviderParam>((ref, param) {
   final repository = ref.watch(memoRepositoryProvider);
-  return MemoStateNotifier(repository: repository, param: param);
+  return MemoStateNotifier(repository: repository, param: param, ref: ref);
 });
 
 class MemoStateNotifier extends StateNotifier<BaseModel> {
   final MemoRepository repository;
   final MemoProviderParam param;
+  final StateNotifierProviderRef ref;
 
-  MemoStateNotifier({required this.repository, required this.param})
+  MemoStateNotifier(
+      {required this.repository, required this.param, required this.ref})
       : super(LoadingModel()) {
     init();
   }
@@ -53,7 +58,11 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         getMemo();
         break;
       case MemoProviderType.getList:
-        getMemoList(param: PageParams(page: 1, size: 4, direction: 'ASC'));
+        getMemoList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+        break;
+      case MemoProviderType.bookmarkList:
+        getBookmarkMemoList(
+            param: PageParams(page: 1, size: 4, direction: 'DESC'));
         break;
       default:
         break;
@@ -74,53 +83,76 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> updateMemo({required MemoParam param}) async {
+  Future<BaseModel> updateMemo({required MemoParam param}) async {
     state = LoadingModel();
-    repository
+    return await repository
         .updateMemo(memoId: this.param.memoId!, param: param)
         .then((value) {
       logger.i('memo update!');
+      state = CompletedModel();
+      return state;
     }).catchError((e) {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return state;
     });
   }
 
-  Future<void> deleteMemo({required DeleteMemoParam param}) async {
+  Future<BaseModel> deleteMemo({required DeleteMemoParam param}) async {
     state = LoadingModel();
-    repository
+    return await repository
         .deleteMemo(memoId: this.param.memoId!, param: param)
         .then((value) {
       logger.i('memo delete!');
+      state = CompletedModel();
+      return state;
     }).catchError((e) {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return state;
     });
   }
 
-  Future<void> createMemo({required MemoParam param}) async {
+  Future<BaseModel> createMemo({required MemoParam param}) async {
     state = LoadingModel();
-    repository.createMemo(param: param).then((value) {
+    return await repository.createMemo(param: param).then((value) {
       logger.i('memo create!');
+      state = CompletedModel();
+      final pageParam = PageParams(page: 1, size: 4, direction: 'DESC');
+      ref
+          .read(memoProvider(MemoProviderParam(
+                  type: MemoProviderType.getList, projectId: param.projectId))
+              .notifier)
+          .getMemoList(param: pageParam);
+      return state;
     }).catchError((e) {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return state;
     });
   }
 
-  Future<void> bookmarkMemo({required BookmarkMemoParam param}) async {
+  Future<BaseModel> bookmarkMemo({required BookmarkMemoParam param}) async {
+    ref
+        .read(memoProvider(MemoProviderParam(
+        type: MemoProviderType.get, memoId: this.param.memoId!, projectId: param.projectId))
+        .notifier)
+        ._updateBookmark();
     state = LoadingModel();
-    repository
+    return await repository
         .bookmarkMemo(param: param, memoId: this.param.memoId!)
         .then((value) {
       logger.i('memo bookmark!');
+      state = CompletedModel();
+      return state;
     }).catchError((e) {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return state;
     });
   }
 
@@ -129,6 +161,7 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
     repository
         .getMemoList(param: param, projectId: this.param.projectId!)
         .then((value) {
+      state = value;
       logger.i('memo list!');
     }).catchError((e) {
       state = ErrorModel.respToError(e);
@@ -142,11 +175,19 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
     repository
         .getBookmarkMemoList(param: param, projectId: this.param.projectId!)
         .then((value) {
+      state = value;
       logger.i('memo bookmark list!');
     }).catchError((e) {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
+  }
+
+
+  // optimistic response
+  void _updateBookmark() {
+    final model = state as MemoModel;
+    state = model.copyWith(bookmarked: !model.bookmarked);
   }
 }

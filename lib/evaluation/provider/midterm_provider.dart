@@ -75,12 +75,13 @@ class MidEvalStateNotifier extends StateNotifier<BaseModel> {
     state = LoadingModel();
     return await repository.createMidTerm(param: param).then((value) {
       logger.i('create mid eval!');
+      state = CompletedModel();
       return state;
     }).catchError((e) {
-      final error = ErrorModel.respToError(e);
+      state =  ErrorModel.respToError(e);
+      final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
-      return ErrorModel.respToError(e);
-      state = ErrorModel.respToError(e);
+      return state;
     });
   }
 

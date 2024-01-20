@@ -61,6 +61,7 @@ dependencies:
 
   debounce_throttle: ^2.0.0
   riverpod_annotation: ^2.3.3
+  flutter_html: ^3.0.0-beta.1
 
 dev_dependencies:
   flutter_test:

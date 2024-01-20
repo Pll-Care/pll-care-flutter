@@ -84,12 +84,11 @@ class ProjectForm extends ConsumerWidget {
             child: TextFormField(
               maxLength: 20,
               initialValue: projectModel?.title,
-              decoration: inputDecoration.copyWith(
+              decoration: InputDecoration(
                 hintText: '프로젝트 이름을 입력하세요',
-                hintStyle: m_Heading_01.copyWith(
-                  color: GREY_400,
-                ),
+                hintStyle: titleFormTextStyle.copyWith(color: GREEN_400),
               ),
+              style: titleFormTextStyle,
               cursorColor: GREEN_400,
               validator: (String? val) {
                 if (val == null || val.isEmpty) {
@@ -163,7 +162,7 @@ class ProjectForm extends ConsumerWidget {
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
                             "시작일자가 종료일자가 같거나 이후 일 수 없습니다.",
-                            style: m_Heading_04.copyWith(color: Colors.red),
+                            style: errorFormTextStyle,
                           ),
                         ),
                       if (!ref
@@ -173,7 +172,7 @@ class ProjectForm extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
-                            style: m_Heading_04.copyWith(color: Colors.red),
+                            style: errorFormTextStyle,
                             "시작일자와 종료일자를 선택해주세요.",
                           ),
                         ),
@@ -187,7 +186,10 @@ class ProjectForm extends ConsumerWidget {
                           maxLines: null,
                           maxLength: 500,
                           expands: true,
-                          decoration: inputDecoration,
+                          textAlignVertical: TextAlignVertical.top,
+                          decoration: const InputDecoration(
+                              hintText: '프로젝트 내용을 입력해주세요.'),
+                          style: contentFormTextStyle,
                           validator: (val) {
                             if (val == null || val.isEmpty) {
                               return '내용은 필수사항입니다.';

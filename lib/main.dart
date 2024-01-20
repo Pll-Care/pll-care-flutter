@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +17,9 @@ void main() async {
   await initializeDateFormatting('ko');
   runApp(
     ProviderScope(
-      observers: [CustomProviderObserver(),],
+      observers: [
+        CustomProviderObserver(),
+      ],
       child: const MyApp(),
     ),
   );
@@ -47,18 +48,9 @@ class MyApp extends ConsumerWidget {
             splashFactory: NoSplash.splashFactory,
             iconTheme: const IconThemeData(color: GREEN_200),
             textButtonTheme: TextButtonThemeData(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(GREEN_200),
-                foregroundColor: MaterialStateProperty.all(GREY_100),
-                textStyle:
-                    MaterialStateProperty.all(const TextStyle(color: GREY_100)),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r),
-                  ),
-                ),
-              ),
+              style: textButtonStyle,
             ),
+            inputDecorationTheme: textFormFieldStyle,
           ),
           routerConfig: router,
         );

@@ -171,6 +171,7 @@ class ScheduleDialogComponent extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                
                 SizedBox(
                   width: 16.w,
                 ),

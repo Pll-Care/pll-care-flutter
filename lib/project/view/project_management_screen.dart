@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pllcare/memo/component/memo_body.dart';
 import 'package:pllcare/project/component/project_header.dart';
 import 'package:pllcare/schedule/component/schedule_overview_body.dart';
 
@@ -43,8 +44,7 @@ class _ProjectManagementScreenState extends State<ProjectManagementScreen>
         controller: tabController,
         children: [
           ScheduleOverViewBody(projectId: widget.projectId),
-          RainyEffect(),
-          // ScheduleOverViewBody(projectId: widget.projectId),
+          MemoBody(projectId: widget.projectId),
           ScheduleBody(projectId: widget.projectId),
           EvaluationBody(projectId: widget.projectId),
           ManagementBody(projectId: widget.projectId),

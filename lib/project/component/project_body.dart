@@ -220,6 +220,9 @@ class _ProjectList extends ConsumerWidget {
                 onTapPage: (int page) {
                   _onTapPage(ref, page);
                 },
+                onPageStart: () =>
+                    _onTapPage(ref, 1),
+                onPageLast: () => _onTapPage(ref, pModelList.totalPages!),
               ),
             ])
           : const SliverToBoxAdapter(

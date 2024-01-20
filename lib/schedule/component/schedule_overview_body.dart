@@ -21,6 +21,9 @@ class ScheduleOverViewBody extends ConsumerStatefulWidget {
       _ScheduleOverViewScreenState();
 }
 
+final startKey = GlobalKey();
+final endKey = GlobalKey();
+
 class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
   late final ScrollController _scrollController;
 
@@ -33,9 +36,29 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
   @override
   Widget build(BuildContext context) {
     log(' GoRouterState.of(context).name ${GoRouterState.of(context).name}');
-
     log(' MediaQuery.of(context).size.width / 2 ${MediaQuery.of(context).size.width / 2}');
 
+    // if (idx == 0)
+    //   Text(
+    //     'start',
+    //     style: m_Heading_02.copyWith(
+    //         color: GREEN_200),
+    //   ),
+    // if (idx == 0)
+    //   SizedBox(
+    //     height: 20.h,
+    //   ),
+
+    // if (idx == model.getMaxOrder() - 1)
+    //   SizedBox(
+    //     height: 20.h,
+    //   ),
+    // if (idx == model.getMaxOrder() - 1)
+    //   Text(
+    //     'end',
+    //     style: m_Heading_02.copyWith(
+    //         color: GREEN_200),
+    //   ),
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -85,19 +108,6 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                           height: 646.h,
                           padding: EdgeInsets.only(top: 50.h, bottom: 20.h),
                           child: Stack(children: [
-                            // if(model.schedules.isNotEmpty)
-                            // Positioned(
-                            //   left: 39.w,
-                            //     top: 60.h,
-                            //     bottom: 60.h,
-                            //     child: SizedBox(
-                            //       height: double.infinity,
-                            //       width: 4.w,
-                            //       child: VerticalDivider(
-                            //         thickness: 4.w,
-                            //         color: GREEN_200,
-                            //       ),
-                            //     )),
                             ListView.separated(
                               controller: _scrollController,
                               itemBuilder: (_, idx) {
@@ -105,25 +115,16 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
+                                    Stack(
                                       children: [
-                                        if (idx == 0)
-                                          Text(
-                                            'start',
-                                            style: m_Heading_02.copyWith(
-                                                color: GREEN_200),
-                                          ),
-                                        if (idx == 0)
-                                          SizedBox(
-                                            height: 20.h,
-                                          ),
                                         Container(
                                           width: 40.w,
                                           height: 40.w,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                                color: GREEN_200, width: 3.w),
+                                                color: GREEN_200,
+                                                width: 3.w),
                                             color: idx % 2 == 0
                                                 ? GREY_100
                                                 : GREEN_200,
@@ -137,16 +138,6 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                                                     : GREY_100),
                                           ),
                                         ),
-                                        if (idx == model.getMaxOrder() - 1)
-                                          SizedBox(
-                                            height: 20.h,
-                                          ),
-                                        if (idx == model.getMaxOrder() - 1)
-                                          Text(
-                                            'end',
-                                            style: m_Heading_02.copyWith(
-                                                color: GREEN_200),
-                                          ),
                                       ],
                                     ),
                                     SizedBox(width: 20.w),

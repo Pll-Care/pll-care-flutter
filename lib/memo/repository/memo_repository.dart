@@ -19,7 +19,7 @@ final memoRepositoryProvider = Provider<MemoRepository>((ref) {
 abstract class MemoRepository {
   factory MemoRepository(Dio dio) = _MemoRepository;
 
-  @GET('api/auth/memo/{memoId}')
+  @GET('/api/auth/memo/{memoId}')
   @Headers({
     'token': 'true',
   })
@@ -27,7 +27,7 @@ abstract class MemoRepository {
       {@Path() required int memoId,
       @Query('project_id') required int projectId});
 
-  @PUT('api/auth/memo/{memoId}')
+  @PUT('/api/auth/memo/{memoId}')
   @Headers({
     'token': 'true',
   })
@@ -36,7 +36,7 @@ abstract class MemoRepository {
     @Body() required MemoParam param,
   });
 
-  @DELETE('api/auth/memo/{memoId}')
+  @DELETE('/api/auth/memo/{memoId}')
   @Headers({
     'token': 'true',
   })
@@ -45,7 +45,7 @@ abstract class MemoRepository {
     @Body() required DeleteMemoParam param,
   });
 
-  @POST('api/auth/memo')
+  @POST('/api/auth/memo')
   @Headers({
     'token': 'true',
   })
@@ -53,7 +53,7 @@ abstract class MemoRepository {
     @Body() required MemoParam param,
   });
 
-  @POST('api/auth/memo/{memoId}/bookmark')
+  @POST('/api/auth/memo/{memoId}/bookmark')
   @Headers({
     'token': 'true',
   })
@@ -62,7 +62,7 @@ abstract class MemoRepository {
     @Body() required BookmarkMemoParam param,
   });
 
-  @GET('api/auth/memo/list')
+  @GET('/api/auth/memo/list')
   @Headers({
     'token': 'true',
   })
@@ -71,7 +71,7 @@ abstract class MemoRepository {
     @Queries() required PageParams param,
   });
 
-  @GET('api/auth/memo/bookmarklist')
+  @GET('/api/auth/memo/bookmarklist')
   @Headers({
     'token': 'true',
   })

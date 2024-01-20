@@ -94,11 +94,11 @@ class _MainContent extends ConsumerWidget {
             ),
           ),
           SizedBox(height: 43.h),
-          const Divider(
-            thickness: 2,
+          Divider(
+            thickness: 2.h,
             color: GREY_400,
-            indent: 26,
-            endIndent: 26,
+            indent: 26.w,
+            endIndent: 26.w,
           ),
           SizedBox(height: 24.h),
           const _HomeFooter(),

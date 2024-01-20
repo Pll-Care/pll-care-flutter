@@ -41,7 +41,7 @@ class CustomFormBottomSheet {
             },
             child: SingleChildScrollView(
               child: Form(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 key: CustomFormBottomSheet.formKey,
                 child: Padding(
                     padding: EdgeInsets.only(

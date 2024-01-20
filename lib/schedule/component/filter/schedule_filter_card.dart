@@ -113,6 +113,8 @@ class ScheduleFilterCard extends ConsumerWidget {
                   TextButton(
                     onPressed: onEval,
                     style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                      // visualDensity: VisualDensity.compact,
                         shape: RoundedRectangleBorder(
                           side: const BorderSide(color: GREEN_200, width: 2),
                           borderRadius: BorderRadius.all(

@@ -10,7 +10,7 @@ enum StateType { TBD, ONGOING, COMPLETE }
 abstract class BaseModel {}
 
 class LoadingModel extends BaseModel {}
-
+class CompletedModel extends BaseModel{}
 /*
 {
   "code": "string",

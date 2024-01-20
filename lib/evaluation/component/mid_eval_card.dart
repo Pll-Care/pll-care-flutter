@@ -70,7 +70,7 @@ class MidEvalCard extends ConsumerWidget {
 
     return SizedBox(
       width: MediaQuery.of(context).size.width / 5 * 4,
-      height: 570.h,
+      height: 630.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

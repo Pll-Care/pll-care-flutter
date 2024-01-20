@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,56 +21,59 @@ final routerProvider = Provider<GoRouter>((ref) {
       debugLogDiagnostics: true,
       navigatorKey: rootNavKey,
       routes: <RouteBase>[
-        // GoRoute(
-        //     path: '/home',
-        //     name: HomeScreen.routeName,
-        //     builder: (BuildContext context, GoRouterState state) {
-        //       return const HomeScreen();
-        //     }),
         GoRoute(
             path: '/login',
             name: LoginScreen.routeName,
-            builder: (BuildContext context, GoRouterState state) {
-              return LoginScreen();
+            pageBuilder: (context, state) {
+              return NoTransitionPage(child: LoginScreen());
             }),
         GoRoute(
-            path: '/test',
-            name: TestScreen.routeName,
-            builder: (BuildContext context, GoRouterState state) {
-              return TestScreen();
-            }),
+          path: '/test',
+          name: TestScreen.routeName,
+          pageBuilder: (context, state) {
+            return NoTransitionPage(child: TestScreen());
+          },
+        ),
         ShellRoute(
-          navigatorKey: shellNavKey,
+            navigatorKey: shellNavKey,
             builder: (context, state, child) {
-              return DefaultLayout(
-                  body: child);
+              return DefaultLayout(body: child);
             },
             routes: [
               GoRoute(
                   path: '/management',
                   name: ProjectListScreen.routeName,
-                  builder: (_, state) => const ProjectListScreen(),
+                  pageBuilder: (context, state) {
+                    return const NoTransitionPage(child: ProjectListScreen());
+                  },
                   routes: [
                     GoRoute(
-                        path: ':projectId/overview',
-                        name: ProjectManagementScreen.routeName,
-                        builder: (BuildContext context, GoRouterState state) {
-                          final int projectId =
-                              int.parse(state.pathParameters['projectId']!);
-                          return ProjectManagementScreen(
-                            projectId: projectId,
-                          );
-                        }),
+                      path: ':projectId/overview',
+                      name: ProjectManagementScreen.routeName,
+                      pageBuilder: (context, state) {
+                        final int projectId =
+                            int.parse(state.pathParameters['projectId']!);
+                        return NoTransitionPage(
+                            child: ProjectManagementScreen(
+                          projectId: projectId,
+                        ));
+                      },
+                    ),
                   ]),
               GoRoute(
                 path: '/home',
                 name: HomeScreen.routeName,
                 builder: (_, state) => const HomeScreen(),
+                pageBuilder: (context, state) {
+                  return const NoTransitionPage(child: HomeScreen());
+                },
               ),
               GoRoute(
                 path: '/recruit',
                 name: PostScreen.routeName,
-                builder: (_, state) => const PostScreen(),
+                pageBuilder: (context, state) {
+                  return const NoTransitionPage(child: PostScreen());
+                },
               ),
             ]),
       ]);

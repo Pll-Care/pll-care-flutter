@@ -23,7 +23,7 @@ class ManagementBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool isCompleted = true;
     final state = ref.watch(projectFamilyProvider(ProjectProviderParam(
-        type: ProjectProviderType.complete, projectId: projectId)));
+        type: ProjectProviderType.isCompleted, projectId: projectId)));
     if (state is ProjectIsCompleted) {
       isCompleted = state.completed;
     }
