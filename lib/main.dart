@@ -47,6 +47,8 @@ class MyApp extends ConsumerWidget {
             primaryColor: GREEN_200,
             splashFactory: NoSplash.splashFactory,
             iconTheme: const IconThemeData(color: GREEN_200),
+            outlinedButtonTheme:
+                OutlinedButtonThemeData(style: outlinedButtonStyle),
             textButtonTheme: TextButtonThemeData(
               style: textButtonStyle,
             ),
@@ -59,3 +61,4 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+

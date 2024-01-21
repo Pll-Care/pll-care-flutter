@@ -113,7 +113,7 @@ final textButtonStyle = ButtonStyle(
   maximumSize: MaterialStateProperty.all<Size>(Size(120.w, 40.h)),
   backgroundColor: MaterialStateProperty.all<Color>(GREEN_200),
   foregroundColor: MaterialStateProperty.all(GREY_100),
-  textStyle: MaterialStateProperty.all(const TextStyle(color: GREY_100)),
+  textStyle: MaterialStateProperty.all(m_Button_00.copyWith(color: GREY_100)),
   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
       EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h)),
   shape: MaterialStateProperty.all(
@@ -122,6 +122,25 @@ final textButtonStyle = ButtonStyle(
     ),
   ),
 );
+
+final ButtonStyle outlinedButtonStyle = ButtonStyle(
+  minimumSize: MaterialStateProperty.all<Size>(Size(40.w, 5.h)),
+  maximumSize: MaterialStateProperty.all<Size>(Size(120.w, 40.h)),
+  backgroundColor: MaterialStateProperty.all<Color>(GREY_100),
+  foregroundColor: MaterialStateProperty.all(GREEN_200),
+  textStyle: MaterialStateProperty.all(m_Button_00.copyWith(color: GREEN_200)),
+  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h)),
+  side: MaterialStateProperty.all<BorderSide>(
+      BorderSide(color: GREEN_200, width: 2.w)),
+  shape: MaterialStateProperty.all(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(45.r),
+      side: BorderSide(color: GREEN_200, width: 2.w),
+    ),
+  ),
+);
+
 final formBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(5.r),
   borderSide: BorderSide(color: GREEN_200, width: 2.w),
@@ -135,8 +154,8 @@ final textFormFieldStyle = InputDecorationTheme(
   border: formBorder,
   focusedBorder: formBorder,
   enabledBorder: formBorder,
-  errorBorder:
-      formBorder.copyWith(borderSide: BorderSide(color: TOMATO_500, width: 2.w)),
+  errorBorder: formBorder.copyWith(
+      borderSide: BorderSide(color: TOMATO_500, width: 2.w)),
   fillColor: GREY_100,
   filled: true,
   errorStyle: errorFormTextStyle,

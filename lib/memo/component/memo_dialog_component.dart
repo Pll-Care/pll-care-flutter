@@ -12,7 +12,10 @@ import '../../common/model/default_model.dart';
 import '../../common/page/param/page_param.dart';
 import '../../project/model/project_model.dart';
 import '../../project/provider/project_provider.dart';
+import '../../util/custom_dialog.dart';
 import '../provider/memo_provider.dart';
+import '../provider/widget/memo_form_provider.dart';
+import 'memo_form.dart';
 
 class MemoDialogComponent extends ConsumerWidget {
   final int memoId;
@@ -96,7 +99,7 @@ class _MemoDetailComponent extends ConsumerWidget {
     if (model.createdDate == model.modifiedDate) {
       writeDate = format.format(DateTime.parse(model.createdDate));
     } else {
-      writeDate = format.format(DateTime.parse(model.modifiedDate));
+      writeDate = '${format.format(DateTime.parse(model.modifiedDate))} (수정)';
     }
     return _MemoDetailComponent(
       memoId: model.memoId,
@@ -141,10 +144,16 @@ class _MemoDetailComponent extends ConsumerWidget {
                       ),
                     ),
                     if (!isCompleted)
-                      IconButton(
-                        onPressed: onBookmark,
-                        icon: Icon(
-                          bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      SizedBox(
+                        height: 48.r,
+                        width: 48.r,
+                        child: IconButton(
+                          onPressed: onBookmark,
+                          padding: EdgeInsets.zero,
+                          iconSize: 32.r,
+                          icon: Icon(
+                            bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          ),
                         ),
                       )
                   ],
@@ -180,12 +189,44 @@ class _MemoDetailComponent extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (editable && !isCompleted)
-                TextButton(onPressed: () {}, child: Text('수정하기')),
+                TextButton(
+                    onPressed: () {
+                      CustomDialog.showCustomDialog(
+                        context: context,
+                        backgroundColor: GREY_100,
+                        content: MemoForm(
+                          title: title,
+                          content: content,
+                        ),
+                        actions: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () async {
+                                    await _updateMemo(ref, context);
+                                  },
+                                  child: const Text('수정완료'),
+                                ),
+                                SizedBox(width: 12.w),
+                                TextButton(
+                                  onPressed: () => context.pop(),
+                                  child: const Text('취소'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    child: Text('수정하기')),
               if (deletable && !isCompleted) SizedBox(width: 12.w),
               if (deletable && !isCompleted)
                 TextButton(
                     onPressed: () async {
-                      await _memoDelete(ref, context);
+                      await _deleteMemo(ref, context);
                     },
                     child: Text('삭제하기')),
             ],
@@ -195,7 +236,45 @@ class _MemoDetailComponent extends ConsumerWidget {
     );
   }
 
-  Future<void> _memoDelete(WidgetRef ref, BuildContext context) async {
+  Future<void> _updateMemo(WidgetRef ref, BuildContext context) async {
+    final form = ref.read(pMemoFormProvider);
+    if (memoFormKey.currentState!.validate()) {
+      final param = MemoParam(
+          projectId: projectId, title: form.title, content: form.content);
+      final model = await ref
+          .read(memoProvider(MemoProviderParam(
+                  type: MemoProviderType.update,
+                  memoId: memoId,
+                  projectId: projectId))
+              .notifier)
+          .updateMemo(param: param);
+      if (model is CompletedModel) {
+        final pageParams = PageParams(page: 0, size: 4, direction: 'DESC');
+        final dropValue = ref.read(memoDropdownProvider);
+        if (dropValue == '전체') {
+          ref
+              .read(memoProvider(MemoProviderParam(
+                      type: MemoProviderType.getList, projectId: projectId))
+                  .notifier)
+              .getMemoList(param: pageParams);
+        } else {
+          ref
+              .read(memoProvider(MemoProviderParam(
+                      type: MemoProviderType.bookmarkList,
+                      projectId: projectId))
+                  .notifier)
+              .getBookmarkMemoList(param: pageParams);
+        }
+        if (context.mounted) {
+          context.pop();
+        }
+      } else {
+        // todo error handling
+      }
+    }
+  }
+
+  Future<void> _deleteMemo(WidgetRef ref, BuildContext context) async {
     final param = DeleteMemoParam(projectId: projectId);
     final completeModel = await ref
         .read(memoProvider(MemoProviderParam(
@@ -217,6 +296,8 @@ class _MemoDetailComponent extends ConsumerWidget {
       }
       if (context.mounted) {
         context.pop();
+      } else {
+        // todo error handling
       }
     }
   }

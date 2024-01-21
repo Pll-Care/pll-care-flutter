@@ -34,18 +34,22 @@ class PostProviderParam extends Equatable {
   List<Object?> get props => [type, postId];
 }
 
-final postProvider = StateNotifierProvider.family<PostStateNotifier, BaseModel,
-    PostProviderParam>((ref, param) {
+final postProvider = StateNotifierProvider.family
+    .autoDispose<PostStateNotifier, BaseModel, PostProviderParam>((ref, param) {
   final repository = ref.watch(postRepositoryProvider);
-  return PostStateNotifier(repository: repository, param: param);
+  return PostStateNotifier(repository: repository, param: param, ref: ref);
 });
 
 class PostStateNotifier extends StateNotifier<BaseModel> {
   final PostProviderParam param;
   final PostRepository repository;
+  final AutoDisposeStateNotifierProviderRef ref;
 
-  PostStateNotifier({required this.repository, required this.param})
-      : super(LoadingModel()) {
+  PostStateNotifier({
+    required this.repository,
+    required this.param,
+    required this.ref,
+  }) : super(LoadingModel()) {
     init();
   }
 
@@ -123,9 +127,15 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> likePost({required int postId}) async {
+  Future<void> likePost({required int postId, bool refreshList = true}) async {
     // Optimistic Response
-    final pState = state as PostList;
+    final pState = refreshList
+        ? state as PostList
+        : ref.read(postProvider(const PostProviderParam(
+            type: PostProviderType.getList,
+          ))) as PostList;
+
+
     final List<PostListModel> model = pState.data!.map((e) {
       if (e.postId == postId) {
         return e.liked
@@ -134,7 +144,23 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
       }
       return e;
     }).toList();
-    state = pState.copyWith(data: model);
+
+    if (refreshList) {
+      state = pState.copyWith(data: model);
+    } else {
+      ref
+          .read(postProvider(const PostProviderParam(
+            type: PostProviderType.getList,
+          )).notifier)
+          ._updateList(modelList: model);
+      final pState = state as PostModel;
+      final prevLike = pState.liked;
+      state = pState.copyWith(
+        liked: !prevLike,
+        likeCount: prevLike ? pState.likeCount - 1 : pState.likeCount + 1,
+      );
+    }
+
     log("갱신!");
     // state = LoadingModel();
 
@@ -169,5 +195,10 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
     });
+  }
+
+  void _updateList({required List<PostListModel> modelList}) {
+    final model = state as PostList;
+    state = model.copyWith(data: modelList);
   }
 }

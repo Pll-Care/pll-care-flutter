@@ -87,8 +87,7 @@ class MemoListComponent extends ConsumerWidget {
                                   children: [
                                     TextButton(
                                       onPressed: () async {
-                                        final form = ref.read(pMemoFormProvider(
-                                            formType: MemoFormType.create));
+                                        final form = ref.read(pMemoFormProvider);
                                         if (memoFormKey.currentState!
                                             .validate()) {
                                           final param = MemoParam(

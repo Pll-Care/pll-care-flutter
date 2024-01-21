@@ -17,15 +17,6 @@ class PostBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ButtonStyle buttonStyle = TextButton.styleFrom(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-      minimumSize: Size(40.w, 5.h),
-      maximumSize: Size(120.w, 35.h),
-      backgroundColor: GREEN_200,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(45.r),
-      ),
-    );
     return CustomScrollView(
       slivers: [
         const SliverToBoxAdapter(

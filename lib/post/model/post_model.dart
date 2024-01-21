@@ -9,7 +9,7 @@ class PostModel extends BaseModel {
   final int postId;
   final int projectId;
   final String projectTitle;
-  final String projectImageUrl;
+  final String? projectImageUrl;
   final String author;
   final String authorImageUrl;
   final String title;
@@ -20,7 +20,7 @@ class PostModel extends BaseModel {
   final String contact;
   final String region;
   final List<TechStack> techStackList;
-  final PositionType applyPosition;
+  final PositionType? applyPosition;
   final List<RecruitModel> recruitInfoList;
   final String createdDate;
   final String modifiedDate;
@@ -53,6 +53,56 @@ class PostModel extends BaseModel {
     required this.editable,
     required this.deletable,
   });
+
+  PostModel copyWith({
+    int? postId,
+    int? projectId,
+    String? projectTitle,
+    String? projectImageUrl,
+    String? author,
+    String? authorImageUrl,
+    String? title,
+    String? description,
+    String? recruitStartDate,
+    String? recruitEndDate,
+    String? reference,
+    String? contact,
+    String? region,
+    List<TechStack>? techStackList,
+    PositionType? applyPosition,
+    List<RecruitModel>? recruitInfoList,
+    String? createdDate,
+    String? modifiedDate,
+    int? likeCount,
+    bool? liked,
+    bool? editable,
+    bool? deletable,
+  }) {
+    return PostModel(
+      postId: postId ?? this.postId,
+      projectId: projectId ?? this.projectId,
+      projectTitle: projectTitle ?? this.projectTitle,
+      projectImageUrl: projectImageUrl ?? this.projectImageUrl,
+      author: author ?? this.author,
+      authorImageUrl: authorImageUrl ?? this.authorImageUrl,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      recruitStartDate: recruitStartDate ?? this.recruitStartDate,
+      recruitEndDate: recruitEndDate ?? this.recruitEndDate,
+      reference: reference ?? this.reference,
+      contact: contact ?? this.contact,
+      region: region ?? this.region,
+      techStackList: techStackList ?? this.techStackList,
+      applyPosition: applyPosition ?? this.applyPosition,
+      recruitInfoList: recruitInfoList ?? this.recruitInfoList,
+      createdDate: createdDate ?? this.createdDate,
+      modifiedDate: modifiedDate ?? this.modifiedDate,
+      likeCount: likeCount ?? this.likeCount,
+      liked: liked ?? this.liked,
+      editable: editable ?? this.editable,
+      deletable: deletable ?? this.deletable,
+    );
+  }
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:pllcare/schedule/model/schedule_overview_model.dart';
 import 'package:pllcare/schedule/provider/schedule_provider.dart';
 import 'package:pllcare/theme.dart';
@@ -26,49 +27,46 @@ final endKey = GlobalKey();
 
 class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
   late final ScrollController _scrollController;
+  Offset? start = const Offset(0, 0);
+  Offset? end = const Offset(0, 0);
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final positions = [startKey, endKey].map((key) {
+        if (key.currentContext != null) {
+          final RenderBox renderBox =
+              key.currentContext!.findRenderObject() as RenderBox;
+          final position = renderBox.localToGlobal(Offset.zero);
+          return position;
+        }
+      }).toList();
+      start = positions[0];
+      end = positions[1];
+      for (var position in positions) {
+        log('position dx = ${position?.dx} dy = ${position?.dy} ');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     log(' GoRouterState.of(context).name ${GoRouterState.of(context).name}');
-    log(' MediaQuery.of(context).size.width / 2 ${MediaQuery.of(context).size.width / 2}');
 
-    // if (idx == 0)
-    //   Text(
-    //     'start',
-    //     style: m_Heading_02.copyWith(
-    //         color: GREEN_200),
-    //   ),
-    // if (idx == 0)
-    //   SizedBox(
-    //     height: 20.h,
-    //   ),
-
-    // if (idx == model.getMaxOrder() - 1)
-    //   SizedBox(
-    //     height: 20.h,
-    //   ),
-    // if (idx == model.getMaxOrder() - 1)
-    //   Text(
-    //     'end',
-    //     style: m_Heading_02.copyWith(
-    //         color: GREEN_200),
-    //   ),
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 40.h),
+          padding: EdgeInsets.symmetric(
+            horizontal: 40.w,
+            vertical: 40.h,
+          ), //
           sliver: SliverToBoxAdapter(
             child: Column(
               children: [
                 Container(
-                  width: 352.w,
-                  height: 646.h,
                   decoration: BoxDecoration(
                     color: GREY_100,
                     borderRadius: BorderRadius.circular(20.r),
@@ -81,90 +79,119 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                       )
                     ],
                   ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 14.w,
-                        top: 12.h,
-                        child: Text(
-                          '주요 일정 미리보기',
-                          style: m_Heading_02.copyWith(color: GREEN_400),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Consumer(builder: (_, ref, child) {
-                        final bModel = ref.watch(scheduleOverviewProvider(
-                            ScheduleProviderParam(
-                                projectId: widget.projectId,
-                                type: ScheduleProviderType.getOverview)));
-                        if (bModel is LoadingModel) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (bModel is ErrorModel) {}
-                        final model = bModel as ScheduleOverViewModel;
-                        return Container(
-                          width: 352.w,
-                          height: 646.h,
-                          padding: EdgeInsets.only(top: 50.h, bottom: 20.h),
-                          child: Stack(children: [
-                            ListView.separated(
-                              controller: _scrollController,
-                              itemBuilder: (_, idx) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        Container(
-                                          width: 40.w,
-                                          height: 40.w,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: GREEN_200,
-                                                width: 3.w),
-                                            color: idx % 2 == 0
-                                                ? GREY_100
-                                                : GREEN_200,
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            (idx + 1).toString(),
-                                            style: m_Heading_01.copyWith(
-                                                color: idx % 2 == 0
-                                                    ? GREEN_200
-                                                    : GREY_100),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 20.w),
-                                    Flexible(
-                                      child: ScheduleOverviewCard.fromModel(
-                                          model: model, order: idx + 1),
-                                    )
-                                  ],
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return SizedBox(
-                                  height: 50.h,
-                                  // child: VerticalDivider(
-                                  //   thickness: 2.w,
-                                  //   color: GREEN_200,
-                                  // ),
-                                );
-                              },
-                              itemCount: model.getMaxOrder(),
+                  child: Consumer(builder: (_, ref, child) {
+                    final bModel = ref.watch(scheduleOverviewProvider(
+                        ScheduleProviderParam(
+                            projectId: widget.projectId,
+                            type: ScheduleProviderType.getOverview)));
+                    if (bModel is LoadingModel) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (bModel is ErrorModel) {}
+                    final model = bModel as ScheduleOverViewModel;
+                    final format = DateFormat('yyyy년 MM월 dd일');
+                    final startDate =
+                        format.format(DateTime.parse(model.startDate));
+                    final endDate =
+                        format.format(DateTime.parse(model.endDate));
+
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 16.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            '주요 일정 미리보기',
+                            style: m_Heading_02.copyWith(color: GREEN_400),
+                            textAlign: TextAlign.start,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: Text(
+                              '시작 $startDate',
+                              style: m_Heading_01.copyWith(color: GREEN_400),
                             ),
-                          ]),
-                        );
-                      }),
-                    ],
-                  ),
+                          ),
+                          Stack(
+                            children: [
+                              Positioned(
+                                top: (start?.dy ?? 0).h,
+                                left: 13.w,
+                                bottom: (end?.dy ?? 0).h,
+                                child: VerticalDivider(
+                                  thickness: 3.w,
+                                  color: GREEN_200,
+                                ),
+                              ),
+                              ListView.separated(
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                itemBuilder: (_, idx) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        key: idx == 0
+                                            ? startKey
+                                            : idx == model.getMaxOrder() - 1
+                                                ? endKey
+                                                : null,
+                                        width: 40.w,
+                                        height: 40.w,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: GREEN_200, width: 3.w),
+                                          color: idx % 2 == 0
+                                              ? GREY_100
+                                              : GREEN_200,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          (idx + 1).toString(),
+                                          style: m_Heading_01.copyWith(
+                                              color: idx % 2 == 0
+                                                  ? GREEN_200
+                                                  : GREY_100),
+                                        ),
+                                      ),
+                                      SizedBox(width: 20.w),
+                                      Flexible(
+                                        child: ScheduleOverviewCard.fromModel(
+                                            model: model, order: idx + 1),
+                                      )
+                                    ],
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: 50.h,
+                                    // child: VerticalDivider(
+                                    //   thickness: 2.w,
+                                    //   color: GREEN_200,
+                                    // ),
+                                  );
+                                },
+                                itemCount: model.getMaxOrder(),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: Text(
+                              '종료 $endDate',
+                              style: m_Heading_01.copyWith(color: GREEN_400),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),

@@ -69,12 +69,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                 },
               ),
               GoRoute(
-                path: '/recruit',
-                name: PostScreen.routeName,
-                pageBuilder: (context, state) {
-                  return const NoTransitionPage(child: PostScreen());
-                },
-              ),
+                  path: '/recruit',
+                  name: PostScreen.routeName,
+                  pageBuilder: (context, state) {
+                    return const NoTransitionPage(child: PostScreen());
+                  },
+                  routes: [
+                    GoRoute(
+                        path: ':postId',
+                        name: PostFormScreen.routeName,
+                        pageBuilder: (context, state) {
+                          final int postId =
+                              int.parse(state.pathParameters['postId']!);
+                          return NoTransitionPage(
+                              child: PostFormScreen(
+                            postId: postId,
+                          ));
+                        })
+                  ]),
             ]),
       ]);
 });

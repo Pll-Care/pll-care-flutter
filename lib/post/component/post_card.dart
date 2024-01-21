@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pllcare/post/view/post_screen.dart';
 
 import '../../post/model/post_model.dart';
 import '../../theme.dart';
@@ -58,105 +60,111 @@ class PostCard extends StatelessWidget {
     log("title ${title}");
     log("liked ${liked}");
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          width: double.infinity,
-          height: 120.h,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: imageUrl.isNotEmpty
-                    ? NetworkImage(imageUrl)
-                    : const AssetImage('assets/main/main1.png')
-                        as ImageProvider,
-                fit: BoxFit.cover),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+    return GestureDetector(
+      onTap: (){
+        Map<String, String> pathParameters = {'postId' : postId.toString()};
+        context.pushNamed(PostFormScreen.routeName, pathParameters: pathParameters);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 120.h,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: imageUrl.isNotEmpty
+                      ? NetworkImage(imageUrl)
+                      : const AssetImage('assets/main/main1.png')
+                          as ImageProvider,
+                  fit: BoxFit.cover),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+            ),
           ),
-        ),
-        Container(
-          height: 180.h,
-          // width: double.infinity,
-          decoration: BoxDecoration(
-              color: GREY_100,
-              boxShadow: [
-                BoxShadow(
-                    color: const Color(0xFF000000).withOpacity(0.25),
-                    blurStyle: BlurStyle.outer,
-                    blurRadius: 10.r,
-                    // spreadRadius: 5,
-                    offset: Offset(0.0, 4.h))
-              ],
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(30.r))),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ...getTechAvatars(),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Text(
-                      title,
-                      style: m_Heading_04.copyWith(color: GREY_500),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    )),
-                    GestureDetector(
-                      onTap: onTapLike,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: Container(
-                          width: 45.w,
-                          height: 45.w,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: GREEN_200, width: 2.w)),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 2.h),
-                              Icon(
-                                liked ? Icons.favorite : Icons.favorite_border,
-                                color: GREEN_200,
-                                size: 15.w,
-                              ),
-                              Text(
-                                likeCount.toString(),
-                                style: Body_02.copyWith(color: GREEN_200),
-                              ),
-                            ],
+          Container(
+            height: 180.h,
+            // width: double.infinity,
+            decoration: BoxDecoration(
+                color: GREY_100,
+                boxShadow: [
+                  BoxShadow(
+                      color: const Color(0xFF000000).withOpacity(0.25),
+                      blurStyle: BlurStyle.outer,
+                      blurRadius: 10.r,
+                      // spreadRadius: 5,
+                      offset: Offset(0.0, 4.h))
+                ],
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(30.r))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ...getTechAvatars(),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Text(
+                        title,
+                        style: m_Heading_04.copyWith(color: GREY_500),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                      GestureDetector(
+                        onTap: onTapLike,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          child: Container(
+                            width: 45.w,
+                            height: 45.w,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: GREEN_200, width: 2.w)),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 2.h),
+                                Icon(
+                                  liked ? Icons.favorite : Icons.favorite_border,
+                                  color: GREEN_200,
+                                  size: 15.w,
+                                ),
+                                Text(
+                                  likeCount.toString(),
+                                  style: Body_02.copyWith(color: GREEN_200),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                Text(
-                  '모집기간 : \n$startDate ~ $endDate',
-                  style: m_Button_01.copyWith(color: GREY_500),
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                Text(
-                  '모집 포지션 :\n$position',
-                  style: m_Button_01.copyWith(color: GREY_500),
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  Text(
+                    '모집기간 : \n$startDate ~ $endDate',
+                    style: m_Button_01.copyWith(color: GREY_500),
+                  ),
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  Text(
+                    '모집 포지션 :\n$position',
+                    style: m_Button_01.copyWith(color: GREY_500),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
@@ -170,12 +178,19 @@ class PostCard extends StatelessWidget {
     return techAvatars.map((e) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 10.h),
-        child: CircleAvatar(
-          maxRadius: 10.r,
-          backgroundColor: Colors.transparent,
-          child: e.imageUrl.endsWith('.svg')
-              ? SvgPicture.network(e.imageUrl)
-              : Image.network(e.imageUrl, scale: 10),
+        child: Tooltip(
+          message: e.name,
+          textStyle:
+          m_Body_01.copyWith(color: GREY_100),
+          showDuration: const Duration(seconds: 1),
+          triggerMode: TooltipTriggerMode.longPress,
+          child: CircleAvatar(
+            maxRadius: 10.r,
+            backgroundColor: Colors.transparent,
+            child: e.imageUrl.endsWith('.svg')
+                ? SvgPicture.network(e.imageUrl)
+                : Image.network(e.imageUrl, scale: 10),
+          ),
         ),
       );
     }).toList();

@@ -3,10 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_form_provider.g.dart';
 
-enum MemoFormType {
-  create,
-  update,
-}
 
 class MemoFormModel {
   final String title;
@@ -29,9 +25,7 @@ class MemoFormModel {
 @Riverpod()
 class PMemoForm extends _$PMemoForm {
   @override
-  MemoFormModel build({required MemoFormType formType, int? projectId}) {
-    // final baseModel = ref.read(memoProvider(MemoProviderParam(type: MemoProviderType.get, projectId: projectId)));
-
+  MemoFormModel build() {
     return MemoFormModel(title: '', content: '');
   }
 

@@ -35,7 +35,8 @@ class MemoProviderParam extends Equatable {
 
 final memoDropdownProvider = StateProvider.autoDispose((ref) => '전체');
 
-final memoProvider = StateNotifierProvider.family<MemoStateNotifier, BaseModel,
+final memoProvider = StateNotifierProvider.family<MemoStateNotifier,
+    BaseModel,
     MemoProviderParam>((ref, param) {
   final repository = ref.watch(memoRepositoryProvider);
   return MemoStateNotifier(repository: repository, param: param, ref: ref);
@@ -89,6 +90,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         .updateMemo(memoId: this.param.memoId!, param: param)
         .then((value) {
       logger.i('memo update!');
+      ref.read(memoProvider(MemoProviderParam(type: MemoProviderType.get,
+          memoId: this.param.memoId!,
+          projectId: this.param.projectId)).notifier).getMemo();
       state = CompletedModel();
       return state;
     }).catchError((e) {
@@ -123,8 +127,8 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
       final pageParam = PageParams(page: 1, size: 4, direction: 'DESC');
       ref
           .read(memoProvider(MemoProviderParam(
-                  type: MemoProviderType.getList, projectId: param.projectId))
-              .notifier)
+          type: MemoProviderType.getList, projectId: param.projectId))
+          .notifier)
           .getMemoList(param: pageParam);
       return state;
     }).catchError((e) {
@@ -138,7 +142,9 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
   Future<BaseModel> bookmarkMemo({required BookmarkMemoParam param}) async {
     ref
         .read(memoProvider(MemoProviderParam(
-        type: MemoProviderType.get, memoId: this.param.memoId!, projectId: param.projectId))
+        type: MemoProviderType.get,
+        memoId: this.param.memoId!,
+        projectId: param.projectId))
         .notifier)
         ._updateBookmark();
     state = LoadingModel();
