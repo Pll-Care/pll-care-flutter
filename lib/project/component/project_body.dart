@@ -60,7 +60,8 @@ class ProjectBody extends ConsumerWidget {
     required BuildContext context,
     required WidgetRef ref,
   }) {
-    CustomFormBottomSheet.showCustomFormBottomSheet(context: context, ref: ref, isCreate: true);
+    CustomFormBottomSheet.showCustomFormBottomSheet(
+        context: context, ref: ref, isCreate: true);
   }
 
   void _onTapFetch({required WidgetRef ref, required List<StateType> state}) {
@@ -105,7 +106,7 @@ class ProjectListNav extends ConsumerWidget {
       ),
       alignment: Alignment.bottomLeft,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0.w),
+        padding: EdgeInsets.symmetric(horizontal: 12.0.w, vertical: 4.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -113,7 +114,8 @@ class ProjectListNav extends ConsumerWidget {
               children: [
                 Text(
                   '참여 프로젝트',
-                  style: m_Heading_01.copyWith(color: GREY_100),
+                  style:
+                      m_Heading_01.copyWith(color: GREY_100, fontSize: 18.sp),
                 ),
                 SizedBox(
                   width: 8.w,
@@ -121,14 +123,16 @@ class ProjectListNav extends ConsumerWidget {
                 TextButton(
                   onPressed: onCreate,
                   style: buttonStyle.copyWith(
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h)),
                     minimumSize:
-                        MaterialStateProperty.all<Size?>(Size(90.w, 5.h)),
+                        MaterialStateProperty.all<Size?>(Size(90.w, 40.h)),
                     maximumSize:
-                        MaterialStateProperty.all<Size?>(Size(140.w, 30.h)),
+                        MaterialStateProperty.all<Size?>(Size(140.w, 40.h)),
                   ),
                   child: Text(
                     '새 프로젝트 생성',
-                    style: m_Button_01.copyWith(color: GREY_500),
+                    style: m_Button_00.copyWith(color: GREY_500),
                   ),
                 )
               ],
@@ -142,16 +146,19 @@ class ProjectListNav extends ConsumerWidget {
                       onPressed: onTapAll,
                       style: buttonStyle.copyWith(
                         minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(32.w, 5.h)),
+                            MaterialStateProperty.all<Size?>(Size(32.w, 40.h)),
                         maximumSize:
-                            MaterialStateProperty.all<Size?>(Size(45.w, 30.h)),
+                            MaterialStateProperty.all<Size?>(Size(120.w, 40.h)),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 8.h)),
                         backgroundColor: isSelectAll
                             ? MaterialStateProperty.all<Color?>(GREEN_400)
                             : null,
                       ),
                       child: Text(
                         '전체',
-                        style: m_Button_01.copyWith(
+                        style: m_Button_00.copyWith(
                             color: isSelectAll ? GREY_100 : GREY_500),
                       ),
                     ),
@@ -162,16 +169,19 @@ class ProjectListNav extends ConsumerWidget {
                       onPressed: onTapOnGoing,
                       style: buttonStyle.copyWith(
                         minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(40.w, 5.h)),
+                            MaterialStateProperty.all<Size?>(Size(45.w, 40.h)),
                         maximumSize:
-                            MaterialStateProperty.all<Size?>(Size(65.w, 30.h)),
+                            MaterialStateProperty.all<Size?>(Size(120.w, 40.h)),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 8.h)),
                         backgroundColor: isSelectAll
                             ? null
                             : MaterialStateProperty.all<Color?>(GREEN_400),
                       ),
                       child: Text(
                         '진행 중',
-                        style: m_Button_01.copyWith(
+                        style: m_Button_00.copyWith(
                             color: isSelectAll ? GREY_500 : GREY_100),
                       ),
                     )
@@ -220,8 +230,7 @@ class _ProjectList extends ConsumerWidget {
                 onTapPage: (int page) {
                   _onTapPage(ref, page);
                 },
-                onPageStart: () =>
-                    _onTapPage(ref, 1),
+                onPageStart: () => _onTapPage(ref, 1),
                 onPageLast: () => _onTapPage(ref, pModelList.totalPages!),
               ),
             ])

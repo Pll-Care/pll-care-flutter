@@ -35,7 +35,7 @@ class UpdatePostParam {
   final String recruitEndDate;
   final String reference;
   final String contact;
-  final String region;
+  final Region region;
   final List<String> techStack;
   final List<RecruitModel> recruitInfo;
 

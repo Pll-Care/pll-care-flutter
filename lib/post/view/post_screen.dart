@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pllcare/post/component/post_form.dart';
 
 import '../../common/component/default_appbar.dart';
 import '../component/post_body.dart';
-import '../component/post_form.dart';
+import '../component/post_detail.dart';
 
 class PostScreen extends StatelessWidget {
   static String get routeName => 'post';
@@ -24,11 +25,11 @@ class PostScreen extends StatelessWidget {
   }
 }
 
-class PostFormScreen extends StatelessWidget {
-  static String get routeName => 'postForm';
+class PostDetailScreen extends StatelessWidget {
+  static String get routeName => 'postDetail';
   final int postId;
 
-  const PostFormScreen({super.key, required this.postId});
+  const PostDetailScreen({super.key, required this.postId});
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,30 @@ class PostFormScreen extends StatelessWidget {
           const DefaultAppbar(),
         ];
       },
-      body: PostForm(
+      body: PostDetailBody(
         postId: postId,
+      ),
+    );
+  }
+}
+
+class PostFormScreen extends StatelessWidget {
+  static String get routeName => 'postForm';
+
+  const PostFormScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return [
+          const DefaultAppbar(),
+        ];
+      },
+      body: CustomScrollView(
+        slivers: [PostFormComponent()],
       ),
     );
   }

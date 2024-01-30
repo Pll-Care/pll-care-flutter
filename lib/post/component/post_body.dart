@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pllcare/common/page/component/bottom_page_count.dart';
 import 'package:pllcare/common/page/param/page_param.dart';
 import 'package:pllcare/post/component/post_card.dart';
 import 'package:pllcare/post/model/post_model.dart';
 import 'package:pllcare/post/provider/post_provider.dart';
+import 'package:pllcare/post/view/post_screen.dart';
 
 import '../../common/model/default_model.dart';
 import '../../theme.dart';
@@ -29,7 +31,10 @@ class PostBody extends ConsumerWidget {
               alignment: Alignment.centerRight,
               child: Container(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Map<String, String> pathParameters = {'postId' : 1.toString()};
+                    context.pushNamed(PostFormScreen.routeName, pathParameters: pathParameters);
+                  },
                   child: Text(
                     "작성하기",
                     style: m_Button_03.copyWith(color: GREY_100),

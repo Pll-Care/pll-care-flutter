@@ -63,7 +63,7 @@ class PostCard extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         Map<String, String> pathParameters = {'postId' : postId.toString()};
-        context.pushNamed(PostFormScreen.routeName, pathParameters: pathParameters);
+        context.pushNamed(PostDetailScreen.routeName, pathParameters: pathParameters);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

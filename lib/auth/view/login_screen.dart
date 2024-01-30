@@ -154,6 +154,57 @@ class LoginScreen extends ConsumerWidget {
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Ink.image(
+                      image: AssetImage('assets/images/login/kakao_login.png'),
+                      width: 60,
+                      height: 60,
+                      child: InkWell(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(35.0),
+                        ),
+                        onTap: () async {
+                          final User userProfile = await UserApi.instance.me();
+                          final param = getSignUpParam(userProfile: userProfile);
+                          log("userProfile = ${userProfile}");
+                          log('param $param');
+                          await ref.read(authProvider.notifier).signUp(param: param);
+                          if(context.mounted) {
+                            context.goNamed('home');
+                          }
+
+                          // if (await AuthApi.instance.hasToken()) {
+                          //   try {
+                          //     AccessTokenInfo tokenInfo = await UserApi.instance.accessTokenInfo();
+                          //     print(
+                          //         '토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn} ${tokenInfo.toString()}');
+
+                          //   } catch (error) {
+                          //     if (error is KakaoException && error.isInvalidTokenError()) {
+                          //       print('토큰 만료 $error');
+                          //     } else {
+                          //       print('토큰 정보 조회 실패 $error');
+                          //     }
+                          //
+                          //     try {
+                          //       // 카카오계정으로 로그인
+                          //       OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+                          //       print('로그인 성공 ${token.accessToken}');
+                          //     } catch (error) {
+                          //       print('로그인 실패 $error');
+                          //     }
+                          //   }
+                          // } else {
+                          //   print('발급된 토큰 없음');
+                          //   try {
+                          //     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+                          //     print('로그인 성공 ${token.accessToken}');
+                          //   } catch (error) {
+                          //     print('로그인 실패 $error');
+                          //   }
+                          // }
+                        },
+                      ),
+                    ),
                     _loginButton(
                       'kakao_logo',
                       restApiLogin,
@@ -164,7 +215,7 @@ class LoginScreen extends ConsumerWidget {
                       shape: const CircleBorder(),
                       clipBehavior: Clip.antiAlias,
                       child: Ink.image(
-                        image: AssetImage('assets/images/login/kakao_logo.png'),
+                        image: AssetImage('assets/images/login/kakao_login.png'),
                         width: 60,
                         height: 60,
                         child: InkWell(

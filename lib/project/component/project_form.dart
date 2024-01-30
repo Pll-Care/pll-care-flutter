@@ -155,11 +155,11 @@ class ProjectForm extends ConsumerWidget {
                             color: GREY_100,
                             borderRadius: BorderRadius.circular(5.r)),
                         padding: EdgeInsets.symmetric(horizontal: 7.w),
-                        child: const DateForm(),
+                        child: const DateForm(title: '진행 기간'),
                       ),
                       if (!ref.watch(dateRangeProvider.notifier).isValidate())
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
                             "시작일자가 종료일자가 같거나 이후 일 수 없습니다.",
                             style: errorFormTextStyle,
@@ -170,7 +170,7 @@ class ProjectForm extends ConsumerWidget {
                               .isSaveValidate() &&
                           ref.watch(checkDateValidateProvider))
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
                             style: errorFormTextStyle,
                             "시작일자와 종료일자를 선택해주세요.",
@@ -188,7 +188,8 @@ class ProjectForm extends ConsumerWidget {
                           expands: true,
                           textAlignVertical: TextAlignVertical.top,
                           decoration: const InputDecoration(
-                              hintText: '프로젝트 내용을 입력해주세요.'),
+                            hintText: '프로젝트 내용을 입력해주세요.',
+                          ),
                           style: contentFormTextStyle,
                           validator: (val) {
                             if (val == null || val.isEmpty) {
@@ -205,24 +206,19 @@ class ProjectForm extends ConsumerWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: 18.h,
-          ),
+          SizedBox(height: 18.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SizedBox(
-                width: 90.w,
-                child: TextButton(
-                  onPressed: onSaved,
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(48.r))),
-                  child: Text(
-                    projectId == null ? '작성 완료' : '수정 완료',
-                    style: m_Button_00.copyWith(
-                      color: GREY_100,
-                    ),
+              TextButton(
+                onPressed: onSaved,
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(48.r))),
+                child: Text(
+                  projectId == null ? '작성 완료' : '수정 완료',
+                  style: m_Button_00.copyWith(
+                    color: GREY_100,
                   ),
                 ),
               ),
@@ -235,7 +231,12 @@ class ProjectForm extends ConsumerWidget {
 }
 
 class DateForm extends ConsumerWidget {
-  const DateForm({super.key});
+  final String title;
+
+  const DateForm({
+    super.key,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -248,8 +249,10 @@ class DateForm extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '진행 기간',
-              style: m_Heading_03.copyWith(color: GREEN_400),
+              title,
+              style: title == '진행 기간'
+                  ? m_Heading_03.copyWith(color: GREEN_400)
+                  : m_Heading_01.copyWith(color: GREEN_400),
             ),
             GestureDetector(
               onTap: () {
@@ -274,6 +277,7 @@ class DateForm extends ConsumerWidget {
                     context.pop();
                   },
                   ref: ref,
+                  title: title == '진행 기간' ? '프로젝트' : '모집',
                 );
               },
               child: Text(
@@ -308,6 +312,7 @@ class DateForm extends ConsumerWidget {
                     context.pop();
                   },
                   ref: ref,
+                  title: title == '진행 기간' ? '프로젝트' : '모집',
                 );
               },
               child: Text(
@@ -325,6 +330,7 @@ class DateForm extends ConsumerWidget {
 
   void dateDialog({
     required BuildContext context,
+    required String title,
     required bool isStartDate,
     required ValueChanged<DateTime> onDateTimeChanged,
     required VoidCallback onPressed,
@@ -350,12 +356,10 @@ class DateForm extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
+                    SizedBox(height: 50.h),
                     Material(
                       child: Text(
-                        isStartDate ? '프로젝트 시작일자' : '프로젝트 종료일자',
+                        isStartDate ? '$title 시작일자' : '$title 종료일자',
                         style: Heading_06.copyWith(color: GREEN_200),
                         textAlign: TextAlign.center,
                       ),
@@ -367,12 +371,16 @@ class DateForm extends ConsumerWidget {
                         onDateTimeChanged: onDateTimeChanged,
                       ),
                     ),
-                    TextButton(
-                        onPressed: onPressed,
-                        child: Text(
-                          "선택",
-                          style: m_Button_03.copyWith(color: GREY_100),
-                        )),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: TextButton(
+                          onPressed: onPressed,
+                          child: Text(
+                            "선택",
+                            style: m_Button_03.copyWith(color: GREY_100),
+                          )),
+                    ),
+                    SizedBox(height: 24.h),
                   ]),
             ),
           );

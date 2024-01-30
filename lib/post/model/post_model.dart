@@ -4,6 +4,33 @@ import 'package:pllcare/management/model/team_member_model.dart';
 
 part 'post_model.g.dart';
 
+enum Region {
+  @JsonValue('서울')
+  seoul('서울'),
+  @JsonValue('경기')
+  gyeonggi('경기'),
+  @JsonValue('인천')
+  incheon('인천'),
+  @JsonValue('대구')
+  daegu('대구'),
+  @JsonValue('부산')
+  busan('부산'),
+  @JsonValue('울산')
+  ulsan('울산'),
+  @JsonValue('광주')
+  gwangju('광주'),
+  @JsonValue('전주')
+  jeonju('전주'),
+  @JsonValue('대전')
+  daejeon('대전'),
+  @JsonValue('세종')
+  sejong('세종'),
+  @JsonValue('강원')
+  gangwon('강원');
+  const Region(this.name);
+  final String name;
+}
+
 @JsonSerializable()
 class PostModel extends BaseModel {
   final int postId;
@@ -18,7 +45,7 @@ class PostModel extends BaseModel {
   final String recruitEndDate;
   final String reference;
   final String contact;
-  final String region;
+  final Region region;
   final List<TechStack> techStackList;
   final PositionType? applyPosition;
   final List<RecruitModel> recruitInfoList;
@@ -67,7 +94,7 @@ class PostModel extends BaseModel {
     String? recruitEndDate,
     String? reference,
     String? contact,
-    String? region,
+    Region? region,
     List<TechStack>? techStackList,
     PositionType? applyPosition,
     List<RecruitModel>? recruitInfoList,
