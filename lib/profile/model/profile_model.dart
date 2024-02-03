@@ -3,6 +3,7 @@ import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
 
 import '../../post/model/post_model.dart';
+import '../../util/model/techstack_model.dart';
 
 part 'profile_model.g.dart';
 
@@ -19,7 +20,7 @@ class ProfileValidateModel extends BaseModel {
 @JsonSerializable()
 class RoleTechStackModel extends BaseModel {
   final PositionType recruitPosition;
-  final List<TechStack> techStack;
+  final List<TechStackModel> techStack;
   final bool myProfile;
 
   RoleTechStackModel({

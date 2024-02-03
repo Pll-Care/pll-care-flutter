@@ -79,4 +79,10 @@ abstract class ProjectRepository {
     'token': 'true',
   })
   Future<ProjectIsCompleted> getIsCompleted({@Path() required int projectId});
+
+  @GET('/api/auth/project/simplelist')
+  @Headers({
+    'token': 'true',
+  })
+  Future<ProjectSimpleList> getSimpleProjectList();
 }

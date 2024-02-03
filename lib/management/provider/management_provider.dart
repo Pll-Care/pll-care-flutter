@@ -18,7 +18,7 @@ class ManageParam {
 }
 
 final managementProvider =
-    StateNotifierProvider.family<ManagementStateNotifier, BaseModel, int>(
+    StateNotifierProvider.family.autoDispose<ManagementStateNotifier, BaseModel, int>(
         (ref, projectId) {
   final repository = ref.watch(managementRepositoryProvider);
   return ManagementStateNotifier(
@@ -27,7 +27,7 @@ final managementProvider =
 });
 
 final applyListProvider =
-    StateNotifierProvider.family<ManagementStateNotifier, BaseModel, int>(
+    StateNotifierProvider.family.autoDispose<ManagementStateNotifier, BaseModel, int>(
         (ref, projectId) {
   final repository = ref.watch(managementRepositoryProvider);
   return ManagementStateNotifier(
@@ -68,15 +68,16 @@ class ManagementStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> getApplyList() async {
+  Future<BaseModel> getApplyList() async {
     state = LoadingModel();
-    repository.getApplyList(projectId: manageParam.projectId).then((value) {
+    return await repository.getApplyList(projectId: manageParam.projectId).then<BaseModel>((value) {
       logger.i(value);
       state = ListModel<ApplyModel>(data: value);
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 }

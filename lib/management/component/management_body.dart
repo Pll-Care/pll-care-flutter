@@ -12,6 +12,7 @@ import 'package:pllcare/theme.dart';
 import '../../common/model/default_model.dart';
 import '../../dio/error/error_type.dart';
 import '../model/apply_model.dart';
+import '../model/leader_model.dart';
 import 'apply_card.dart';
 
 class ManagementBody extends ConsumerWidget {
@@ -27,6 +28,8 @@ class ManagementBody extends ConsumerWidget {
     if (state is ProjectIsCompleted) {
       isCompleted = state.completed;
     }
+    final leaderModel = ref.watch(projectLeaderProvider(projectId: projectId));
+
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -39,7 +42,7 @@ class ManagementBody extends ConsumerWidget {
                   '팀원 관리',
                   style: m_Heading_02.copyWith(color: GREEN_400),
                 ),
-                if(!isCompleted)
+                if(!isCompleted && leaderModel is LeaderModel && leaderModel.leader)
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(

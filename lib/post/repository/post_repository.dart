@@ -38,12 +38,12 @@ abstract class PostRepository {
   })
   Future<void> deletePost({@Path() required int postId});
 
-  @POST('/api/auth/post/{postId}')
+  @POST('/api/auth/post')
   @Headers({
     'token': 'true',
   })
   Future<void> createPost(
-      {@Path() required int postId, @Body() required CreatePostParam param});
+      { @Body() required CreatePostParam param});
 
   @POST('/api/auth/post/{postId}/like')
   @Headers({

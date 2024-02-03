@@ -123,8 +123,12 @@ class _MainContent extends ConsumerWidget {
           );
         }
         model as ListModel<ProjectMainModel>;
-        return ProjectMainCard.fromModel(
+        if(model.data.isNotEmpty) {
+          return ProjectMainCard.fromModel(
             model: model.data.first, cardTitle: title);
+        }else{
+          return Text('모집글이 없습니다.');
+        }
       },
     );
   }
@@ -178,13 +182,13 @@ class _HomeFooter extends StatelessWidget {
         SizedBox(
           height: 8.h,
         ),
-        Text('풀케어 : FULL CARE, Project Manager',
+        Text('플케어 : PLL CARE, Project Manager',
             style: m_Body_02.copyWith(color: GREY_500)),
         SizedBox(
           height: 3.h,
         ),
         Text(
-          'Copyright 2023. Team Full-Care. All rights reserved',
+          'Copyright 2023. Team Pll-Care. All rights reserved',
           style: m_Body_02.copyWith(color: GREY_500),
         ),
       ],

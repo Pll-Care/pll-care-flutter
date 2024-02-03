@@ -9,7 +9,7 @@ import 'package:pllcare/util/repository/util_repository.dart';
 import '../auth/model/auth_model.dart';
 import '../common/logger/custom_logger.dart';
 
-const String serverURL = "http://59.6.240.12:8080";
+const String serverURL = "http://59.6.240.5:8080";
 // const String serverURL = "https://pll-care.store";
 
 class CustomDioInterceptor extends Interceptor {
@@ -77,7 +77,7 @@ class CustomDioInterceptor extends Interceptor {
         // String newAccessToken = response.data["accessToken"]["tokenValue"];
         // await storage.write(key: "token", value: newAccessToken);
 
-        ref.read(authProvider.notifier).reIssueToken();
+        await ref.read(authProvider.notifier).reIssueToken();
         final newAccessToken = ref.read(authProvider)?.accessToken;
 
         err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
@@ -91,8 +91,7 @@ class CustomDioInterceptor extends Interceptor {
       } on DioException catch (e) {
         // 리프레쉬 토큰 만료 된 경우
         log("리프레쉬 만료 언어선택으로 이동 !!");
-        await ref.read(authProvider.notifier).logout();
-        // await ref.read(authProvider.notifier).logout();
+        await ref.read(tokenProvider.notifier).logout();
         return;
         // handler.reject(e);
       }

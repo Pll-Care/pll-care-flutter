@@ -60,6 +60,7 @@ class MemoListComponent extends ConsumerWidget {
                     .read(memoDropdownProvider.notifier)
                     .update((state) => value!);
               },
+              initValue: '전체',
             ),
             SizedBox(width: 10.w),
             Consumer(
@@ -87,7 +88,8 @@ class MemoListComponent extends ConsumerWidget {
                                   children: [
                                     TextButton(
                                       onPressed: () async {
-                                        final form = ref.read(pMemoFormProvider);
+                                        final form =
+                                            ref.read(pMemoFormProvider);
                                         if (memoFormKey.currentState!
                                             .validate()) {
                                           final param = MemoParam(
@@ -190,13 +192,13 @@ class MemoListComponent extends ConsumerWidget {
   void showMemoDetail(
       BuildContext context, List<MemoListModel> modelList, int idx) {
     CustomDialog.showCustomDialog(
-        context: context,
-        backgroundColor: GREY_100,
-        content: MemoDialogComponent(
-          memoId: modelList[idx].memoId,
-          projectId: projectId,
-        ),
-       );
+      context: context,
+      backgroundColor: GREY_100,
+      content: MemoDialogComponent(
+        memoId: modelList[idx].memoId,
+        projectId: projectId,
+      ),
+    );
   }
 
   void _onTapPage(WidgetRef ref, int page, int projectId, bool isBookmarkList) {

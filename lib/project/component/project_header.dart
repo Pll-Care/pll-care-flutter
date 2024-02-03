@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pllcare/management/model/leader_model.dart';
+import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
 
 class ProjectHeader extends StatefulWidget {
   final TabController tabController;
+  final int projectId;
 
-  const ProjectHeader({super.key, required this.tabController});
+  const ProjectHeader(
+      {super.key, required this.tabController, required this.projectId});
 
   @override
   State<ProjectHeader> createState() => _ProjectHeaderState();
@@ -16,15 +21,20 @@ class _ProjectHeaderState extends State<ProjectHeader>
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-      delegate: TabBarDelegate(tabController: widget.tabController),
+      delegate: TabBarDelegate(
+          tabController: widget.tabController, projectId: widget.projectId),
     );
   }
 }
 
 class TabBarDelegate extends SliverPersistentHeaderDelegate {
+  final int projectId;
   final TabController tabController;
 
-  TabBarDelegate({required this.tabController});
+  TabBarDelegate({
+    required this.tabController,
+    required this.projectId,
+  });
 
   Widget projectTab({
     required String title,
@@ -44,32 +54,38 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 18.w),
-      child: Container(
-        decoration: BoxDecoration(
-            color: GREY_100,
-            border: Border.all(color: GREEN_200),
-            borderRadius: BorderRadius.circular(40.r)),
-        child: TabBar(
-          controller: tabController,
-          labelPadding: EdgeInsets.zero,
-          indicatorColor: Colors.transparent,
-          labelColor: GREEN_200,
-          unselectedLabelColor: GREY_500,
-          onTap: (idx) {
-            tabController.animateTo(idx);
-          },
-          tabs: [
-            projectTab(title: '오버뷰'),
-            projectTab(title: '회의록'),
-            projectTab(title: '일정'),
-            projectTab(title: '평가'),
-            projectTab(title: '팀관리'),
-            projectTab(title: '관리'),
-          ],
-        ),
-      ),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final model = ref.watch(projectLeaderProvider(projectId: projectId));
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18.w),
+          child: Container(
+            decoration: BoxDecoration(
+                color: GREY_100,
+                border: Border.all(color: GREEN_200),
+                borderRadius: BorderRadius.circular(40.r)),
+            child: TabBar(
+              controller: tabController,
+              labelPadding: EdgeInsets.zero,
+              indicatorColor: Colors.transparent,
+              labelColor: GREEN_200,
+              unselectedLabelColor: GREY_500,
+              onTap: (idx) {
+                tabController.animateTo(idx);
+              },
+              tabs: [
+                projectTab(title: '오버뷰'),
+                projectTab(title: '회의록'),
+                projectTab(title: '일정'),
+                projectTab(title: '평가'),
+                projectTab(title: '팀관리'),
+                if(model is LeaderModel && model.leader)
+                projectTab(title: '관리'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

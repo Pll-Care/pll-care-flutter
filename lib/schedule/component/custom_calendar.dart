@@ -12,6 +12,7 @@ import 'package:pllcare/util/custom_dialog.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:developer';
 import 'package:collection/collection.dart';
+import '../../common/component/tech_stack_icon.dart';
 import '../../project/provider/project_provider.dart';
 import '../model/schedule_calendar_model.dart';
 import '../model/schedule_daily_model.dart';
@@ -404,16 +405,10 @@ class CalendarContent extends StatelessWidget {
                       ...members.mapIndexed((idx, e) {
                         return Positioned(
                           right: idx * 25,
-                          child: Tooltip(
-                            message: e.name,
-                            textStyle: m_Body_01.copyWith(color: GREY_100),
-                            showDuration: const Duration(seconds: 1),
-                            triggerMode: TooltipTriggerMode.longPress,
-                            child: CircleAvatar(
-                              radius: 15,
-                              // backgroundColor: Colors.transparent,
-                              backgroundImage: NetworkImage(e.imageUrl),
-                            ),
+                          child: TechStackIcon(
+                            name: e.name,
+                            imageUrl: e.imageUrl,
+                            radius: 15,
                           ),
                         );
                       }).toList()

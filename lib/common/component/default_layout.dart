@@ -98,6 +98,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
+      resizeToAvoidBottomInset : false,
       body: SafeArea(
         child: widget.body,
       ),

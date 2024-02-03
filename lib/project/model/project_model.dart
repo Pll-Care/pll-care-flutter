@@ -179,3 +179,33 @@ class ProjectIsCompleted extends BaseModel {
   factory ProjectIsCompleted.fromJson(Map<String, dynamic> json) =>
       _$ProjectIsCompletedFromJson(json);
 }
+
+@JsonSerializable()
+class ProjectSimpleList extends BaseModel {
+  final List<ProjectSimpleModel> data;
+
+  ProjectSimpleList({
+    required this.data,
+  });
+
+  @override
+  factory ProjectSimpleList.fromJson(Map<String, dynamic> json) =>
+      _$ProjectSimpleListFromJson(json);
+}
+
+@JsonSerializable()
+class ProjectSimpleModel extends BaseModel {
+  final int projectId;
+  final String? imageUrl;
+  final String? title;
+
+  ProjectSimpleModel({
+    required this.projectId,
+    required this.imageUrl,
+    required this.title,
+  });
+
+  @override
+  factory ProjectSimpleModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectSimpleModelFromJson(json);
+}

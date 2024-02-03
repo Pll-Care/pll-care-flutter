@@ -32,8 +32,7 @@ class PostBody extends ConsumerWidget {
               child: Container(
                 child: TextButton(
                   onPressed: () {
-                    Map<String, String> pathParameters = {'postId' : 1.toString()};
-                    context.pushNamed(PostFormScreen.routeName, pathParameters: pathParameters);
+                    context.pushNamed(PostFormScreen.routeName, );
                   },
                   child: Text(
                     "작성하기",

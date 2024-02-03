@@ -9,6 +9,7 @@ import 'package:pllcare/schedule/param/schedule_param.dart';
 import 'package:pllcare/schedule/provider/schedule_provider.dart';
 import 'package:pllcare/util/custom_dialog.dart';
 
+import '../../../common/component/tech_stack_icon.dart';
 import '../../../theme.dart';
 import 'package:collection/collection.dart';
 
@@ -32,7 +33,8 @@ class ScheduleFilterCard extends ConsumerWidget {
   final GestureTapCallback onComplete;
   final VoidCallback onEval;
 
-  const ScheduleFilterCard({super.key,
+  const ScheduleFilterCard({
+    super.key,
     required this.scheduleId,
     required this.day,
     required this.dayOfWeek,
@@ -45,7 +47,9 @@ class ScheduleFilterCard extends ConsumerWidget {
     required this.check,
     required this.isCompleted,
     required this.onTap,
-    required this.onComplete, required this.onEval,});
+    required this.onComplete,
+    required this.onEval,
+  });
 
   factory ScheduleFilterCard.fromModel({
     required ScheduleFilter model,
@@ -63,9 +67,9 @@ class ScheduleFilterCard extends ConsumerWidget {
     final period = '$startDate ~ $endDate';
     final day = onlyDayFormat.format(DateTime.parse(model.startDate));
     final dayOfWeek =
-    DateFormat('EEEE', 'ko').format(DateTime.parse(model.startDate));
+        DateFormat('EEEE', 'ko').format(DateTime.parse(model.startDate));
     final remainingDay =
-    DateTime.parse(model.startDate).difference(DateTime.now());
+        DateTime.parse(model.startDate).difference(DateTime.now());
 
     return ScheduleFilterCard(
       scheduleId: model.scheduleId,
@@ -113,8 +117,9 @@ class ScheduleFilterCard extends ConsumerWidget {
                   TextButton(
                     onPressed: onEval,
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                      // visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 6.h),
+                        // visualDensity: VisualDensity.compact,
                         shape: RoundedRectangleBorder(
                           side: const BorderSide(color: GREEN_200, width: 2),
                           borderRadius: BorderRadius.all(
@@ -220,8 +225,8 @@ class ScheduleFilterCard extends ConsumerWidget {
                             remainingDay == 0
                                 ? 'd-day'
                                 : remainingDay > 0
-                                ? 'd-$remainingDay'
-                                : 'd+${remainingDay.abs()}',
+                                    ? 'd-$remainingDay'
+                                    : 'd+${remainingDay.abs()}',
                             style: m_Button_03.copyWith(
                               color: GREEN_400,
                             ),
@@ -230,7 +235,7 @@ class ScheduleFilterCard extends ConsumerWidget {
                           elevation: 3,
                           shadowColor: Colors.black54,
                           materialTapTargetSize:
-                          MaterialTapTargetSize.shrinkWrap,
+                              MaterialTapTargetSize.shrinkWrap,
                         ),
                         if (!evaluationRequired) SizedBox(height: 10.h),
                         if (!evaluationRequired &&
@@ -245,7 +250,7 @@ class ScheduleFilterCard extends ConsumerWidget {
                               ),
                               backgroundColor: GREEN_200,
                               materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                                  MaterialTapTargetSize.shrinkWrap,
                             ),
                           ),
                       ],

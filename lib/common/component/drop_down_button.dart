@@ -6,10 +6,11 @@ import 'package:pllcare/theme.dart';
 
 class CustomDropDownButton<T> extends StatelessWidget {
   final List<T> items;
+  final T initValue;
   final ValueChanged<T?> onChanged;
 
   const CustomDropDownButton(
-      {super.key, required this.onChanged, required this.items});
+      {super.key, required this.onChanged, required this.items, required this.initValue});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class CustomDropDownButton<T> extends StatelessWidget {
       alignedDropdown: true,
       child: DropdownButtonFormField(
         iconEnabledColor: GREEN_200,
-        value: items.first,
+        value: initValue,
         decoration: InputDecoration(
           constraints: BoxConstraints.loose(Size(120.w, 35.h)),
           contentPadding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),

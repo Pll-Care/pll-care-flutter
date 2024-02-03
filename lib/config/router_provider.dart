@@ -15,11 +15,12 @@ final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> shellNavKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final provider = ref.read(authProvider);
+  final provider = ref.read(tokenProvider);
   return GoRouter(
       initialLocation: '/home',
       debugLogDiagnostics: true,
       navigatorKey: rootNavKey,
+      refreshListenable: TokenProvider(ref: ref),
       routes: <RouteBase>[
         GoRoute(
             path: '/login',
@@ -43,6 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                   path: '/management',
                   name: ProjectListScreen.routeName,
+                  redirect: (_, state) => provider.redirectLogic(state),
                   pageBuilder: (context, state) {
                     return const NoTransitionPage(child: ProjectListScreen());
                   },
@@ -76,6 +78,20 @@ final routerProvider = Provider<GoRouter>((ref) {
                   },
                   routes: [
                     GoRoute(
+                        path: 'form',
+                        name: PostFormScreen.routeName,
+                        pageBuilder: (context, state) {
+                          int? postId;
+                          if (state.uri.queryParameters['postId'] != null) {
+                            postId =
+                                int.parse(state.uri.queryParameters['postId']!);
+                          }
+                          return NoTransitionPage(
+                              child: PostFormScreen(
+                            postId: postId,
+                          ));
+                        }),
+                    GoRoute(
                         path: ':postId',
                         name: PostDetailScreen.routeName,
                         pageBuilder: (context, state) {
@@ -86,14 +102,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                             postId: postId,
                           ));
                         }),
-                    GoRoute(
-                        path: ':postId/test',
-                        name: PostFormScreen.routeName,
-                        pageBuilder: (context, state) {
-                          final int postId =
-                          int.parse(state.pathParameters['postId']!);
-                          return NoTransitionPage(child: PostFormScreen());
-                        })
                   ]),
             ]),
       ]);

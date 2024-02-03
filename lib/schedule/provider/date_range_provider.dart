@@ -44,6 +44,10 @@ class DateRangeStateNotifier extends StateNotifier<DateRange> {
     return true;
   }
 
+  bool integrationValid(){
+    return isValidate() && isSaveValidate();
+  }
+
   void updateDate({DateTime? startDate, DateTime? endDate}) {
     state = state.copyWith(
         startDate: startDate ?? state.startDate,

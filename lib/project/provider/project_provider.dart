@@ -4,16 +4,54 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pllcare/common/logger/custom_logger.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/management/provider/management_provider.dart';
+import 'package:pllcare/management/repository/management_repository.dart';
 import 'package:pllcare/project/param/param.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/param/project_create_param.dart';
 import 'package:pllcare/project/repository/project_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'project_provider.g.dart';
+
+@riverpod
+Future<ProjectSimpleList> projectSimple(
+  ProjectSimpleRef ref,
+) {
+  final repository = ref.watch(projectRepositoryProvider);
+  return repository.getSimpleProjectList();
+}
+
+@Riverpod(keepAlive: true)
+class ProjectLeader extends _$ProjectLeader{
+  @override
+  BaseModel build({required int projectId}){
+    getIsLeader(projectId: projectId);
+    return LoadingModel();
+  }
+
+  Future<void> getIsLeader({required int projectId}) async {
+    final repository = ref.read(managementRepositoryProvider);
+    await repository.getIsLeader(projectId: projectId).then((value) {
+      state = value;
+    }
+    ).catchError((e){
+      final error = ErrorModel.respToError(e);
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+      state = error;
+    });
+  }
+}
+
+
 
 final projectMostLikedProvider =
     StateNotifierProvider<ProjectMostLikedStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectMostLikedStateNotifier(repository: repository);
 });
+
+
 
 class ProjectMostLikedStateNotifier extends StateNotifier<BaseModel> {
   final ProjectRepository repository;
@@ -148,8 +186,9 @@ class ProjectProviderParam extends Equatable {
   List<Object?> get props => [type, projectId];
 }
 
-final projectFamilyProvider = StateNotifierProvider.family.autoDispose<ProjectStateNotifier,
-    BaseModel?, ProjectProviderParam>((ref, param) {
+final projectFamilyProvider = StateNotifierProvider.family
+    .autoDispose<ProjectStateNotifier, BaseModel?, ProjectProviderParam>(
+        (ref, param) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectStateNotifier(repository: repository, param: param);
 });
@@ -193,7 +232,7 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
   }
 
   Future<BaseModel?> getProject() async {
-    await repository.getProject(projectId: param.projectId!).then((value) {
+    return await repository.getProject(projectId: param.projectId!).then<BaseModel>((value) {
       logger.i(value);
       return state = value;
     }).catchError((e) {

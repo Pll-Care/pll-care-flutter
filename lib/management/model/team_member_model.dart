@@ -18,6 +18,9 @@ enum PositionType {
   ;
    const PositionType(this.name);
   final String name;
+   static PositionType stringToEnum({required String position}) {
+     return PositionType.values.firstWhere((e) => e.name == position);
+   }
 }
 
 @JsonSerializable()

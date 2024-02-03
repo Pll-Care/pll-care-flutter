@@ -90,40 +90,58 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> createPost({required CreatePostParam param}) async {
+  Future<BaseModel> createPost({required CreatePostParam param}) async {
     state = LoadingModel();
-    repository
-        .createPost(postId: this.param.postId!, param: param)
-        .then((value) {
+    return await repository.createPost(param: param).then<BaseModel>((value) {
       logger.i('post create!');
+      ref
+          .read(postProvider(
+                  const PostProviderParam(type: PostProviderType.getList))
+              .notifier)
+          .getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> updatePost({required UpdatePostParam param}) async {
+  Future<BaseModel> updatePost({required UpdatePostParam param}) async {
     state = LoadingModel();
-    repository
+    return await repository
         .updatePost(postId: this.param.postId!, param: param)
-        .then((value) {
+        .then<BaseModel>((value) {
       logger.i('post update!');
+      ref
+          .read(postProvider(PostProviderParam(
+                  type: PostProviderType.get, postId: this.param.postId!))
+              .notifier)
+          .getPost();
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> deletePost() async {
+  Future<BaseModel> deletePost() async {
     state = LoadingModel();
-    repository.deletePost(postId: param.postId!).then((value) {
+    return await repository
+        .deletePost(postId: param.postId!)
+        .then<BaseModel>((value) {
       logger.i('post delete!');
+      ref
+          .read(postProvider(
+                  const PostProviderParam(type: PostProviderType.getList))
+              .notifier)
+          .getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
@@ -134,7 +152,6 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         : ref.read(postProvider(const PostProviderParam(
             type: PostProviderType.getList,
           ))) as PostList;
-
 
     final List<PostListModel> model = pState.data!.map((e) {
       if (e.postId == postId) {
@@ -173,27 +190,33 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
     });
   }
 
-  Future<void> applyCancelPost() async {
-    state = LoadingModel();
-    repository.applyCancelPost(postId: param.postId!).then((value) {
+  Future<BaseModel> applyCancelPost() async {
+    return await repository
+        .applyCancelPost(postId: param.postId!)
+        .then<BaseModel>((value) {
       logger.i('post apply cancel!');
+      final pModel = state as PostModel;
+      state = pModel.applyCancel();
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> applyPost({required ApplyPostParam param}) async {
-    state = LoadingModel();
-    repository
+  Future<BaseModel> applyPost({required ApplyPostParam param}) async {
+    return await repository
         .applyPost(postId: this.param.postId!, param: param)
-        .then((value) {
+        .then<BaseModel>((value) {
       logger.i('post apply!');
+      final pModel = state as PostModel;
+      state = pModel.copyWith(applyPosition: param.position);
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 

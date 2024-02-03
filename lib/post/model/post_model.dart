@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
 
+import '../../util/model/techstack_model.dart';
+
 part 'post_model.g.dart';
 
 enum Region {
@@ -27,8 +29,14 @@ enum Region {
   sejong('세종'),
   @JsonValue('강원')
   gangwon('강원');
+
   const Region(this.name);
+
   final String name;
+
+  static Region stringToEnum({required String region}) {
+    return Region.values.firstWhere((e) => e.name == region);
+  }
 }
 
 @JsonSerializable()
@@ -46,7 +54,7 @@ class PostModel extends BaseModel {
   final String reference;
   final String contact;
   final Region region;
-  final List<TechStack> techStackList;
+  final List<TechStackModel> techStackList;
   final PositionType? applyPosition;
   final List<RecruitModel> recruitInfoList;
   final String createdDate;
@@ -95,7 +103,7 @@ class PostModel extends BaseModel {
     String? reference,
     String? contact,
     Region? region,
-    List<TechStack>? techStackList,
+    List<TechStackModel>? techStackList,
     PositionType? applyPosition,
     List<RecruitModel>? recruitInfoList,
     String? createdDate,
@@ -133,21 +141,47 @@ class PostModel extends BaseModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
+
+  PostModel applyCancel() {
+    return PostModel(
+        postId: postId,
+        projectId: projectId,
+        projectTitle: projectTitle,
+        projectImageUrl: projectImageUrl,
+        author: author,
+        authorImageUrl: authorImageUrl,
+        title: title,
+        description: description,
+        recruitStartDate: recruitStartDate,
+        recruitEndDate: recruitEndDate,
+        reference: reference,
+        contact: contact,
+        region: region,
+        techStackList: techStackList,
+        applyPosition: null,
+        recruitInfoList: recruitInfoList,
+        createdDate: createdDate,
+        modifiedDate: modifiedDate,
+        likeCount: likeCount,
+        liked: liked,
+        editable: editable,
+        deletable: deletable);
+  }
 }
 
-@JsonSerializable()
-class TechStack {
-  final String name;
-  final String imageUrl;
-
-  TechStack({
-    required this.name,
-    required this.imageUrl,
-  });
-
-  factory TechStack.fromJson(Map<String, dynamic> json) =>
-      _$TechStackFromJson(json);
-}
+// @JsonSerializable()
+// class TechStack {
+//   final String name;
+//   final String imageUrl;
+//
+//   TechStack({
+//     required this.name,
+//     required this.imageUrl,
+//   });
+//
+//   factory TechStack.fromJson(Map<String, dynamic> json) =>
+//       _$TechStackFromJson(json);
+// }
 
 @JsonSerializable()
 class RecruitModel {
@@ -161,10 +195,27 @@ class RecruitModel {
     required this.totalCnt,
   });
 
+  RecruitModel copyWith({
+    PositionType? position,
+    int? currentCnt,
+    int? totalCnt,
+  }) {
+    return RecruitModel(
+      position: position ?? this.position,
+      currentCnt: currentCnt ?? this.currentCnt,
+      totalCnt: totalCnt ?? this.totalCnt,
+    );
+  }
+
   factory RecruitModel.fromJson(Map<String, dynamic> json) =>
       _$RecruitModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$RecruitModelToJson(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 @JsonSerializable()
@@ -175,7 +226,7 @@ class PostListModel {
   final String? title;
   final String? recruitStartDate;
   final String? recruitEndDate;
-  final List<TechStack> techStackList;
+  final List<TechStackModel> techStackList;
   final List<RecruitModel> recruitInfoList;
   final String? createdDate;
   final String? modifiedDate;
@@ -204,7 +255,7 @@ class PostListModel {
     final String? title,
     final String? recruitStartDate,
     final String? recruitEndDate,
-    final List<TechStack>? techStackList,
+    final List<TechStackModel>? techStackList,
     final List<RecruitModel>? recruitInfoList,
     final String? createdDate,
     final String? modifiedDate,

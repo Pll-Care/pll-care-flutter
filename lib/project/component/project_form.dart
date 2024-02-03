@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/post/param/post_param.dart';
+import 'package:pllcare/post/provider/widget/post_form_provider.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/schedule/provider/date_range_provider.dart';
 import 'package:pllcare/theme.dart';
@@ -57,22 +59,6 @@ class ProjectForm extends ConsumerWidget {
       }
     }
 
-    final inputFormBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5.r),
-      borderSide: const BorderSide(color: GREEN_200, width: 2.0),
-    );
-    final inputDecoration = InputDecoration(
-      border: inputFormBorder,
-      focusedBorder: inputFormBorder,
-      enabledBorder: inputFormBorder,
-      fillColor: GREY_100,
-      filled: true,
-      hintText: '내용 입력',
-      hintStyle: m_Heading_03.copyWith(
-        color: GREY_400,
-      ),
-      errorStyle: m_Heading_04.copyWith(color: Colors.red),
-    );
     ref.watch(dateRangeProvider);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -161,7 +147,7 @@ class ProjectForm extends ConsumerWidget {
                         Padding(
                           padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
-                            "시작일자가 종료일자가 같거나 이후 일 수 없습니다.",
+                            "시작일자가 종료일자와 같거나 이후 일 수 없습니다.",
                             style: errorFormTextStyle,
                           ),
                         ),
@@ -241,9 +227,11 @@ class DateForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dateRange = ref.watch(dateRangeProvider);
+
     final dateFormat = DateFormat('yy-MM-dd');
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,6 +312,7 @@ class DateForm extends ConsumerWidget {
             ),
           ],
         ),
+
       ],
     );
   }
@@ -367,7 +356,7 @@ class DateForm extends ConsumerWidget {
                     Expanded(
                       child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.date,
-                        minimumDate: isStartDate ? minimumDate : null,
+                        minimumDate: minimumDate,
                         onDateTimeChanged: onDateTimeChanged,
                       ),
                     ),

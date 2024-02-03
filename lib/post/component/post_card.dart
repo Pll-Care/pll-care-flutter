@@ -7,8 +7,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pllcare/post/view/post_screen.dart';
 
+import '../../common/component/tech_stack_icon.dart';
 import '../../post/model/post_model.dart';
 import '../../theme.dart';
+import '../../util/model/techstack_model.dart';
 
 class PostCard extends StatelessWidget {
   final int postId;
@@ -16,7 +18,7 @@ class PostCard extends StatelessWidget {
   final String title;
   final String startDate;
   final String endDate;
-  final List<TechStack> techStackList;
+  final List<TechStackModel> techStackList;
   final List<RecruitModel> recruitInfoList;
   final int likeCount;
   final bool liked;
@@ -55,15 +57,17 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String position = recruitInfoList
+        .where((e) => e.currentCnt < e.totalCnt)
         .map((e) => e.position.name)
         .reduce((value, element) => '$value, $element');
     log("title ${title}");
     log("liked ${liked}");
 
     return GestureDetector(
-      onTap: (){
-        Map<String, String> pathParameters = {'postId' : postId.toString()};
-        context.pushNamed(PostDetailScreen.routeName, pathParameters: pathParameters);
+      onTap: () {
+        Map<String, String> pathParameters = {'postId': postId.toString()};
+        context.pushNamed(PostDetailScreen.routeName,
+            pathParameters: pathParameters);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -108,6 +112,7 @@ class PostCard extends StatelessWidget {
                     ],
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                           child: Text(
@@ -125,12 +130,15 @@ class PostCard extends StatelessWidget {
                             height: 45.w,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: GREEN_200, width: 2.w)),
+                                border:
+                                    Border.all(color: GREEN_200, width: 2.w)),
                             child: Column(
                               children: [
                                 SizedBox(height: 2.h),
                                 Icon(
-                                  liked ? Icons.favorite : Icons.favorite_border,
+                                  liked
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
                                   color: GREEN_200,
                                   size: 15.w,
                                 ),
@@ -169,7 +177,7 @@ class PostCard extends StatelessWidget {
   }
 
   List<Padding> getTechAvatars() {
-    final List<TechStack> techAvatars;
+    final List<TechStackModel> techAvatars;
     if (techStackList.length > 5) {
       techAvatars = techStackList.sublist(0, 5);
     } else {
@@ -178,19 +186,9 @@ class PostCard extends StatelessWidget {
     return techAvatars.map((e) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 10.h),
-        child: Tooltip(
-          message: e.name,
-          textStyle:
-          m_Body_01.copyWith(color: GREY_100),
-          showDuration: const Duration(seconds: 1),
-          triggerMode: TooltipTriggerMode.longPress,
-          child: CircleAvatar(
-            maxRadius: 10.r,
-            backgroundColor: Colors.transparent,
-            child: e.imageUrl.endsWith('.svg')
-                ? SvgPicture.network(e.imageUrl)
-                : Image.network(e.imageUrl, scale: 10),
-          ),
+        child: TechStackIcon(
+          name: e.name,
+          imageUrl: e.imageUrl,
         ),
       );
     }).toList();

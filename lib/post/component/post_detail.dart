@@ -3,13 +3,20 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/common/component/default_flash.dart';
+import 'package:pllcare/common/component/tech_stack_icon.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/management/provider/management_provider.dart';
+import 'package:pllcare/post/param/post_param.dart';
 import 'package:pllcare/post/provider/post_provider.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../management/model/team_member_model.dart';
+import '../../util/model/techstack_model.dart';
 import '../model/post_model.dart';
+import '../view/post_screen.dart';
 
 class PostDetailBody extends ConsumerWidget {
   final int postId;
@@ -47,7 +54,7 @@ class PostDetailComponent extends ConsumerStatefulWidget {
   final String reference;
   final String contact;
   final String region;
-  final List<TechStack> techStackList;
+  final List<TechStackModel> techStackList;
   final PositionType? applyPosition;
   final List<RecruitModel> recruitInfoList;
   final String writeDate;
@@ -102,7 +109,7 @@ class PostDetailComponent extends ConsumerStatefulWidget {
       recruitEndDate: model.recruitEndDate,
       reference: model.reference,
       contact: model.contact,
-      region: model.region.toString(),
+      region: model.region.name,
       techStackList: model.techStackList,
       applyPosition: model.applyPosition,
       recruitInfoList: model.recruitInfoList,
@@ -173,11 +180,36 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                 ),
                 Row(
                   children: [
-                    // if(editable)
-                    TextButton(onPressed: () {}, child: const Text('수정')),
+                    if (widget.editable)
+                      TextButton(
+                          onPressed: () {
+                            Map<String, String> queryParameters = {
+                              'postId': widget.postId.toString()
+                            };
+                            context.pushNamed(PostFormScreen.routeName,
+                                queryParameters: queryParameters);
+                          },
+                          child: const Text('수정')),
                     SizedBox(width: 8.w),
-                    // if(deletable)
-                    TextButton(onPressed: () {}, child: const Text('삭제')),
+                    if (widget.deletable)
+                      TextButton(
+                          onPressed: () async {
+                            final model = await ref
+                                .read(postProvider(PostProviderParam(
+                                        type: PostProviderType.delete,
+                                        postId: widget.postId))
+                                    .notifier)
+                                .deletePost();
+                            if (model is CompletedModel && context.mounted) {
+                              context.pop();
+                            } else if (model is ErrorModel && context.mounted) {
+                              DefaultFlash.showFlash(
+                                  context: context,
+                                  type: FlashType.fail,
+                                  content: model.message);
+                            }
+                          },
+                          child: const Text('삭제')),
                   ],
                 ),
               ],
@@ -214,6 +246,8 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                   divider,
                   _PostPositionField(
                     recruitInfoList: widget.recruitInfoList,
+                    postId: widget.postId,
+                    applyPosition: widget.applyPosition,
                   ),
                   SizedBox(height: 9.h),
                   _TechStackField(
@@ -316,9 +350,15 @@ class _PostField extends StatelessWidget {
 }
 
 class _PostPositionField extends StatelessWidget {
+  final int postId;
   final List<RecruitModel> recruitInfoList;
+  final PositionType? applyPosition;
 
-  const _PostPositionField({super.key, required this.recruitInfoList});
+  const _PostPositionField(
+      {super.key,
+      required this.recruitInfoList,
+      required this.postId,
+      this.applyPosition});
 
   @override
   Widget build(BuildContext context) {
@@ -330,13 +370,18 @@ class _PostPositionField extends StatelessWidget {
           '포지션',
           style: m_Heading_01.copyWith(color: GREEN_400),
         ),
+        SizedBox(width: 70.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ...recruitInfoList
                   .where((e) => e.totalCnt != 0)
-                  .map((e) => _PositionRecruitField.fromModel(model: e))
+                  .map((e) => _PositionRecruitField.fromModel(
+                        model: e,
+                        postId: postId,
+                        applyPosition: applyPosition,
+                      ))
                   .toList()
             ],
           ),
@@ -346,36 +391,47 @@ class _PostPositionField extends StatelessWidget {
   }
 }
 
-class _PositionRecruitField extends StatelessWidget {
-  final String positionName;
+class _PositionRecruitField extends ConsumerWidget {
+  final int postId;
+  final PositionType position;
   final int currentCnt;
   final int totalCnt;
+  final PositionType? applyPosition;
 
-  const _PositionRecruitField(
-      {super.key,
-      required this.positionName,
-      required this.currentCnt,
-      required this.totalCnt});
+  const _PositionRecruitField({
+    super.key,
+    required this.postId,
+    required this.position,
+    required this.currentCnt,
+    required this.totalCnt,
+    required this.applyPosition,
+  });
 
-  factory _PositionRecruitField.fromModel({required RecruitModel model}) {
+  factory _PositionRecruitField.fromModel(
+      {required RecruitModel model,
+      required int postId,
+      required PositionType? applyPosition}) {
     return _PositionRecruitField(
-      positionName: model.position.name,
+      postId: postId,
+      position: model.position,
       currentCnt: model.currentCnt,
       totalCnt: model.totalCnt,
+      applyPosition: applyPosition,
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       height: 40.h,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
           SizedBox(
             width: 85.w,
             child: Text(
-              positionName,
+              position.name,
               style: m_Body_01.copyWith(
                   color: GREY_500, fontWeight: FontWeight.bold),
             ),
@@ -389,20 +445,64 @@ class _PositionRecruitField extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          if (currentCnt != totalCnt)
-            SizedBox(
-              width: 60.w,
-              child: OutlinedButton(
-                onPressed: () {},
-                child: const Text('지원'),
+          if (currentCnt != totalCnt && applyPosition == null)
+            Expanded(
+              child: Center(
+                child: SizedBox(
+                  width: 60.w,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      final param = ApplyPostParam(position: position);
+                      final model = await ref
+                          .read(postProvider(PostProviderParam(
+                                  type: PostProviderType.get, postId: postId))
+                              .notifier)
+                          .applyPost(param: param);
+                      if (model is CompletedModel && context.mounted) {
+                        DefaultFlash.showFlash(
+                            context: context,
+                            type: FlashType.success,
+                            content: '${position.name}에 지원하였습니다.');
+                      } else if (model is ErrorModel && context.mounted) {
+                        DefaultFlash.showFlash(
+                            context: context,
+                            type: FlashType.fail,
+                            content: model.message);
+                      }
+                    },
+                    child: const Text('지원'),
+                  ),
+                ),
+              ),
+            ),
+          if (currentCnt != totalCnt &&
+              applyPosition != null &&
+              position == applyPosition)
+            Expanded(
+              child: Center(
+                child: SizedBox(
+                  width: 85.w,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      ref
+                          .read(postProvider(PostProviderParam(
+                                  type: PostProviderType.get,
+                                  postId: postId))
+                              .notifier)
+                          .applyCancelPost();
+                    },
+                    child: const Text('지원취소'),
+                  ),
+                ),
               ),
             ),
           if (currentCnt == totalCnt)
-            SizedBox(
-              width: 60.w,
-              child: Text('모집완료',
-                  style: m_Body_01.copyWith(
-                      color: GREEN_400, fontWeight: FontWeight.w800)),
+            Expanded(
+              child: Center(
+                child: Text('모집완료',
+                    style: m_Body_01.copyWith(
+                        color: GREEN_400, fontWeight: FontWeight.w800)),
+              ),
             )
         ],
       ),
@@ -411,7 +511,7 @@ class _PositionRecruitField extends StatelessWidget {
 }
 
 class _TechStackField extends StatelessWidget {
-  final List<TechStack> techStackList;
+  final List<TechStackModel> techStackList;
 
   const _TechStackField({super.key, required this.techStackList});
 
@@ -435,18 +535,10 @@ class _TechStackField extends StatelessWidget {
             children: [
               ...techStackList
                   .map(
-                    (e) => Tooltip(
-                      message: e.name,
-                      textStyle: m_Body_01.copyWith(color: GREY_100),
-                      showDuration: const Duration(seconds: 1),
-                      triggerMode: TooltipTriggerMode.longPress,
-                      child: CircleAvatar(
-                        maxRadius: 16.r,
-                        backgroundColor: Colors.transparent,
-                        child: e.imageUrl.endsWith('.svg')
-                            ? SvgPicture.network(e.imageUrl)
-                            : Image.network(e.imageUrl, scale: 16.r),
-                      ),
+                    (e) => TechStackIcon(
+                      name: e.name,
+                      imageUrl: e.imageUrl,
+                      radius: 16,
                     ),
                   )
                   .toList(),

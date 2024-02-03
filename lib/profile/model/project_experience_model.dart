@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/post/model/post_model.dart';
 
+import '../../util/model/techstack_model.dart';
+
 part 'project_experience_model.g.dart';
 @JsonSerializable()
 class ProjectExperienceList extends BaseModel {
@@ -25,7 +27,7 @@ class ProjectExperience {
   final String description;
   final String startDate;
   final String endDate;
-  final List<TechStack> techStack;
+  final List<TechStackModel> techStack;
 
   ProjectExperience({
     required this.projectId,

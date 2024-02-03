@@ -140,12 +140,9 @@ class ProjectManagementBody extends ConsumerWidget {
 
   void onTapUpdate(
       {required BuildContext context, required WidgetRef ref}) async {
-    log("ㅁㅁ");
-     await  ref
-        .watch(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)).notifier).getProject();
+     await  ref.watch(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)).notifier).getProject();
 
     final bModel = ref.read(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)));
-    log("ㅠㅠ");
 
     if (bModel is ProjectModel) {
       if (context.mounted) {
