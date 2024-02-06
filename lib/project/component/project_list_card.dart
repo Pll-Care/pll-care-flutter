@@ -8,6 +8,7 @@ import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/project/view/project_management_screen.dart';
 import 'package:pllcare/theme.dart';
 
+import '../../common/component/default_flash.dart';
 import '../../common/model/default_model.dart';
 import '../../util/custom_dialog.dart';
 
@@ -168,14 +169,21 @@ class ProjectListCard extends ConsumerWidget {
             height: 35,
             width: 80,
             child: TextButton(
-              onPressed: () {
-                ref
+              onPressed: () async {
+                final result = await ref
                     .read(projectFamilyProvider(ProjectProviderParam(
                             type: ProjectProviderType.selfOut,
                             projectId: projectId))
                         .notifier)
                     .selfOut();
-                context.pop();
+                if(result is CompletedModel && context.mounted){
+                  context.pop();
+                }else if(result is ErrorModel && context.mounted){
+                  DefaultFlash.showFlash(
+                      context: context,
+                      type: FlashType.fail,
+                      content: result.message);
+                }
               },
               style: CustomDialog.textButtonStyle,
               child: Text(

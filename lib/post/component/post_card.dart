@@ -60,8 +60,6 @@ class PostCard extends StatelessWidget {
         .where((e) => e.currentCnt < e.totalCnt)
         .map((e) => e.position.name)
         .reduce((value, element) => '$value, $element');
-    log("title ${title}");
-    log("liked ${liked}");
 
     return GestureDetector(
       onTap: () {

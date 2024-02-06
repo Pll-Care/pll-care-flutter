@@ -30,7 +30,7 @@ class ProjectManagementScreen extends ConsumerStatefulWidget {
 class _ProjectManagementScreenState
     extends ConsumerState<ProjectManagementScreen>
     with TickerProviderStateMixin {
-  late TabController tabController = TabController(length: 5, vsync: this);
+  late TabController tabController = TabController(length: 6, vsync: this);
 
   @override
   void initState() {
@@ -76,7 +76,7 @@ class _ProjectManagementScreenState
           ScheduleBody(projectId: widget.projectId),
           EvaluationBody(projectId: widget.projectId),
           ManagementBody(projectId: widget.projectId),
-          if(model is LeaderModel && model.leader)
+          // if(model is LeaderModel && model.leader)
           ProjectManagementBody(projectId: widget.projectId),
         ],
       ),

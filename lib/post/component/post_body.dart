@@ -90,7 +90,6 @@ class _RecruitList extends ConsumerWidget {
 
     if (modelList is PostList) {
       pModelList = modelList as PostList;
-      log("pModelList.data!.length ${pModelList.data!.length}");
     } else if (modelList is ErrorModel) {}
 
     return SliverPadding(

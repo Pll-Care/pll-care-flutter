@@ -1,7 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pllcare/management/model/leader_model.dart';
+import 'package:pllcare/project/provider/project_provider.dart';
 
 import '../../theme.dart';
 import '../model/apply_model.dart';
@@ -13,6 +14,7 @@ class ApplyCard extends ConsumerWidget {
   final PositionType position;
   final VoidCallback onAccept;
   final VoidCallback onReject;
+  final int projectId;
 
   const ApplyCard({
     super.key,
@@ -21,23 +23,28 @@ class ApplyCard extends ConsumerWidget {
     required this.position,
     required this.onAccept,
     required this.onReject,
+    required this.projectId,
   });
 
-  factory ApplyCard.fromModel(
-      {required ApplyModel model,
-        required VoidCallback onAccept,
-        required VoidCallback onReject}) {
+  factory ApplyCard.fromModel({required ApplyModel model,
+    required VoidCallback onAccept,
+    required VoidCallback onReject,
+    required int projectId,
+  }) {
     return ApplyCard(
       imageUrl: model.imageUrl,
       name: model.name,
       position: model.position,
       onAccept: onAccept,
       onReject: onReject,
+      projectId: projectId,
+
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final leader = ref.watch(projectLeaderProvider(projectId: projectId));
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 18.w),
       child: Container(
@@ -70,13 +77,16 @@ class ApplyCard extends ConsumerWidget {
                 ],
               ),
             ),
-            _ApplyButton(
-              title: '수락',
-              onPressed: onAccept,
-            ),
+            if(leader is LeaderModel && leader.leader)
+              _ApplyButton(
+                title: '수락',
+                onPressed: onAccept,
+              ),
             SizedBox(
               width: 6.w,
             ),
+            if(leader is LeaderModel && leader.leader)
+
             _ApplyButton(
               title: '거절',
               onPressed: onReject,

@@ -156,7 +156,7 @@ class LoginScreen extends ConsumerWidget {
                   children: [
                     Ink.image(
                       image: AssetImage('assets/images/login/kakao_login.png'),
-                      width: 60,
+                      width: 200,
                       height: 60,
                       child: InkWell(
                         borderRadius: const BorderRadius.all(

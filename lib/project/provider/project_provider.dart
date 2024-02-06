@@ -12,6 +12,9 @@ import 'package:pllcare/project/param/project_create_param.dart';
 import 'package:pllcare/project/repository/project_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../management/model/leader_model.dart';
+import '../component/project_body.dart';
+
 part 'project_provider.g.dart';
 
 @riverpod
@@ -22,10 +25,10 @@ Future<ProjectSimpleList> projectSimple(
   return repository.getSimpleProjectList();
 }
 
-@Riverpod(keepAlive: true)
-class ProjectLeader extends _$ProjectLeader{
+@Riverpod(keepAlive: false)
+class ProjectLeader extends _$ProjectLeader {
   @override
-  BaseModel build({required int projectId}){
+  BaseModel build({required int projectId}) {
     getIsLeader(projectId: projectId);
     return LoadingModel();
   }
@@ -34,24 +37,23 @@ class ProjectLeader extends _$ProjectLeader{
     final repository = ref.read(managementRepositoryProvider);
     await repository.getIsLeader(projectId: projectId).then((value) {
       state = value;
-    }
-    ).catchError((e){
+    }).catchError((e) {
       final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
       state = error;
     });
   }
+
+  void loseLeader() {
+    state = LeaderModel(leader: false);
+  }
 }
-
-
 
 final projectMostLikedProvider =
     StateNotifierProvider<ProjectMostLikedStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(projectRepositoryProvider);
   return ProjectMostLikedStateNotifier(repository: repository);
 });
-
-
 
 class ProjectMostLikedStateNotifier extends StateNotifier<BaseModel> {
   final ProjectRepository repository;
@@ -190,16 +192,18 @@ final projectFamilyProvider = StateNotifierProvider.family
     .autoDispose<ProjectStateNotifier, BaseModel?, ProjectProviderParam>(
         (ref, param) {
   final repository = ref.watch(projectRepositoryProvider);
-  return ProjectStateNotifier(repository: repository, param: param);
+  return ProjectStateNotifier(repository: repository, param: param, ref: ref);
 });
 
 class ProjectStateNotifier extends StateNotifier<BaseModel?> {
   final ProjectRepository repository;
   final ProjectProviderParam param;
+  final StateNotifierProviderRef ref;
 
   ProjectStateNotifier({
     required this.repository,
     required this.param,
+    required this.ref,
   }) : super(LoadingModel()) {
     init();
   }
@@ -221,78 +225,107 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
     }
   }
 
-  Future<void> selfOut() async {
-    repository.selfOutProject(projectId: param.projectId!).then((value) {
+  Future<BaseModel> selfOut() async {
+    return await repository
+        .selfOutProject(projectId: param.projectId!)
+        .then<BaseModel>((value) {
       logger.i('project selfOut');
+      ref.read(projectListProvider.notifier).getList(
+          params: ProjectParams(
+              page: 1,
+              size: 5,
+              direction: 'DESC',
+              state: [StateType.COMPLETE, StateType.ONGOING]));
+      ref.read(isSelectAllProvider.notifier).update((isSelectAll) {
+        return true;
+      });
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
   Future<BaseModel?> getProject() async {
-    return await repository.getProject(projectId: param.projectId!).then<BaseModel>((value) {
+    return await repository
+        .getProject(projectId: param.projectId!)
+        .then<BaseModel>((value) {
       logger.i(value);
       return state = value;
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> createProject({required CreateProjectFormParam param}) async {
-    repository.createProject(param: param).then((value) {
+  Future<BaseModel> createProject(
+      {required CreateProjectFormParam param}) async {
+    return await repository
+        .createProject(param: param)
+        .then<BaseModel>((value) {
       logger.i('project create');
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> updateProject({required UpdateProjectFormParam param}) async {
-    repository
+  Future<BaseModel> updateProject(
+      {required UpdateProjectFormParam param}) async {
+    return await repository
         .updateProject(param: param, projectId: this.param.projectId!)
-        .then((value) {
+        .then<BaseModel>((value) {
       logger.i('project update');
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> completeProject() async {
-    repository.completeProject(projectId: param.projectId!).then((value) {
+  Future<BaseModel> completeProject() async {
+    return await repository
+        .completeProject(projectId: param.projectId!)
+        .then<BaseModel>((value) {
       logger.i('project complete');
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> deleteProject() async {
-    repository.deleteProject(projectId: param.projectId!).then((value) {
+  Future<BaseModel> deleteProject() async {
+    return await repository
+        .deleteProject(projectId: param.projectId!)
+        .then<BaseModel>((value) {
       logger.i('project complete');
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 
-  Future<void> getIsCompleted() async {
+  Future<BaseModel> getIsCompleted() async {
     state = LoadingModel();
-    repository.getIsCompleted(projectId: param.projectId!).then((value) {
+    return await repository
+        .getIsCompleted(projectId: param.projectId!)
+        .then<BaseModel>((value) {
       logger.i(value);
       state = value;
+      return value;
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 }

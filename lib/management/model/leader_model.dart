@@ -10,4 +10,5 @@ class LeaderModel extends BaseModel {
 
   factory LeaderModel.fromJson(Map<String, dynamic> json) =>
       _$LeaderModelFromJson(json);
+
 }

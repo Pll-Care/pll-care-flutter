@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/common/component/default_flash.dart';
 import 'package:pllcare/evaluation/param/evaluation_param.dart';
 import 'package:pllcare/evaluation/provider/midterm_provider.dart';
 import 'package:pllcare/theme.dart';
@@ -186,33 +187,36 @@ class MidEvalCard extends ConsumerWidget {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: ref.watch(midVotedProvider) != null
-                  ? () async {
-                      final param = CreateMidTermParam(
-                          projectId: projectId,
-                          votedId: ref.read(midVotedProvider)!,
-                          scheduleId: scheduleId,
-                          evaluationBadge: ref.read(badgeProvider));
-                      final isSuccess = await ref
-                          .read(midEvalProvider(MidEvalProviderParam(
-                                  projectId: projectId,
-                                  type: MidProviderType.create))
-                              .notifier)
-                          .createEval(param: param);
-                      if (isSuccess is! ErrorModel && context.mounted) {
-                        context.pop();
-                      } else {
-                        const snackBar = SnackBar(
-                          content: Text('자기 자신의 평가를 할 수 없습니다.'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        isSuccess as ErrorModel;
-                        log("실패 = ${isSuccess.code}"); //todo 실패 핸들링
-                      }
-                    }
-                  : () {
-                      log("안됨");
-                    },
+              onPressed: () async {
+                if (ref.read(midVotedProvider) == null) {
+                  DefaultFlash.showFlash(
+                      context: context,
+                      type: FlashType.fail,
+                      content: '참여자를 선택해주세요.');
+                  return;
+                }
+                final param = CreateMidTermParam(
+                    projectId: projectId,
+                    votedId: ref.read(midVotedProvider)!,
+                    scheduleId: scheduleId,
+                    evaluationBadge: ref.read(badgeProvider));
+                final result = await ref
+                    .read(midEvalProvider(MidEvalProviderParam(
+                            projectId: projectId, type: MidProviderType.create))
+                        .notifier)
+                    .createEval(param: param);
+                if (result is! ErrorModel && context.mounted) {
+                  context.pop();
+                } else {
+                  result as ErrorModel;
+                  if (context.mounted) {
+                    DefaultFlash.showFlash(
+                        context: context,
+                        type: FlashType.fail,
+                        content: result.message);
+                  }
+                }
+              },
               style: CustomDialog.textButtonStyle,
               child: Text(
                 '작성 완료',

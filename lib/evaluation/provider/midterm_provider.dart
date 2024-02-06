@@ -73,15 +73,14 @@ class MidEvalStateNotifier extends StateNotifier<BaseModel> {
 
   Future<BaseModel> createEval({required CreateMidTermParam param}) async {
     state = LoadingModel();
-    return await repository.createMidTerm(param: param).then((value) {
+    return await repository.createMidTerm(param: param).then<BaseModel>((value) {
       logger.i('create mid eval!');
       state = CompletedModel();
       return state;
     }).catchError((e) {
-      state =  ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
-      return state;
+      return error;
     });
   }
 

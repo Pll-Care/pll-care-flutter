@@ -79,7 +79,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
                 projectTab(title: '일정'),
                 projectTab(title: '평가'),
                 projectTab(title: '팀관리'),
-                if(model is LeaderModel && model.leader)
+                // if(model is LeaderModel && model.leader)
                 projectTab(title: '관리'),
               ],
             ),

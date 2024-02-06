@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:pllcare/util/custom_dialog.dart';
 import 'package:pllcare/util/custom_form_bottom_sheet.dart';
 
 import '../../common/model/default_model.dart';
+import '../../management/model/leader_model.dart';
 import '../view/project_list_screen.dart';
 
 enum ManageType {
@@ -29,23 +31,40 @@ class ProjectManagementBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    return Center(
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        _ManageCard(
-          type: ManageType.COMPLETE,
-          onTap: onTapComplete,
+    final complete = ref.watch(projectFamilyProvider(ProjectProviderParam(
+      type: ProjectProviderType.isCompleted,
+      projectId: projectId,
+    )));
+    final leader = ref.watch(projectLeaderProvider(projectId: projectId));
+    return Stack(children: [
+      Center(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          _ManageCard(
+            type: ManageType.COMPLETE,
+            onTap: onTapComplete,
+          ),
+          _ManageCard(
+            type: ManageType.DELETE,
+            onTap: onTapDelete,
+          ),
+          _ManageCard(
+            type: ManageType.UPDATE,
+            onTap: onTapUpdate,
+          ),
+        ]),
+      ),
+      if (leader is LeaderModel && !leader.leader ||
+          complete is ProjectIsCompleted && complete.completed)
+        AbsorbPointer(
+          child: Align(
+            alignment: Alignment.center,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(),
+            ),
+          ),
         ),
-        _ManageCard(
-          type: ManageType.DELETE,
-          onTap: onTapDelete,
-        ),
-        _ManageCard(
-          type: ManageType.UPDATE,
-          onTap: onTapUpdate,
-        ),
-      ]),
-    );
+    ]);
   }
 
   void onTapComplete({required BuildContext context, required WidgetRef ref}) {
@@ -140,9 +159,14 @@ class ProjectManagementBody extends ConsumerWidget {
 
   void onTapUpdate(
       {required BuildContext context, required WidgetRef ref}) async {
-     await  ref.watch(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)).notifier).getProject();
+    await ref
+        .watch(projectFamilyProvider(ProjectProviderParam(
+                type: ProjectProviderType.get, projectId: projectId))
+            .notifier)
+        .getProject();
 
-    final bModel = ref.read(projectFamilyProvider(ProjectProviderParam(type: ProjectProviderType.get, projectId: projectId)));
+    final bModel = ref.read(projectFamilyProvider(ProjectProviderParam(
+        type: ProjectProviderType.get, projectId: projectId)));
 
     if (bModel is ProjectModel) {
       if (context.mounted) {
