@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/schedule/component/filter/schedule_filter_card.dart';
 
@@ -21,6 +22,7 @@ import '../../param/schedule_param.dart';
 import '../../provider/schedule_provider.dart';
 import '../../provider/widget_provider.dart';
 import '../schedule_dialog_component.dart';
+import '../skeleton/schedule_filter_card_skeleton.dart';
 
 class ScheduleFilterContent extends ConsumerStatefulWidget {
   final int projectId;
@@ -33,14 +35,13 @@ class ScheduleFilterContent extends ConsumerStatefulWidget {
 }
 
 class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
-  int cardCnt = 0;
   ScheduleParams? condition;
 
   @override
   Widget build(BuildContext context) {
     ref.listen(scheduleFilterProvider(widget.projectId),
         (previous, next) async {
-      final PageParams params = PageParams(page: 1, size: 4, direction: 'DESC');
+      final PageParams params = defaultPageParam;
       condition = getFilterParam(next);
       await ref
           .read(scheduleFilterFetchProvider(condition: condition!).notifier)
@@ -58,95 +59,99 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
       padding: EdgeInsets.symmetric(
         vertical: 20.h,
       ),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: 760.h, minHeight: 140.h),
-          child: Container(
-            // todo 개수에 맞게 높이 조절
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.r),
-              color: GREY_100,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromRGBO(0, 0, 0, 0.25),
-                  blurRadius: 4.r,
-                  offset: Offset(0, 4.h)
-                )
-              ],
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: 20.w,
-              vertical: 25.h,
-            ),
-            child: Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                if (model is LoadingModel) {
-                  return CircularProgressIndicator();
-                } else if (model is ErrorModel) {
-                  return Text("error");
-                }
-                final pModelList = (model as PaginationModel<ScheduleFilter>);
-                final modelList = pModelList.data!;
-                cardCnt = modelList.length;
-                return Column(
-                  children: [
-                    Flexible(
-                      child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, idx) {
-                          return ScheduleFilterCard.fromModel(
-                            model: modelList[idx],
-                            isCompleted: (isCompleted is ProjectIsCompleted)
-                                ? isCompleted.completed
-                                : false,
-                            onTap: () {
-                              CustomDialog.showCustomDialog(
-                                context: context,
-                                backgroundColor: GREY_100,
-                                content: ScheduleDialogComponent(
-                                  projectId: widget.projectId,
-                                  scheduleId: modelList[idx].scheduleId,
-                                ),
-                              );
-                            },
-                            onComplete: () {
-                              onComplete(context, modelList, idx);
-                            },
-                            onEval: () {
-                              CustomDialog.showCustomDialog(
-                                  context: context,
-                                  backgroundColor: GREEN_200,
-                                  content: MidEvalCard.fromModel(
-                                    model: modelList[idx],
-                                    projectId: widget.projectId,
-                                  ));
-                            },
-                          );
-                        },
-                        separatorBuilder: (_, idx) {
-                          return SizedBox(
-                            height: 10.h,
-                          );
-                        },
-                        itemCount: modelList.length,
-                      ),
-                    ),
-                    BottomPageCount<ScheduleFilter>(
-                      pModelList: pModelList,
-                      onTapPage: (int page) {
-                        _onTapPage(ref, page, widget.projectId);
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: GREY_100,
+          boxShadow: [
+            BoxShadow(
+                color: const Color.fromRGBO(0, 0, 0, 0.25),
+                blurRadius: 4.r,
+                offset: Offset(0, 4.h))
+          ],
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 20.w,
+          vertical: 25.h,
+        ),
+        child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            if (model is LoadingModel) {
+              return const CustomSkeleton(skeleton: ScheduleFilterCardSkeleton());
+            } else if (model is ErrorModel) {
+              return Text("error");
+            }
+            final pModelList = (model as PaginationModel<ScheduleFilter>);
+            final modelList = pModelList.data!;
+
+            if (modelList.isEmpty) {
+              return SizedBox(
+                height: 100.h,
+                child: Center(
+                    child: Text(
+                  '진행중인 일정이 없습니다.',
+                  style: Heading_07.copyWith(
+                    color: GREEN_400,
+                  ),
+                )),
+              );
+            }
+
+            return Column(
+              children: [
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (_, idx) {
+                    return ScheduleFilterCard.fromModel(
+                      model: modelList[idx],
+                      isCompleted: (isCompleted is ProjectIsCompleted)
+                          ? isCompleted.completed
+                          : false,
+                      onTap: () {
+                        CustomDialog.showCustomDialog(
+                          context: context,
+                          backgroundColor: GREY_100,
+                          content: ScheduleDialogComponent(
+                            projectId: widget.projectId,
+                            scheduleId: modelList[idx].scheduleId,
+                          ),
+                        );
                       },
-                      isSliver: false,
-                      onPageStart: () =>
-                          _onTapPage(ref, 1, widget.projectId),
-                      onPageLast: () => _onTapPage(ref, pModelList.totalPages!, widget.projectId),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+                      onComplete: () {
+                        onComplete(context, modelList, idx);
+                      },
+                      onEval: () {
+                        CustomDialog.showCustomDialog(
+                            context: context,
+                            backgroundColor: GREEN_200,
+                            content: MidEvalCard.fromModel(
+                              model: modelList[idx],
+                              projectId: widget.projectId,
+                            ));
+                      },
+                    );
+                  },
+                  separatorBuilder: (_, idx) {
+                    return SizedBox(
+                      height: 10.h,
+                    );
+                  },
+                  itemCount: modelList.length,
+                ),
+                BottomPageCount<ScheduleFilter>(
+                  pModelList: pModelList,
+                  onTapPage: (int page) {
+                    _onTapPage(ref, page, widget.projectId);
+                  },
+                  isSliver: false,
+                  onPageStart: () => _onTapPage(ref, 1, widget.projectId),
+                  onPageLast: () =>
+                      _onTapPage(ref, pModelList.totalPages!, widget.projectId),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

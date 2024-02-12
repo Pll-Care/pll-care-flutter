@@ -1,12 +1,3 @@
-/*
-{
-  "email": "string",
-  "imageUrl": "string",
-  "name": "string",
-  "nickName": "string",
-  "oauth2Id": "string"
-}
- */
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_param.g.dart';

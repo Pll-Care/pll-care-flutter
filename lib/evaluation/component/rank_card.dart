@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/evaluation/component/skeleton/rank_card_skeleton.dart';
 
 import '../../project/model/project_model.dart';
 import '../../project/provider/project_provider.dart';
@@ -26,7 +30,7 @@ class RankCard extends ConsumerWidget {
         type: ProjectProviderType.isCompleted, projectId: projectId)));
     if (pModel is LoadingModel) {
       return const SliverToBoxAdapter(
-        child: CircularProgressIndicator(),
+        child: CustomSkeleton(skeleton: RankCardSkeleton()),
       );
     } else if (pModel is ErrorModel) {
       return const SliverToBoxAdapter(
@@ -43,7 +47,9 @@ class RankCard extends ConsumerWidget {
             projectId: projectId, type: MidProviderType.getChart)));
 
     if (model is LoadingModel) {
-      return const SliverToBoxAdapter(child: CircularProgressIndicator());
+      return const SliverToBoxAdapter(
+        child: CustomSkeleton(skeleton: RankCardSkeleton()),
+      );
     } else if (model is ErrorModel) {
       return const SliverToBoxAdapter(
         child: Text("error"),
@@ -64,7 +70,7 @@ class RankCard extends ConsumerWidget {
     if (finalRankModel != null && !finalRankModel.evaluation ||
         midRankModel != null && !midRankModel.evaluation) {
       return const SliverToBoxAdapter(
-        child: Text("평가가 없습니다."),
+        child: _EmptyRankCard(),
       );
     }
 
@@ -112,7 +118,9 @@ class RankCard extends ConsumerWidget {
                           midRank[index].name,
                           style: Heading_07.copyWith(color: GREEN_200),
                         ),
-                        SizedBox(height: 5.h,),
+                        SizedBox(
+                          height: 5.h,
+                        ),
                         Text(
                           !isCompleted
                               ? '${midRank[index].quantity}개'
@@ -132,6 +140,39 @@ class RankCard extends ConsumerWidget {
                 );
               },
               itemCount: midRank.length,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyRankCard extends StatelessWidget {
+  const _EmptyRankCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 25.w, right: 25.w, bottom: 32.h),
+      child: ClipRRect(
+        child: Container(
+          height: 110.h,
+          width: 340.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.r),
+            color: GREEN_200.withOpacity(.2),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 10,
+              sigmaY: 10,
+            ),
+            child: Center(
+              child: Text(
+                '평가를 진행해 주세요.',
+                style: Heading_07.copyWith(color: GREEN_400),
+              ),
             ),
           ),
         ),

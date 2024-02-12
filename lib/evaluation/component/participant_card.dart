@@ -138,32 +138,6 @@ class ParticipantCard extends StatelessWidget {
                 ],
               ),
             ),
-            // if (!me && isCompleted)
-            //   TextButton(
-            //     onPressed: () {
-            //       showDialog(
-            //           context: context,
-            //           builder: (context) {
-            //             return FinalDialog(
-            //               memberId: memberId,
-            //               badges: badges,
-            //               name: name,
-            //               finalEvalId: finalEvalId,
-            //               projectId: projectId,
-            //             );
-            //           });
-            //     },
-            //     style: finalEvalId != null
-            //         ? showEvalButtonStyle
-            //         : createEvalButtonStyle,
-            //     child: Text(
-            //       finalEvalId != null ? "최종평가 보기" : "최종평가 하기",
-            //       // todo optimistic response 필요
-            //       style: finalEvalId != null
-            //           ? showEvalTextStyle
-            //           : createEvalTextStyle,
-            //     ),
-            //   ),
             SizedBox(
               width: 15.w,
             )

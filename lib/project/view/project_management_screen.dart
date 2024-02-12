@@ -30,11 +30,12 @@ class ProjectManagementScreen extends ConsumerStatefulWidget {
 class _ProjectManagementScreenState
     extends ConsumerState<ProjectManagementScreen>
     with TickerProviderStateMixin {
-  late TabController tabController = TabController(length: 6, vsync: this);
+  late final TabController tabController;
 
   @override
   void initState() {
     super.initState();
+    tabController = TabController(length: 6, vsync: this);
   }
 
   @override
@@ -42,22 +43,9 @@ class _ProjectManagementScreenState
     tabController.dispose();
     super.dispose();
   }
-  //todo tabController 개수 설정
+
   @override
   Widget build(BuildContext context) {
-    final model = ref.watch(projectLeaderProvider(projectId: widget.projectId));
-
-    ref.listen(projectLeaderProvider(projectId: widget.projectId), (previous, next) {
-      if(previous != next){
-        if(next is LeaderModel && next.leader){
-          // tabController.dispose();
-          tabController = TabController(length: 6, vsync: this);
-        }
-      }
-    });
-
-
-
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
@@ -76,7 +64,6 @@ class _ProjectManagementScreenState
           ScheduleBody(projectId: widget.projectId),
           EvaluationBody(projectId: widget.projectId),
           ManagementBody(projectId: widget.projectId),
-          // if(model is LeaderModel && model.leader)
           ProjectManagementBody(projectId: widget.projectId),
         ],
       ),

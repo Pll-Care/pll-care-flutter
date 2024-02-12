@@ -25,7 +25,6 @@ class ProjectMainCard extends StatelessWidget {
   factory ProjectMainCard.fromModel(
       {required ProjectMainModel model, required String cardTitle}) {
     if (model is ProjectMostLiked) {
-      model as ProjectMostLiked;
       return ProjectMainCard(
         cardTitle: cardTitle,
         title: model.title,

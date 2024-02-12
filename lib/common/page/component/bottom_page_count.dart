@@ -61,6 +61,12 @@ class BottomPageCount<T> extends ConsumerWidget {
     //
     // log("startPage ${startPage}");
     // log("lastDividePage ${((pModelList.pageNumber! ~/ 5) + 1) * 5}");
+    if (pModelList.data!.isEmpty && !isSliver) {
+      return Container();
+    } else if (pModelList.data!.isEmpty) {
+      return const SliverToBoxAdapter();
+    }
+
     if (!isSliver) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 24.h),

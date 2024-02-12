@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/management/provider/management_provider.dart';
 import 'package:pllcare/schedule/component/filter/schedule_filter_content.dart';
 import 'package:pllcare/schedule/provider/widget_provider.dart';
@@ -11,6 +12,7 @@ import '../../../common/model/default_model.dart';
 import '../../../management/model/team_member_model.dart';
 import '../../../theme.dart';
 import '../../param/schedule_param.dart';
+import '../skeleton/schedule_filter_skeleton.dart';
 
 class ScheduleFilter extends ConsumerWidget {
   final int projectId;
@@ -37,7 +39,7 @@ class ScheduleFilter extends ConsumerWidget {
     });
 
     if (model is LoadingModel) {
-      return const SliverToBoxAdapter(child: CircularProgressIndicator());
+      return const SliverToBoxAdapter(child: CustomSkeleton(skeleton: ScheduleFilterSkeleton()));
     } else if (model is ErrorModel) {
       return const SliverToBoxAdapter(child: Text("error"));
     } else {

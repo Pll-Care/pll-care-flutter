@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pllcare/auth/provider/auth_provider.dart';
+import 'package:pllcare/common/component/default_flash.dart';
 import 'package:pllcare/common/page/component/bottom_page_count.dart';
 import 'package:pllcare/common/page/param/page_param.dart';
 import 'package:pllcare/post/component/post_card.dart';
+import 'package:pllcare/post/component/skeleton/post_skeleton.dart';
 import 'package:pllcare/post/model/post_model.dart';
 import 'package:pllcare/post/provider/post_provider.dart';
 import 'package:pllcare/post/view/post_screen.dart';
 
+import '../../common/component/skeleton.dart';
 import '../../common/model/default_model.dart';
 import '../../theme.dart';
 
@@ -29,15 +33,19 @@ class PostBody extends ConsumerWidget {
           sliver: SliverToBoxAdapter(
             child: Align(
               alignment: Alignment.centerRight,
-              child: Container(
-                child: TextButton(
-                  onPressed: () {
-                    context.pushNamed(PostFormScreen.routeName, );
-                  },
-                  child: Text(
-                    "작성하기",
-                    style: m_Button_03.copyWith(color: GREY_100),
-                  ),
+              child: TextButton(
+                onPressed: () {
+                  final isLogin =
+                      ref.read(memberProvider.notifier).checkLogin(context);
+                  if (isLogin) {
+                    context.pushNamed(
+                      PostFormScreen.routeName,
+                    );
+                  }
+                },
+                child: Text(
+                  "작성하기",
+                  style: m_Button_03.copyWith(color: GREY_100),
                 ),
               ),
             ),
@@ -71,7 +79,7 @@ class RecruitNav extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
             '모집 중인 프로젝트 목록  Currently Recruiting',
-            style: m_Heading_01.copyWith(color: GREY_100),
+            style: m_Heading_01.copyWith(color: GREY_100, fontSize: 18.sp),
           ),
         ]),
       ),
@@ -103,6 +111,12 @@ class _RecruitList extends ConsumerWidget {
                     return PostCard.fromModel(
                       model: pModelList.data![idx],
                       onTapLike: () {
+                        final isLogin = ref
+                            .read(memberProvider.notifier)
+                            .checkLogin(context);
+                        if (!isLogin) {
+                          return;
+                        }
                         ref
                             .read(
                               postProvider(const PostProviderParam(
@@ -130,8 +144,21 @@ class _RecruitList extends ConsumerWidget {
                 onPageLast: () => _onTapPage(ref, pModelList.totalPages!),
               ),
             ])
-          : const SliverToBoxAdapter(
-              child: Text("로딩"),
+          : SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                childCount: 4,
+                (_, idx) {
+                  return const CustomSkeleton(
+                    skeleton: PostCardSkeleton(),
+                  );
+                },
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 22.h,
+                crossAxisSpacing: 15.w,
+                mainAxisExtent: 300.h,
+              ),
             ),
     );
   }

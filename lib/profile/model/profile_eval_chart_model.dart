@@ -24,4 +24,13 @@ class ProfileEvalChartModel {
 
   factory ProfileEvalChartModel.fromJson(Map<String, dynamic> json) =>
       _$ProfileEvalChartModelFromJson(json);
+
+  List<double> getScoreList() {
+    return [
+      score.sincerity.toDouble(),
+      score.jobPerformance.toDouble(),
+      score.punctuality.toDouble(),
+      score.communication.toDouble()
+    ];
+  }
 }

@@ -4,15 +4,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/evaluation/component/participant_card.dart';
 import 'package:pllcare/evaluation/component/rank_card.dart';
+import 'package:pllcare/evaluation/component/skeleton/participant_card_list_skeleton.dart';
 import 'package:pllcare/evaluation/provider/eval_provider.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../common/model/default_model.dart';
+import '../../profile/view/profile_screen.dart';
 import '../model/participant_model.dart';
 import 'chart_component.dart';
 
@@ -73,9 +77,7 @@ class _EvaluationBodyState extends State<EvaluationBody> {
 
             if (model is LoadingModel) {
               return const SliverToBoxAdapter(
-                child: Center(
-                  child: Text("로딩"),
-                ),
+                child: CustomSkeleton(skeleton: ParticipantCardListSkeleton()),
               );
             }
             if (model is ListModel<ParticipantModel> &&
@@ -83,10 +85,19 @@ class _EvaluationBodyState extends State<EvaluationBody> {
               return SliverList.separated(
                   itemBuilder: (_, idx) {
                     if (model.data.length > idx) {
-                      return ParticipantCard.fromModel(
-                        model: model.data[idx],
-                        isCompleted: pModel.completed,
-                        projectId: widget.projectId,
+                      return InkWell(
+                        onTap: () {
+                          final Map<String, String> pathParameters = {
+                            'memberId': model.data[idx].memberId.toString()
+                          };
+                          context.pushNamed(ProfileScreen.routeName,
+                              pathParameters: pathParameters);
+                        },
+                        child: ParticipantCard.fromModel(
+                          model: model.data[idx],
+                          isCompleted: pModel.completed,
+                          projectId: widget.projectId,
+                        ),
                       );
                     }
                     return null;
@@ -98,7 +109,6 @@ class _EvaluationBodyState extends State<EvaluationBody> {
                   },
                   itemCount: model.data.length + 1);
             }
-            // final pModel = model as ListModel<ParticipantModel>;
             return const SliverToBoxAdapter(child: Text("error"));
           },
         )

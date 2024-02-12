@@ -156,14 +156,16 @@ class PostCard extends StatelessWidget {
                   ),
                   Text(
                     '모집기간 : \n$startDate ~ $endDate',
-                    style: m_Button_01.copyWith(color: GREY_500),
+                    style:
+                        m_Button_01.copyWith(color: GREY_500, fontSize: 12.sp),
                   ),
                   SizedBox(
                     height: 4.h,
                   ),
                   Text(
                     '모집 포지션 :\n$position',
-                    style: m_Button_01.copyWith(color: GREY_500),
+                    style:
+                        m_Button_01.copyWith(color: GREY_500, fontSize: 12.sp),
                   ),
                 ],
               ),

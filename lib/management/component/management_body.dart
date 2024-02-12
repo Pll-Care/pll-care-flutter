@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pllcare/auth/model/member_model.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
+import 'package:pllcare/common/component/skeleton.dart';
+import 'package:pllcare/management/component/skeleton/team_member_card_skeleton.dart';
 import 'package:pllcare/management/component/team_member_card.dart';
 import 'package:pllcare/management/model/team_member_model.dart';
 import 'package:pllcare/management/param/management_param.dart';
@@ -17,6 +19,7 @@ import 'package:pllcare/theme.dart';
 import '../../common/component/default_flash.dart';
 import '../../common/model/default_model.dart';
 import '../../dio/error/error_type.dart';
+import '../../profile/view/profile_screen.dart';
 import '../model/apply_model.dart';
 import '../model/leader_model.dart';
 import '../provider/widget/management_form_provider.dart';
@@ -95,11 +98,18 @@ class _ManagementBodyState extends ConsumerState<ManagementBody> {
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final bModel = ref.watch(managementProvider(widget.projectId));
             if (bModel is LoadingModel) {
-              return const SliverToBoxAdapter(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
+              return SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: 9,
+                        (_, idx) {
+                      return CustomSkeleton(skeleton: TeamMemberCardSkeleton());
+                    },
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 15.h,
+                    mainAxisExtent: 160.h,
+                  ));
             } else if (bModel is ErrorModel) {
               return const SliverToBoxAdapter(
                 child: Center(
@@ -112,7 +122,16 @@ class _ManagementBodyState extends ConsumerState<ManagementBody> {
                 delegate: SliverChildBuilderDelegate(
                   childCount: model.data.length,
                   (_, idx) {
-                    return TeamMemberCard.fromModel(model: model.data[idx]);
+                    return InkWell(
+                      onTap: () {
+                        final Map<String, String> pathParameters = {
+                          'memberId': model.data[idx].memberId.toString()
+                        };
+                        context.pushNamed(ProfileScreen.routeName,
+                            pathParameters: pathParameters);
+                      },
+                      child: TeamMemberCard.fromModel(model: model.data[idx]),
+                    );
                   },
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -160,17 +179,26 @@ class _ManagementBodyState extends ConsumerState<ManagementBody> {
               return SliverMainAxisGroup(slivers: [
                 SliverList.separated(
                   itemBuilder: (_, idx) {
-                    return ApplyCard.fromModel(
-                      model: model.data[idx],
-                      onAccept: () {
-                        // todo optimise 최적화 필요
-                        onAccept(ref, model, idx);
+                    return InkWell(
+                      onTap: (){
+                        final Map<String, String> pathParameters = {
+                          'memberId': model.data[idx].memberId.toString()
+                        };
+                        context.pushNamed(ProfileScreen.routeName,
+                            pathParameters: pathParameters);
                       },
-                      onReject: () {
-                        // todo optimise 최적화 필요
-                        onReject(ref, model, idx);
-                      },
-                      projectId: widget.projectId,
+                      child: ApplyCard.fromModel(
+                        model: model.data[idx],
+                        onAccept: () {
+                          // todo optimise 최적화 필요
+                          onAccept(ref, model, idx);
+                        },
+                        onReject: () {
+                          // todo optimise 최적화 필요
+                          onReject(ref, model, idx);
+                        },
+                        projectId: widget.projectId,
+                      ),
                     );
                   },
                   separatorBuilder: (_, idx) {
@@ -511,7 +539,8 @@ class TeamUpdateComponent extends ConsumerWidget {
       ),
     );
   }
-  Widget _getLeaderButton(WidgetRef ref, BuildContext context){
+
+  Widget _getLeaderButton(WidgetRef ref, BuildContext context) {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
@@ -521,8 +550,8 @@ class TeamUpdateComponent extends ConsumerWidget {
             return;
           }
           final param = ChangeLeaderParam(id: teamMember.teamMember!.memberId);
-          final result = await ref
-              .read(changeLeaderProvider(projectId: projectId, param: param).future);
+          final result = await ref.read(
+              changeLeaderProvider(projectId: projectId, param: param).future);
           if (result is CompletedModel && context.mounted) {
             log('성공');
             context.pop();
@@ -538,7 +567,7 @@ class TeamUpdateComponent extends ConsumerWidget {
     );
   }
 
-  Widget _getLeaderWidget(TeamMemberUpdateModel model){
+  Widget _getLeaderWidget(TeamMemberUpdateModel model) {
     if (model.teamMember != null) {
       return SizedBox(
         height: 150.h,

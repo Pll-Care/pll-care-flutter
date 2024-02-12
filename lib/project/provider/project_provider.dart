@@ -214,7 +214,7 @@ class ProjectStateNotifier extends StateNotifier<BaseModel?> {
         // getProject();
         break;
       case ProjectProviderType.getList:
-        // getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+        // getPostList(param: defaultPageParam);
         break;
       case ProjectProviderType.isCompleted:
         log("completed!!");

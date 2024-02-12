@@ -17,3 +17,4 @@ class PageParams {
   Map<String, dynamic> toJson() => _$PageParamsToJson(this);
 }
 
+final defaultPageParam = PageParams(page: 1, size: 4, direction: 'DESC');

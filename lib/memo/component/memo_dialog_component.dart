@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/memo/model/memo_model.dart';
 import 'package:pllcare/memo/param/memo_param.dart';
 import 'package:pllcare/theme.dart';
@@ -35,7 +36,10 @@ class MemoDialogComponent extends ConsumerWidget {
       memoId: memoId,
     )));
     if (model is LoadingModel) {
-      return const CircularProgressIndicator();
+      return SizedBox(
+        width: double.infinity,
+        height: 500.h,
+      );
     } else if (model is ErrorModel) {
       return const Text('error');
     }
@@ -54,8 +58,9 @@ class MemoDialogComponent extends ConsumerWidget {
           if (ref.read(memoDropdownProvider) == '즐겨찾기') {
             final param = MemoProviderParam(
                 type: MemoProviderType.bookmarkList, projectId: projectId);
-            ref.read(memoProvider(param).notifier).getBookmarkMemoList(
-                param: PageParams(page: 1, size: 4, direction: 'DESC'));
+            ref
+                .read(memoProvider(param).notifier)
+                .getBookmarkMemoList(param: defaultPageParam);
           }
         } else {}
       },
@@ -249,7 +254,7 @@ class _MemoDetailComponent extends ConsumerWidget {
               .notifier)
           .updateMemo(param: param);
       if (model is CompletedModel) {
-        final pageParams = PageParams(page: 0, size: 4, direction: 'DESC');
+        final pageParams = defaultPageParam;
         final dropValue = ref.read(memoDropdownProvider);
         if (dropValue == '전체') {
           ref
@@ -286,13 +291,15 @@ class _MemoDetailComponent extends ConsumerWidget {
       if (dropValue == '전체') {
         final param = MemoProviderParam(
             type: MemoProviderType.getList, projectId: projectId);
-        ref.read(memoProvider(param).notifier).getMemoList(
-            param: PageParams(page: 1, size: 4, direction: 'DESC'));
+        ref
+            .read(memoProvider(param).notifier)
+            .getMemoList(param: defaultPageParam);
       } else {
         final param = MemoProviderParam(
             type: MemoProviderType.bookmarkList, projectId: projectId);
-        ref.read(memoProvider(param).notifier).getBookmarkMemoList(
-            param: PageParams(page: 1, size: 4, direction: 'DESC'));
+        ref
+            .read(memoProvider(param).notifier)
+            .getBookmarkMemoList(param: defaultPageParam);
       }
       if (context.mounted) {
         context.pop();

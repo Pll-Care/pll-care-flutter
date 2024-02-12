@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pllcare/common/component/default_flash.dart';
 import 'package:pllcare/evaluation/param/evaluation_param.dart';
 import 'package:pllcare/evaluation/provider/finalterm_provider.dart';
 import 'package:pllcare/util/custom_dialog.dart';
@@ -41,7 +42,7 @@ class FinalDialog extends ConsumerWidget {
           type: FinalProviderType.getEval,
           evaluationId: finalEvalId)));
       if (bModel is LoadingModel) {
-        return CircularProgressIndicator();
+        return Container();
       } else if (bModel is ErrorModel) {
       } else {
         model = bModel as FinalTermModel;
@@ -159,7 +160,7 @@ class FinalDialog extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () async {
-                await ref
+                final result = await ref
                     .read(finalEvalProvider(FinalEvalProviderParam(
                             projectId: projectId,
                             type: FinalProviderType.create))
@@ -171,9 +172,16 @@ class FinalDialog extends ConsumerWidget {
                             score: ref.read(scoreProvider),
                             content: evalContent));
 
-                int count = 0;
-                if (context.mounted) {
-                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                if (result is CompletedModel) {
+                  int count = 0;
+                  if (context.mounted) {
+                    Navigator.of(context).popUntil((_) => count++ >= 2);
+                  }
+                } else if (result is ErrorModel && context.mounted) {
+                  DefaultFlash.showFlash(
+                      context: context,
+                      type: FlashType.fail,
+                      content: result.message);
                 }
               },
               style: CustomDialog.textButtonStyle,
@@ -577,6 +585,7 @@ class _FinalTextFormComponent extends StatelessWidget {
                   }
                   return null;
                 },
+                textAlignVertical: TextAlignVertical.top,
                 cursorColor: GREEN_400,
                 maxLines: null,
                 maxLength: 500,

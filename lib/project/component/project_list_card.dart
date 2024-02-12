@@ -60,7 +60,7 @@ class ProjectListCard extends ConsumerWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 11.w, right: 24.w, top: 15.h),
+              padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 15.h, bottom: 4.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -74,7 +74,7 @@ class ProjectListCard extends ConsumerWidget {
                           radius: 20.r,
                         ),
                         SizedBox(
-                          width: 8.w,
+                          width: 16.w,
                         ),
                         Expanded(
                           child: Text(
@@ -89,38 +89,39 @@ class ProjectListCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  if (state != StateType.COMPLETE)
-                    InkWell(
-                      onTap: () {
-                        onTapSelfOut(context: context, ref: ref);
-                      },
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.1),
-                                blurStyle: BlurStyle.outer,
-                                blurRadius: 20,
-                                spreadRadius: 10,
-                              )
-                            ]),
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.exit_to_app,
-                              size: 18,
-                            ),
-                            Text(
-                              '팀 나가기',
-                              style: m_Button_02.copyWith(color: GREEN_400),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  // todo 백엔드 처리 x
+                  // if (state != StateType.COMPLETE)
+                  //   InkWell(
+                  //     onTap: () {
+                  //       onTapSelfOut(context: context, ref: ref);
+                  //     },
+                  //     child: Container(
+                  //       width: 30,
+                  //       height: 30,
+                  //       decoration: const BoxDecoration(
+                  //           shape: BoxShape.circle,
+                  //           boxShadow: [
+                  //             BoxShadow(
+                  //               color: Color.fromRGBO(0, 0, 0, 0.1),
+                  //               blurStyle: BlurStyle.outer,
+                  //               blurRadius: 20,
+                  //               spreadRadius: 10,
+                  //             )
+                  //           ]),
+                  //       child: Column(
+                  //         children: [
+                  //           const Icon(
+                  //             Icons.exit_to_app,
+                  //             size: 18,
+                  //           ),
+                  //           Text(
+                  //             '팀 나가기',
+                  //             style: m_Button_02.copyWith(color: GREEN_400),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),
@@ -137,6 +138,7 @@ class ProjectListCard extends ConsumerWidget {
                     ),
                     textAlign: TextAlign.start,
                   ),
+                  SizedBox(height: 4.h),
                   Text(
                     '프로젝트 설명: $content',
                     overflow: TextOverflow.ellipsis,

@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/project/component/skeleton/project_list_card_skeleton.dart';
 import 'package:pllcare/project/param/param.dart';
 import 'package:pllcare/project/component/project_list_card.dart';
 import 'package:pllcare/project/model/project_model.dart';
@@ -235,7 +237,7 @@ class _ProjectList extends ConsumerWidget {
               ),
             ])
           : const SliverToBoxAdapter(
-              child: Text("로딩"),
+              child: CustomSkeleton(skeleton: ProjectListCardSkeleton()),
             ),
     );
   }

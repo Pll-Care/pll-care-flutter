@@ -1,33 +1,3 @@
-/*
-{
-  "content": [
-    {
-      "projectId": 0,
-      "imageUrl": "string",
-      "title": "string",
-      "score": {
-        "sincerity": 0,
-        "jobPerformance": 0,
-        "punctuality": 0,
-        "communication": 0
-      }
-    }
-  ],
-  "pageNumber": 0,
-  "totalElements": 0,
-  "totalPages": 0,
-  "last": true,
-  "size": 0,
-  "sort": {
-    "empty": true,
-    "sorted": true,
-    "unsorted": true
-  },
-  "numberOfElements": 0,
-  "first": true,
-  "empty": true
-}
- */
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/evaluation/param/evaluation_param.dart';
@@ -35,10 +5,10 @@ import 'package:pllcare/evaluation/param/evaluation_param.dart';
 part 'profile_eval_model.g.dart';
 
 @JsonSerializable()
-class ProfileEvalList extends PaginationModel {
+class ProfileEvalList extends PaginationModel<ProfileEvalListModel> {
   @override
   @JsonKey(name: 'content')
-  get data => super.data;
+  List<ProfileEvalListModel>? get data => super.data;
 
   ProfileEvalList(
       {required super.data,
@@ -56,24 +26,12 @@ class ProfileEvalList extends PaginationModel {
       _$ProfileEvalListFromJson(json);
 }
 
-/*
-    {
-      "projectId": 0,
-      "imageUrl": "string",
-      "title": "string",
-      "score": {
-        "sincerity": 0,
-        "jobPerformance": 0,
-        "punctuality": 0,
-        "communication": 0
-      }
-    }
- */
+
 @JsonSerializable()
 class ProfileEvalListModel {
   final int projectId;
-  final String imageUrl;
-  final String title;
+  final String? imageUrl;
+  final String? title;
   final ScoreModel score;
 
   ProfileEvalListModel({
@@ -86,33 +44,6 @@ class ProfileEvalListModel {
   factory ProfileEvalListModel.fromJson(Map<String, dynamic> json) =>
       _$ProfileEvalListModelFromJson(json);
 }
-
-/*
-  "badges": {
-    "support": "string",
-    "quantity1": 0,
-    "leader": "string",
-    "quantity2": 0,
-    "participant": "string",
-    "quantity3": 0,
-    "bank": "string",
-    "quantity4": 0
-  },
-  "finalEvals": [
-    {
-      "memberId": 0,
-      "name": "string",
-      "imageUrl": "string",
-      "content": "string",
-      "score": {
-        "sincerity": 0,
-        "jobPerformance": 0,
-        "punctuality": 0,
-        "communication": 0
-      }
-    }
-  ]
- */
 
 @JsonSerializable()
 class Badge {

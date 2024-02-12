@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pllcare/project/model/project_model.dart';
@@ -183,8 +184,9 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                           ),
                         ),
                       if (calendarSchedule.isNotEmpty)
-                        Expanded(
+                        Flexible(
                           child: ListView.separated(
+                            shrinkWrap: true,
                               itemBuilder: (_, idx) {
                                 return CalendarContent.fromModel(
                                     model: calendarSchedule[idx]);
@@ -381,12 +383,13 @@ class CalendarContent extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: m_Body_02.copyWith(
               color: GREY_500,
+              fontWeight: FontWeight.w700
             ),
           ),
           Text(
             title,
             overflow: TextOverflow.ellipsis,
-            style: m_Heading_04.copyWith(
+            style: m_Heading_01.copyWith(
               color: GREY_500,
             ),
           ),
@@ -397,7 +400,7 @@ class CalendarContent extends StatelessWidget {
                 Text(
                   location ?? '',
                   overflow: TextOverflow.ellipsis,
-                  style: m_Body_02.copyWith(color: GREY_500),
+                  style: m_Heading_01.copyWith(color: GREY_500),
                 ),
                 Expanded(
                   child: Stack(
@@ -405,10 +408,17 @@ class CalendarContent extends StatelessWidget {
                       ...members.mapIndexed((idx, e) {
                         return Positioned(
                           right: idx * 25,
-                          child: TechStackIcon(
-                            name: e.name,
-                            imageUrl: e.imageUrl,
-                            radius: 15,
+                          child: Tooltip(
+                            message: e.name,
+                            textStyle:
+                            m_Body_01.copyWith(color: GREY_100),
+                            showDuration: const Duration(seconds: 1),
+                            triggerMode: TooltipTriggerMode.longPress,
+                            child: CircleAvatar(
+                              backgroundImage:
+                              NetworkImage(e.imageUrl),
+                              radius: 15.r,
+                            ),
                           ),
                         );
                       }).toList()

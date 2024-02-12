@@ -5,6 +5,7 @@ import 'package:pllcare/evaluation/repository/final_eval_repository.dart';
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
 import '../../common/provider/default_provider_type.dart';
+import 'eval_provider.dart';
 
 enum FinalProviderType { create, getEval, getChart }
 
@@ -17,6 +18,7 @@ class FinalEvalProviderParam extends DefaultProviderType {
     required this.type,
     this.evaluationId,
   });
+
   @override
   List<Object?> get props => [projectId, type, evaluationId];
 }
@@ -25,15 +27,19 @@ final finalEvalProvider = StateNotifierProvider.autoDispose
     .family<FinalEvalStateNotifier, BaseModel, FinalEvalProviderParam>(
         (ref, param) {
   final repository = ref.watch(finalEvalRepositoryProvider);
-  return FinalEvalStateNotifier(repository: repository, param: param);
+  return FinalEvalStateNotifier(repository: repository, param: param, ref: ref);
 });
 
 class FinalEvalStateNotifier extends StateNotifier<BaseModel> {
   final FinalEvalRepository repository;
   final FinalEvalProviderParam param;
+  final StateNotifierProviderRef ref;
 
-  FinalEvalStateNotifier({required this.repository, required this.param})
-      : super(LoadingModel()) {
+  FinalEvalStateNotifier({
+    required this.repository,
+    required this.param,
+    required this.ref,
+  }) : super(LoadingModel()) {
     init();
   }
 
@@ -50,14 +56,21 @@ class FinalEvalStateNotifier extends StateNotifier<BaseModel> {
     }
   }
 
-  Future<void> createEval({required CreateFinalTermParam param}) async {
+  Future<BaseModel> createEval({required CreateFinalTermParam param}) async {
     state = LoadingModel();
-    repository.createFinalTerm(param: param).then((value) {
+    return await repository
+        .createFinalTerm(param: param)
+        .then<BaseModel>((value) {
       logger.i('create final eval!');
+      ref
+          .read(evalProvider(EvalProviderParam(projectId: param.projectId))
+              .notifier)
+          .getParticipant();
+      return CompletedModel();
     }).catchError((e) {
-      state = ErrorModel.respToError(e);
-      final error = state as ErrorModel;
+      final error = ErrorModel.respToError(e);
       logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
     });
   }
 

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pllcare/auth/model/member_model.dart';
+import 'package:pllcare/auth/provider/auth_provider.dart';
+import 'package:pllcare/common/component/default_drawer.dart';
+import 'package:pllcare/profile/provider/profile_provider.dart';
 import 'package:pllcare/theme.dart';
 
 import '../../home_screen.dart';
 import '../../post/view/post_screen.dart';
+import '../../profile/model/profile_model.dart';
 import '../../project/view/project_list_screen.dart';
+import '../model/default_model.dart';
 
 class DefaultLayout extends ConsumerStatefulWidget {
   final bool hasInfiniteScroll;
@@ -94,17 +101,34 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout>
     }
   }
 
+  Widget? _getDraw(BaseModel? model, WidgetRef ref) {
+    if (model is MemberModel) {
+      return DefaultDrawer(
+        memberId: model.memberId,
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final model = ref.watch(memberProvider);
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
+      endDrawer: _getDraw(model, ref),
       body: SafeArea(
         child: widget.body,
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           if (index == 0) {
+            final isLogin =
+            ref.read(memberProvider.notifier).checkLogin(context);
+            if(!isLogin){
+              return;
+            }
             context.goNamed(ProjectListScreen.routeName);
           } else if (index == 1) {
             context.goNamed(HomeScreen.routeName);

@@ -1,45 +1,17 @@
-/*
-{
-  "content": [
-    {
-      "postId": 0,
-      "title": "string",
-      "description": "string",
-      "state": "TBD"
-    }
-  ],
-  "pageNumber": 0,
-  "totalElements": 0,
-  "totalPages": 0,
-  "last": true,
-  "size": 0,
-  "sort": {
-    "empty": true,
-    "sorted": true,
-    "unsorted": true
-  },
-  "numberOfElements": 0,
-  "first": true,
-  "empty": true
-}
- */
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/profile/model/profile_apply_model.dart';
 
 part 'profile_post_model.g.dart';
 
 @JsonSerializable()
-class ProfilePostModel {
-  final int postId;
-  final String title;
-  final String description;
+class ProfilePostModel extends ProfileApplyModel {
   final StateType state;
 
   ProfilePostModel({
-    required this.postId,
-    required this.title,
-    required this.description,
+    required super.postId,
+    required super.title,
+    required super.description,
     required this.state,
   });
 

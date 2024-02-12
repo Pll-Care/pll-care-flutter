@@ -87,7 +87,7 @@ abstract class UserRepository {
   // @Headers({
   //   'token': 'true',
   // })
-  Future<ProjectExperienceList> getProfileEvalList({
+  Future<ProfileEvalList> getProfileEvalList({
     @Path() required int memberId,
     @Queries() required PageParams param,
   });

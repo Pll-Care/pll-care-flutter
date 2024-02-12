@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pllcare/common/component/default_flash.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/common/component/tech_stack_icon.dart';
 import 'package:pllcare/common/model/default_model.dart';
-import 'package:pllcare/management/provider/management_provider.dart';
+import 'package:pllcare/post/component/skeleton/post_detail_skeleton.dart';
 import 'package:pllcare/post/param/post_param.dart';
 import 'package:pllcare/post/provider/post_provider.dart';
 import 'package:pllcare/theme.dart';
 
+import '../../auth/provider/auth_provider.dart';
 import '../../management/model/team_member_model.dart';
 import '../../util/model/techstack_model.dart';
 import '../model/post_model.dart';
@@ -31,7 +31,7 @@ class PostDetailBody extends ConsumerWidget {
     final model = ref.watch(postProvider(
         PostProviderParam(type: PostProviderType.get, postId: postId)));
     if (model is LoadingModel) {
-      return CircularProgressIndicator();
+      return const CustomSkeleton(skeleton: PostDetailSkeleton());
     }
     model as PostModel;
     return CustomScrollView(
@@ -292,21 +292,21 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                   ),
                 ),
                 SizedBox(width: 8.w),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: 45.w,
-                    height: 45.w,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: GREEN_200, width: 2.w)),
-                    child: Icon(
-                      Icons.share,
-                      color: GREEN_200,
-                      size: 32.w,
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {},
+                //   child: Container(
+                //     width: 45.w,
+                //     height: 45.w,
+                //     decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         border: Border.all(color: GREEN_200, width: 2.w)),
+                //     child: Icon(
+                //       Icons.share,
+                //       color: GREEN_200,
+                //       size: 32.w,
+                //     ),
+                //   ),
+                // ),
               ],
             )
           ],
@@ -316,6 +316,10 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
   }
 
   void onTapLike() {
+    final isLogin = ref.read(memberProvider.notifier).checkLogin(context);
+    if (!isLogin) {
+      return;
+    }
     ref
         .read(postProvider(PostProviderParam(
                 type: PostProviderType.get, postId: widget.postId))
@@ -452,6 +456,12 @@ class _PositionRecruitField extends ConsumerWidget {
                   width: 60.w,
                   child: OutlinedButton(
                     onPressed: () async {
+                      final isLogin =
+                          ref.read(memberProvider.notifier).checkLogin(context);
+                      if (!isLogin) {
+                        return;
+                      }
+
                       final param = ApplyPostParam(position: position);
                       final model = await ref
                           .read(postProvider(PostProviderParam(
@@ -486,8 +496,7 @@ class _PositionRecruitField extends ConsumerWidget {
                     onPressed: () async {
                       ref
                           .read(postProvider(PostProviderParam(
-                                  type: PostProviderType.get,
-                                  postId: postId))
+                                  type: PostProviderType.get, postId: postId))
                               .notifier)
                           .applyCancelPost();
                     },

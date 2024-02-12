@@ -1,13 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/project/component/skeleton/project_main_card_skeleton.dart';
 import 'package:pllcare/project/model/project_model.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
 import 'package:pllcare/theme.dart';
 
+import '../../post/view/post_screen.dart';
 import '../../project/component/project_main_card.dart';
 
 class HomeBody extends ConsumerWidget {
@@ -87,9 +90,12 @@ class _MainContent extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _getMainCard(ref: ref, type: MainCareType.MOSTLIKE),
-                _getMainCard(ref: ref, type: MainCareType.DEADLINE),
-                _getMainCard(ref: ref, type: MainCareType.UPTODATE),
+                _getMainCard(
+                    ref: ref, type: MainCareType.MOSTLIKE, context: context),
+                _getMainCard(
+                    ref: ref, type: MainCareType.DEADLINE, context: context),
+                _getMainCard(
+                    ref: ref, type: MainCareType.UPTODATE, context: context),
               ],
             ),
           ),
@@ -108,25 +114,36 @@ class _MainContent extends ConsumerWidget {
     );
   }
 
-  Widget _getMainCard({required WidgetRef ref, required MainCareType type}) {
+  Widget _getMainCard(
+      {required WidgetRef ref,
+      required MainCareType type,
+      required BuildContext context}) {
     return Consumer(
       builder: (_, ref, __) {
         BaseModel model = _getModel(type, ref);
         String title = _getTitle(type);
         if (model is LoadingModel) {
-          return const Center(
-            child: Text("loading"),
-          );
+          return const CustomSkeleton(skeleton: ProjectMainCardSkeleton());
         } else if (model is ErrorModel) {
           return const Center(
             child: Text("error"),
           );
         }
         model as ListModel<ProjectMainModel>;
-        if(model.data.isNotEmpty) {
-          return ProjectMainCard.fromModel(
-            model: model.data.first, cardTitle: title);
-        }else{
+        if (model.data.isNotEmpty) {
+          return InkWell(
+            onTap: () {
+              Map<String, String> pathParameters = {
+                'postId': model.data.first.postId.toString()
+              };
+              context.pushNamed(PostDetailScreen.routeName,
+                  pathParameters: pathParameters);
+            },
+            child: ProjectMainCard.fromModel(
+                model: model.data.first, cardTitle: title),
+          );
+        } else {
+          return Container();
           return Text('모집글이 없습니다.');
         }
       },

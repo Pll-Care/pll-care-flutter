@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/auth/view/login_screen.dart';
+import 'package:pllcare/profile/view/profile_screen.dart';
 
 import '../../auth/model/member_model.dart';
 import '../../theme.dart';
@@ -41,39 +44,41 @@ class DefaultAppbar extends ConsumerWidget {
       floating: true,
       elevation: 0,
       actions: [
-        Container(
-          width: 85.w,
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          child: TextButton(
-            onPressed: () {
-              isLogin == null
-                  ? context.pushNamed(LoginScreen.routeName)
-                  : ref.read(authProvider.notifier).logout();
-            },
-            style: TextButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.r),
+        if (isLogin == null)
+          Container(
+            width: 85.w,
+            padding: EdgeInsets.symmetric(vertical: 10.h),
+            child: TextButton(
+              onPressed: () {
+                isLogin == null
+                    ? context.pushNamed(LoginScreen.routeName)
+                    : ref.read(authProvider.notifier).logout();
+              },
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.r),
+                ),
+              ),
+              child: Text(
+                isLogin == null ? 'Log In' : 'Log Out',
+                style: m_Button_00.copyWith(color: Colors.white),
               ),
             ),
-            child: Text(
-              isLogin == null ? 'Log In' : 'Log Out',
-              style: m_Button_00.copyWith(color: Colors.white),
-            ),
           ),
-        ),
         SizedBox(width: 10.w),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final model = ref.watch(memberProvider);
             if (model is MemberModel) {
-              if (ref.watch(authProvider) == null) {
-                ref.read(authProvider.notifier).autoLogin();
-              }
               return Padding(
                 padding: EdgeInsets.only(right: 10.w),
                 child: GestureDetector(
                   onTap: () {
-                    model.memberId;
+                    final Map<String, String> pathParameters = {
+                      'memberId': model.memberId.toString()
+                    };
+                    context.pushNamed(ProfileScreen.routeName,
+                        pathParameters: pathParameters);
                   },
                   child: CircleAvatar(
                     radius: 18.r,
@@ -82,18 +87,25 @@ class DefaultAppbar extends ConsumerWidget {
                 ),
               );
             } else if (model is ErrorModel) {
-              ref.read(authProvider.notifier).logout();
+              ref.read(tokenProvider.notifier).logout();
             }
             return Container();
           },
         ),
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: const Icon(
-        //     Icons.menu,
-        //     color: GREEN_200,
-        //   ),
-        // ),
+        if (isLogin != null)
+          Padding(
+            padding: EdgeInsets.only(right: 8.w),
+            child: IconButton(
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                color: GREEN_200,
+                size: 40.r,
+              ),
+            ),
+          ),
       ],
     );
   }

@@ -59,7 +59,7 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
         getPost();
         break;
       case PostProviderType.getList:
-        getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+        getPostList(param: defaultPageParam);
         break;
       default:
         break;
@@ -98,7 +98,7 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
           .read(postProvider(
                   const PostProviderParam(type: PostProviderType.getList))
               .notifier)
-          .getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+          .getPostList(param: defaultPageParam);
       return CompletedModel();
     }).catchError((e) {
       final error = ErrorModel.respToError(e);
@@ -136,7 +136,7 @@ class PostStateNotifier extends StateNotifier<BaseModel> {
           .read(postProvider(
                   const PostProviderParam(type: PostProviderType.getList))
               .notifier)
-          .getPostList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+          .getPostList(param: defaultPageParam);
       return CompletedModel();
     }).catchError((e) {
       final error = ErrorModel.respToError(e);

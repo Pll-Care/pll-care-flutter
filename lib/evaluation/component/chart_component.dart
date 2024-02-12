@@ -1,11 +1,14 @@
 import 'dart:developer';
 import 'dart:math' hide log;
+import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/common/model/default_model.dart';
+import 'package:pllcare/evaluation/component/skeleton/chart_skeleton.dart';
 import 'package:pllcare/evaluation/provider/finalterm_provider.dart';
 import 'package:pllcare/evaluation/provider/midterm_provider.dart';
 import 'package:pllcare/project/provider/project_provider.dart';
@@ -66,7 +69,7 @@ class _ChartComponentState extends ConsumerState<ChartComponent> {
 
     if (model is LoadingModel) {
       return const SliverToBoxAdapter(
-        child: CircularProgressIndicator(),
+        child: CustomSkeleton(skeleton: ChartSkeleton()),
       );
     } else if (model is ErrorModel) {
       return const SliverToBoxAdapter(
@@ -83,16 +86,12 @@ class _ChartComponentState extends ConsumerState<ChartComponent> {
 
     if (finalChartModel != null && !finalChartModel.evaluation ||
         midChartModel != null && !midChartModel.evaluation) {
-      return const SliverToBoxAdapter(
-        child: Text("평가가 없습니다."),
-      );
+      return const _EmptyChart();
     }
 
     setMidChart(midChartModel);
 
     setFinalChart(finalChartModel);
-
-    log("build!!!");
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -320,6 +319,41 @@ class _ChartComponentState extends ConsumerState<ChartComponent> {
             width: width,
             borderRadius: BorderRadius.zero),
       ],
+    );
+  }
+}
+
+
+class _EmptyChart extends StatelessWidget {
+  const _EmptyChart({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25.w),
+        child: ClipRRect(
+          child: Container(
+            height: 300.h,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                border: Border.all(color: GREEN_200, width: 2.w),
+                color: GREEN_200.withOpacity(.2)),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 10,
+                sigmaY: 10,
+              ),
+              child: Center(
+                child: Text(
+                  '평가를 진행해 주세요.',
+                  style: Heading_07.copyWith(color: GREEN_400),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pllcare/auth/model/auth_model.dart';
 import 'package:pllcare/auth/param/auth_param.dart';
 import 'package:pllcare/auth/repository/auth_repository.dart';
+import 'package:pllcare/common/component/default_flash.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/common/provider/secure_storage_provider.dart';
 
@@ -74,30 +75,37 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     required this.repository,
     required this.storage,
     required this.ref,
-  }) : super(null);
+  }) : super(null) {
+    autoLogin();
+  }
 
   Future<void> signUp({required AuthParameter param}) async {
+    log("signUp");
     state = await repository.signUp(param: param);
     await storage.write(key: 'accessToken', value: state!.accessToken);
     await storage.write(key: 'refreshToken', value: state!.refreshToken);
+    ref.read(memberProvider.notifier).getProfileImage();
   }
 
   Future<void> reIssueToken() async {
+    log("reIssueToken");
+
     state = await repository.getReIssueToken();
     await storage.write(key: 'accessToken', value: state!.accessToken);
     await storage.write(key: 'refreshToken', value: state!.refreshToken);
   }
 
   Future<void> autoLogin() async {
-    final storage = ref.read(secureStorageProvider);
+    log("autoLogin");
     final accessToken = await storage.read(key: 'accessToken');
     final refreshToken = await storage.read(key: 'refreshToken');
     state = AuthModel(accessToken: accessToken, refreshToken: refreshToken);
   }
 
   Future<void> logout() async {
-    state = null;
     await storage.deleteAll();
+    ref.read(memberProvider.notifier).logout();
+    state = null;
   }
 
   String? redirectLogic(GoRouterState goRouteState) {
@@ -120,21 +128,23 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
   }
 }
 
-final memberProvider = StateNotifierProvider((ref) {
+final memberProvider =
+    StateNotifierProvider<MemberStateNotifier, BaseModel?>((ref) {
   final repository = ref.watch(authRepositoryProvider);
   return MemberStateNotifier(repository: repository);
 });
 
-class MemberStateNotifier extends StateNotifier<BaseModel> {
+class MemberStateNotifier extends StateNotifier<BaseModel?> {
   final AuthRepository repository;
 
   MemberStateNotifier({
     required this.repository,
-  }) : super(LoadingModel()) {
+  }) : super(null) {
     getProfileImage();
   }
 
   Future<bool> getProfileImage() async {
+    // state = LoadingModel();
     return await repository.getProfile().then((value) {
       logger.i(value);
       state = value;
@@ -143,8 +153,20 @@ class MemberStateNotifier extends StateNotifier<BaseModel> {
       state = ErrorModel.respToError(e);
       final error = state as ErrorModel;
       logger.e('code = ${error.code}\nmessage = ${error.message}');
-
       return false;
     });
+  }
+
+  void logout() {
+    state = null;
+  }
+
+  bool checkLogin(BuildContext context) {
+    if (state == null) {
+      DefaultFlash.showFlash(
+          context: context, type: FlashType.success, content: '로그인이 필요합니다.');
+      return false;
+    }
+    return true;
   }
 }

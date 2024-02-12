@@ -56,7 +56,6 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final model = ref.watch(projectLeaderProvider(projectId: projectId));
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.w),
           child: Container(
@@ -79,7 +78,6 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
                 projectTab(title: '일정'),
                 projectTab(title: '평가'),
                 projectTab(title: '팀관리'),
-                // if(model is LeaderModel && model.leader)
                 projectTab(title: '관리'),
               ],
             ),

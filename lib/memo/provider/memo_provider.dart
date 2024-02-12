@@ -59,11 +59,11 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
         getMemo();
         break;
       case MemoProviderType.getList:
-        getMemoList(param: PageParams(page: 1, size: 4, direction: 'DESC'));
+        getMemoList(param: defaultPageParam);
         break;
       case MemoProviderType.bookmarkList:
         getBookmarkMemoList(
-            param: PageParams(page: 1, size: 4, direction: 'DESC'));
+            param: defaultPageParam);
         break;
       default:
         break;
@@ -124,7 +124,7 @@ class MemoStateNotifier extends StateNotifier<BaseModel> {
     return await repository.createMemo(param: param).then((value) {
       logger.i('memo create!');
       state = CompletedModel();
-      final pageParam = PageParams(page: 1, size: 4, direction: 'DESC');
+      final pageParam = defaultPageParam;
       ref
           .read(memoProvider(MemoProviderParam(
           type: MemoProviderType.getList, projectId: param.projectId))

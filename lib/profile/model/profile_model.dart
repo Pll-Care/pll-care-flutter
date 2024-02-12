@@ -33,16 +33,6 @@ class RoleTechStackModel extends BaseModel {
       _$RoleTechStackModelFromJson(json);
 }
 
-/*
-{
-  "contact": {
-    "email": "string",
-    "github": "string",
-    "websiteUrl": "string"
-  },
-  "myProfile": true
-}
- */
 @JsonSerializable()
 class ContactModel extends BaseModel {
   final ContactModel contact;
@@ -57,15 +47,6 @@ class ContactModel extends BaseModel {
       _$ContactModelFromJson(json);
 }
 
-/*
-{
-  "name": "string",
-  "nickName": "string",
-  "imageUrl": "string",
-  "bio": "string",
-  "myProfile": true
-}
- */
 @JsonSerializable()
 class ProfileIntroModel extends BaseModel {
   final String name;

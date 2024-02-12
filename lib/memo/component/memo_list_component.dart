@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/memo/component/memo_dialog_component.dart';
 import 'package:pllcare/memo/component/memo_form.dart';
+import 'package:pllcare/memo/component/skeleton/memo_list_skeleton.dart';
 import 'package:pllcare/memo/model/memo_model.dart';
 import 'package:pllcare/memo/param/memo_param.dart';
 import 'package:pllcare/memo/provider/memo_provider.dart';
@@ -34,12 +36,12 @@ class MemoListComponent extends ConsumerWidget {
         final param = MemoProviderParam(
             type: MemoProviderType.getList, projectId: projectId);
         ref.read(memoProvider(param).notifier).getMemoList(
-            param: PageParams(page: 1, size: 4, direction: 'DESC'));
+            param: defaultPageParam);
       } else {
         final param = MemoProviderParam(
             type: MemoProviderType.bookmarkList, projectId: projectId);
         ref.read(memoProvider(param).notifier).getBookmarkMemoList(
-            param: PageParams(page: 1, size: 4, direction: 'DESC'));
+            param: defaultPageParam);
       }
     });
     return Column(
@@ -146,7 +148,7 @@ class MemoListComponent extends ConsumerWidget {
                 : ref.watch(memoProvider(MemoProviderParam(
                     type: MemoProviderType.getList, projectId: projectId)));
             if (model is LoadingModel) {
-              return const CircularProgressIndicator();
+              return const CustomSkeleton(skeleton: MemoListSkeleton());
             } else if (model is ErrorModel) {
               return const Text("error");
             }

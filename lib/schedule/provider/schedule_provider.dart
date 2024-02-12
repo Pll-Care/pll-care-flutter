@@ -192,7 +192,7 @@ class ScheduleStateNotifier extends StateNotifier<BaseModel> {
 class ScheduleFilterFetch extends _$ScheduleFilterFetch {
   @override
   BaseModel build({required ScheduleParams condition}) {
-    final PageParams params = PageParams(page: 1, size: 4, direction: 'DESC');
+    final PageParams params = defaultPageParam;
     getFilter(params: params, condition: condition);
     return LoadingModel();
   }
