@@ -177,24 +177,24 @@ class _ProfileInfo extends ConsumerWidget {
                           style: m_Heading_03.copyWith(color: GREY_100),
                         ),
                         SizedBox(width: 12.w),
-                        SizedBox(
-                          height: 25.h,
-                          width: 45.w,
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: GREEN_200,
-                              side: BorderSide(color: GREY_100, width: 2.w),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8.w, vertical: 2.h),
-                              maximumSize: Size(60.w, 30.h),
-                            ),
-                            child: Text(
-                              '수정',
-                              style: m_Heading_04.copyWith(color: GREY_100),
-                            ),
-                          ),
-                        ),
+                        // SizedBox(
+                        //   height: 25.h,
+                        //   width: 45.w,
+                        //   child: OutlinedButton(
+                        //     onPressed: () {},
+                        //     style: OutlinedButton.styleFrom(
+                        //       backgroundColor: GREEN_200,
+                        //       side: BorderSide(color: GREY_100, width: 2.w),
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 8.w, vertical: 2.h),
+                        //       maximumSize: Size(60.w, 30.h),
+                        //     ),
+                        //     child: Text(
+                        //       '수정',
+                        //       style: m_Heading_04.copyWith(color: GREY_100),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     )
                   ],

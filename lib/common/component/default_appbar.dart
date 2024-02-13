@@ -60,7 +60,7 @@ class DefaultAppbar extends ConsumerWidget {
                 ),
               ),
               child: Text(
-                isLogin == null ? 'Log In' : 'Log Out',
+                isLogin == null ? '로그인' : 'Log Out',
                 style: m_Button_00.copyWith(color: Colors.white),
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
 
 import '../../profile/model/profile_model.dart';
@@ -51,9 +52,12 @@ class DefaultDrawer extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 ref.read(tokenProvider.notifier).logout();
-                context.pop();
+                await UserApi.instance.logout();
+                if(context.mounted){
+                  context.pop();
+                }
               },
               child: const Text('로그아웃'),
             ),
