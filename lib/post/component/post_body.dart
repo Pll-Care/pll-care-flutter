@@ -97,7 +97,7 @@ class _RecruitList extends ConsumerWidget {
         postProvider(const PostProviderParam(type: PostProviderType.getList)));
 
     if (modelList is PostList) {
-      pModelList = modelList as PostList;
+      pModelList = modelList;
     } else if (modelList is ErrorModel) {}
 
     return SliverPadding(
@@ -132,7 +132,7 @@ class _RecruitList extends ConsumerWidget {
                   crossAxisCount: 2,
                   mainAxisSpacing: 22.h,
                   crossAxisSpacing: 15.w,
-                  mainAxisExtent: 300.h,
+                  mainAxisExtent: 330.h,
                 ),
               ),
               BottomPageCount<PostListModel>(

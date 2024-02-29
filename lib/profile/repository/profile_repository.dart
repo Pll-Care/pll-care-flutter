@@ -21,6 +21,7 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(dio);
 });
 
+
 @RestApi(baseUrl: serverURL)
 abstract class UserRepository {
   factory UserRepository(Dio dio) = _UserRepository;

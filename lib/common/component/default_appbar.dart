@@ -26,7 +26,7 @@ class DefaultAppbar extends ConsumerWidget {
     return Image.asset(
       'assets/images/logo.png',
       width: 80.w,
-      height: 20.h,
+      height: 48.h,
       fit: BoxFit.fitWidth,
     );
   }
@@ -47,7 +47,8 @@ class DefaultAppbar extends ConsumerWidget {
         if (isLogin == null)
           Container(
             width: 85.w,
-            padding: EdgeInsets.symmetric(vertical: 10.h),
+            height: 48.h,
+            // padding: EdgeInsets.symmetric(vertical: 10.h),
             child: TextButton(
               onPressed: () {
                 isLogin == null
@@ -81,8 +82,11 @@ class DefaultAppbar extends ConsumerWidget {
                         pathParameters: pathParameters);
                   },
                   child: CircleAvatar(
-                    radius: 18.r,
-                    backgroundImage: NetworkImage(model.imageUrl),
+                    radius: 24.r,
+                    backgroundImage: model.imageUrl.isNotEmpty
+                        ? NetworkImage(model.imageUrl)
+                        : const AssetImage('assets/main/main1.png')
+                            as ImageProvider,
                   ),
                 ),
               );

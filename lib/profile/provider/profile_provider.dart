@@ -9,8 +9,42 @@ import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
 import '../model/profile_apply_model.dart';
 import '../model/profile_eval_model.dart';
+import '../model/profile_model.dart';
+import '../model/project_experience_model.dart';
+import '../param/profile_param.dart';
 
 part 'profile_provider.g.dart';
+
+@riverpod
+Future<BaseModel> profileEdit(ProfileEditRef ref,
+    {required int memberId, required PatchProfileParam param}) async {
+  return await ref
+      .watch(userRepositoryProvider)
+      .patchProfile(memberId: memberId, param: param)
+      .then<BaseModel>((value) {
+    logger.i('change profile!');
+    return CompletedModel();
+  }).catchError((e) {
+    final error = ErrorModel.respToError(e);
+    logger.e('code = ${error.code}\nmessage = ${error.message}');
+    return error;
+  });
+}
+
+@Riverpod(keepAlive: true)
+Future<ContactModel> profileContact(ProfileContactRef ref, {required int memberId}){
+  return ref.watch(userRepositoryProvider).getProfileContact(memberId: memberId);
+}
+
+@Riverpod(keepAlive: true)
+Future<ProjectExperienceList> profileExperience(ProfileExperienceRef ref, {required int memberId}){
+  return ref.watch(userRepositoryProvider).getProjectExperience(memberId: memberId);
+}
+
+@Riverpod(keepAlive: true)
+Future<RoleTechStackModel> profileRoleTechStack(ProfileRoleTechStackRef ref, {required int memberId}){
+  return ref.watch(userRepositoryProvider).getRoleTechStack(memberId: memberId);
+}
 
 @Riverpod(keepAlive: true)
 class ProfileIntro extends _$ProfileIntro {

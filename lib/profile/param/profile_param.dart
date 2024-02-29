@@ -102,13 +102,13 @@ class PatchProfileParam {
   final bool? delete;
 
   PatchProfileParam({
-    required this.contact,
-    required this.recruitPosition,
-    required this.imageUrl,
-    required this.techStack,
-    required this.projectId,
-    required this.projectExperiences,
-    required this.delete,
+     this.contact,
+     this.recruitPosition,
+     this.imageUrl,
+     this.techStack,
+     this.projectId,
+     this.projectExperiences,
+     this.delete,
   });
 
   Map<String, dynamic> toJson() => _$PatchProfileParamToJson(this);

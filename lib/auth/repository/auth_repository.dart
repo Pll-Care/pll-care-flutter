@@ -32,4 +32,8 @@ abstract class AuthRepository {
     'refreshToken': 'true',
   })
   Future<AuthModel> getReIssueToken();
+
+  @DELETE('/api/auth/member/withdrawal')
+  @Headers({'token':'true'})
+  Future<void> withdrawal();
 }

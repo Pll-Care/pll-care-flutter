@@ -108,6 +108,17 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     state = null;
   }
 
+  Future<BaseModel> withdrawal() async {
+    return await repository.withdrawal().then<BaseModel>((value) {
+      logger.i('withdrawal!');
+      return CompletedModel();
+    }).catchError((e) {
+      final error = ErrorModel.respToError(e);
+      logger.e('code = ${error.code}\nmessage = ${error.message}');
+      return error;
+    });
+  }
+
   String? redirectLogic(GoRouterState goRouteState) {
     log('redirect start!');
     final logginIn = goRouteState.path == '/login';

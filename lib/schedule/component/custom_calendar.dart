@@ -42,6 +42,7 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
   List<CalendarSchedule> calendarMark = [];
   late String title;
   late String content;
+
   DateTime getOnlyYMd(DateTime day) {
     return DateTime(day.year, day.month, day.day);
   }
@@ -52,6 +53,7 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
         getOnlyYMd(DateTime.parse(startDate)).isAtSameMomentAs(validDay) ||
         getOnlyYMd(DateTime.parse(endDate)).isAtSameMomentAs(validDay);
   }
+
   final CalendarStyle calendarStyle = CalendarStyle(
     rangeHighlightScale: 1.0,
     rangeHighlightColor: GREEN_200,
@@ -109,7 +111,6 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
       ];
       calendarMark = [...calendar.milestones!, ...calendar.meetings!];
     }
-
 
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -186,7 +187,7 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                       if (calendarSchedule.isNotEmpty)
                         Flexible(
                           child: ListView.separated(
-                            shrinkWrap: true,
+                              shrinkWrap: true,
                               itemBuilder: (_, idx) {
                                 return CalendarContent.fromModel(
                                     model: calendarSchedule[idx]);
@@ -201,7 +202,6 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                       Consumer(
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
-
                           final isCompleted = ref.watch(projectFamilyProvider(
                               ProjectProviderParam(
                                   type: ProjectProviderType.isCompleted,
@@ -246,9 +246,11 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
       ),
     );
   }
+
   void onSavedTitle(String? newValue) {
     title = newValue!;
   }
+
   void onSavedContent(String? newValue) {
     content = newValue!;
   }
@@ -258,6 +260,7 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
         .where((e) => isRangeDate(e.startDate, e.endDate, day))
         .toList();
   }
+
   void createSchedule(WidgetRef ref, projectId) {
     final formKey = GlobalKey<FormState>();
     final textButtonStyle = TextButton.styleFrom(
@@ -274,7 +277,9 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
           width: MediaQuery.of(context).size.width / 10 * 8,
           child: ScheduleFormComponent(
             projectId: widget.projectId,
-            formKey: formKey, onSavedTitle: onSavedTitle, onSavedContent: onSavedContent,
+            formKey: formKey,
+            onSavedTitle: onSavedTitle,
+            onSavedContent: onSavedContent,
           ),
         ),
         actions: [
@@ -285,9 +290,10 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                 onPressed: () async {
                   final form = ref.read(scheduleCreateFormProvider);
                   log('formKey.currentState!.validate() ${formKey.currentState!.validate()}');
-                  log(' form.memberIds.isNotEmpty ${ form.memberIds.isNotEmpty}');
+                  log(' form.memberIds.isNotEmpty ${form.memberIds.isNotEmpty}');
                   formKey.currentState!.save();
-                  if (formKey.currentState!.validate() && form.memberIds.isNotEmpty) {
+                  if (formKey.currentState!.validate() &&
+                      form.memberIds.isNotEmpty) {
                     final format = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
                     final ScheduleCreateParam param = ScheduleCreateParam(
                         projectId: projectId,
@@ -327,8 +333,6 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
           )
         ]);
   }
-
-
 }
 
 class CalendarContent extends StatelessWidget {
@@ -382,9 +386,7 @@ class CalendarContent extends StatelessWidget {
             dateRange,
             overflow: TextOverflow.ellipsis,
             style: m_Body_02.copyWith(
-              color: GREY_500,
-              fontWeight: FontWeight.w700
-            ),
+                color: GREY_500, fontWeight: FontWeight.w700),
           ),
           Text(
             title,
@@ -410,13 +412,14 @@ class CalendarContent extends StatelessWidget {
                           right: idx * 25,
                           child: Tooltip(
                             message: e.name,
-                            textStyle:
-                            m_Body_01.copyWith(color: GREY_100),
+                            textStyle: m_Body_01.copyWith(color: GREY_100),
                             showDuration: const Duration(seconds: 1),
                             triggerMode: TooltipTriggerMode.longPress,
                             child: CircleAvatar(
-                              backgroundImage:
-                              NetworkImage(e.imageUrl),
+                              backgroundImage: e.imageUrl.isNotEmpty
+                                  ? NetworkImage(e.imageUrl)
+                                  : const AssetImage('assets/main/main1.png')
+                                      as ImageProvider,
                               radius: 15.r,
                             ),
                           ),

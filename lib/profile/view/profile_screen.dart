@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             body: TabBarView(
               controller: _tabController,
               children: [
-                ProfileInfoBody(memberId: widget.memberId),
+                // ProfileInfoBody(memberId: widget.memberId),
                 ProfileEvalBody(memberId: widget.memberId),
                 ProfileApplyBody(memberId: widget.memberId),
                 ProfileFavoriteBody(memberId: widget.memberId),

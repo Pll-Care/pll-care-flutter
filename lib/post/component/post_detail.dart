@@ -144,10 +144,9 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
               children: [
                 CircleAvatar(
                   backgroundImage: widget.projectImageUrl.isNotEmpty
-                      ? NetworkImage(
-                          widget.projectImageUrl,
-                        )
-                      : null,
+                      ? NetworkImage(widget.projectImageUrl)
+                      : const AssetImage('assets/main/main1.png')
+                          as ImageProvider,
                   radius: 20.r,
                 ),
                 SizedBox(width: 12.w),
@@ -279,8 +278,8 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                 GestureDetector(
                   onTap: onTapLike,
                   child: Container(
-                    width: 45.w,
-                    height: 45.w,
+                    width: 48.w,
+                    height: 48.w,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: GREEN_200, width: 2.w)),
@@ -426,95 +425,92 @@ class _PositionRecruitField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 40.h,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(
-            width: 85.w,
-            child: Text(
-              position.name,
-              style: m_Body_01.copyWith(
-                  color: GREY_500, fontWeight: FontWeight.bold),
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 85.w,
+          child: Text(
+            position.name,
+            style: m_Body_01.copyWith(
+                color: GREY_500, fontWeight: FontWeight.bold),
           ),
-          SizedBox(
-            width: 60.w,
-            child: Text(
-              '$currentCnt / $totalCnt',
-              style: m_Body_01.copyWith(
-                  color: GREY_500, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+        ),
+        SizedBox(
+          width: 60.w,
+          child: Text(
+            '$currentCnt / $totalCnt',
+            style: m_Body_01.copyWith(
+                color: GREY_500, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
           ),
-          if (currentCnt != totalCnt && applyPosition == null)
-            Expanded(
-              child: Center(
-                child: SizedBox(
-                  width: 60.w,
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      final isLogin =
-                          ref.read(memberProvider.notifier).checkLogin(context);
-                      if (!isLogin) {
-                        return;
-                      }
+        ),
+        if (currentCnt != totalCnt && applyPosition == null)
+          Expanded(
+            child: Center(
+              child: SizedBox(
+                width: 80.w,
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final isLogin =
+                        ref.read(memberProvider.notifier).checkLogin(context);
+                    if (!isLogin) {
+                      return;
+                    }
 
-                      final param = ApplyPostParam(position: position);
-                      final model = await ref
-                          .read(postProvider(PostProviderParam(
-                                  type: PostProviderType.get, postId: postId))
-                              .notifier)
-                          .applyPost(param: param);
-                      if (model is CompletedModel && context.mounted) {
-                        DefaultFlash.showFlash(
-                            context: context,
-                            type: FlashType.success,
-                            content: '${position.name}에 지원하였습니다.');
-                      } else if (model is ErrorModel && context.mounted) {
-                        DefaultFlash.showFlash(
-                            context: context,
-                            type: FlashType.fail,
-                            content: model.message);
-                      }
-                    },
-                    child: const Text('지원'),
-                  ),
+                    final param = ApplyPostParam(position: position);
+                    final model = await ref
+                        .read(postProvider(PostProviderParam(
+                                type: PostProviderType.get, postId: postId))
+                            .notifier)
+                        .applyPost(param: param);
+                    if (model is CompletedModel && context.mounted) {
+                      DefaultFlash.showFlash(
+                          context: context,
+                          type: FlashType.success,
+                          content: '${position.name}에 지원하였습니다.');
+                    } else if (model is ErrorModel && context.mounted) {
+                      DefaultFlash.showFlash(
+                          context: context,
+                          type: FlashType.fail,
+                          content: model.message);
+                    }
+                  },
+                  child: const Text('지원'),
                 ),
               ),
             ),
-          if (currentCnt != totalCnt &&
-              applyPosition != null &&
-              position == applyPosition)
-            Expanded(
-              child: Center(
-                child: SizedBox(
-                  width: 85.w,
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      ref
-                          .read(postProvider(PostProviderParam(
-                                  type: PostProviderType.get, postId: postId))
-                              .notifier)
-                          .applyCancelPost();
-                    },
-                    child: const Text('지원취소'),
-                  ),
+          ),
+        if (currentCnt != totalCnt &&
+            applyPosition != null &&
+            position == applyPosition)
+          Expanded(
+            child: Center(
+              child: SizedBox(
+                width: 100.w,
+                child: OutlinedButton(
+                  onPressed: () async {
+                    ref
+                        .read(postProvider(PostProviderParam(
+                                type: PostProviderType.get, postId: postId))
+                            .notifier)
+                        .applyCancelPost();
+                  },
+                  child: const Text('지원취소'),
                 ),
               ),
             ),
-          if (currentCnt == totalCnt)
-            Expanded(
-              child: Center(
-                child: Text('모집완료',
-                    style: m_Body_01.copyWith(
-                        color: GREEN_400, fontWeight: FontWeight.w800)),
-              ),
-            )
-        ],
-      ),
+          ),
+        if (currentCnt == totalCnt)
+          Expanded(
+            child: Center(
+              child: Text('모집완료',
+                  style: m_Body_01.copyWith(
+                      color: GREEN_400, fontWeight: FontWeight.w800)),
+            ),
+          )
+      ],
     );
   }
 }

@@ -92,10 +92,9 @@ class ProjectMainCard extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             backgroundImage: imageUrl.isNotEmpty
-                                ? NetworkImage(
-                                    imageUrl,
-                                  )
-                                : null,
+                                ? NetworkImage(imageUrl)
+                                : const AssetImage('assets/main/main1.png')
+                                    as ImageProvider,
                             radius: 27.r,
                           ),
                           if (likeCount != null)

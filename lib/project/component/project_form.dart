@@ -392,13 +392,13 @@ class _CustomButton extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(48.r)));
 
     return SizedBox(
-      height: 30.h,
+      height: 48.h,
       child: TextButton(
         onPressed: onPressed,
         style: textButtonStyle,
         child: Text(
           title,
-          style: m_Button_01.copyWith(color: GREEN_400),
+          style: m_Button_00.copyWith(color: GREEN_400),
         ),
       ),
     );

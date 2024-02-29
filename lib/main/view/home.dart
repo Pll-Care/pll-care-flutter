@@ -1,8 +1,12 @@
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pllcare/common/component/skeleton.dart';
 import 'package:pllcare/common/model/default_model.dart';
 import 'package:pllcare/project/component/skeleton/project_main_card_skeleton.dart';
@@ -30,6 +34,32 @@ class HomeBody extends ConsumerWidget {
               fit: BoxFit.fitWidth,
             ),
           ),
+          // TextButton(
+          //   onPressed: () async {
+          //     // await Permission.storage.request();
+          //     await Permission.storage
+          //         .onDeniedCallback(() {
+          //           log('onDeniedCallback');
+          //     })
+          //         .onGrantedCallback(() {
+          //       log('onGrantedCallback');
+          //     })
+          //         .onPermanentlyDeniedCallback(() {
+          //       log('onPermanentlyDeniedCallback');
+          //     })
+          //         .onRestrictedCallback(() {
+          //       log('onRestrictedCallback');
+          //     })
+          //         .onLimitedCallback(() {
+          //       log('onLimitedCallback');
+          //     })
+          //         .onProvisionalCallback(() {
+          //       log('onProvisionalCallback');
+          //     })
+          //         .request();
+          //   },
+          //   child: Text('요청'),
+          // ),
           SizedBox(
             height: 42.h,
           ),
@@ -210,5 +240,122 @@ class _HomeFooter extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class PermissionHandlerWidget extends StatefulWidget {
+  /// Create a page containing the functionality of this plugin
+
+  @override
+  _PermissionHandlerWidgetState createState() =>
+      _PermissionHandlerWidgetState();
+}
+
+class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ListView(
+          children: Permission.values
+              .where((permission) {
+                return permission != Permission.unknown &&
+                    permission != Permission.mediaLibrary &&
+                    permission != Permission.photosAddOnly &&
+                    permission != Permission.reminders &&
+                    permission != Permission.bluetooth &&
+                    permission != Permission.appTrackingTransparency &&
+                    permission != Permission.criticalAlerts;
+              })
+              .map((permission) => PermissionWidget(permission))
+              .toList()),
+    );
+  }
+}
+
+/// Permission widget containing information about the passed [Permission]
+class PermissionWidget extends StatefulWidget {
+  /// Constructs a [PermissionWidget] for the supplied [Permission]
+  const PermissionWidget(this._permission);
+
+  final Permission _permission;
+
+  @override
+  _PermissionState createState() => _PermissionState(_permission);
+}
+
+class _PermissionState extends State<PermissionWidget> {
+  _PermissionState(this._permission);
+
+  final Permission _permission;
+  PermissionStatus _permissionStatus = PermissionStatus.denied;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _listenForPermissionStatus();
+  }
+
+  void _listenForPermissionStatus() async {
+    final status = await _permission.status;
+    setState(() => _permissionStatus = status);
+  }
+
+  Color getPermissionColor() {
+    switch (_permissionStatus) {
+      case PermissionStatus.denied:
+        return Colors.red;
+      case PermissionStatus.granted:
+        return Colors.green;
+      case PermissionStatus.limited:
+        return Colors.orange;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        _permission.toString(),
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+      subtitle: Text(
+        _permissionStatus.toString(),
+        style: TextStyle(color: getPermissionColor()),
+      ),
+      trailing: (_permission is PermissionWithService)
+          ? IconButton(
+              icon: const Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                checkServiceStatus(
+                    context, _permission as PermissionWithService);
+              })
+          : null,
+      onTap: () {
+        requestPermission(_permission);
+      },
+    );
+  }
+
+  void checkServiceStatus(
+      BuildContext context, PermissionWithService permission) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text((await permission.serviceStatus).toString()),
+    ));
+  }
+
+  Future<void> requestPermission(Permission permission) async {
+    final status = await permission.request();
+
+    setState(() {
+      print(status);
+      _permissionStatus = status;
+      print(_permissionStatus);
+    });
   }
 }

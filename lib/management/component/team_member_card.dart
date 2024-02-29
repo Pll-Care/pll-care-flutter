@@ -16,11 +16,15 @@ class TeamMemberCard extends StatelessWidget {
     required this.imageUrl,
     required this.name,
     required this.position,
-    this.radius = 50, required this.requiredPosition,
+    this.radius = 50,
+    required this.requiredPosition,
   });
 
-  factory TeamMemberCard.fromModel(
-      {required TeamMemberModel model, double radius = 50, bool requiredPosition = true,}) {
+  factory TeamMemberCard.fromModel({
+    required TeamMemberModel model,
+    double radius = 50,
+    bool requiredPosition = true,
+  }) {
     return TeamMemberCard(
       imageUrl: model.imageUrl,
       name: model.name,
@@ -38,7 +42,9 @@ class TeamMemberCard extends StatelessWidget {
       child: Column(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(imageUrl),
+            backgroundImage: imageUrl.isNotEmpty
+                ? NetworkImage(imageUrl)
+                : const AssetImage('assets/main/main1.png') as ImageProvider,
             radius: radius.r,
           ),
           Text(
@@ -46,12 +52,12 @@ class TeamMemberCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: m_Heading_01.copyWith(color: GREEN_500),
           ),
-          if(requiredPosition)
-          Text(
-            position.name,
-            overflow: TextOverflow.ellipsis,
-            style: m_Heading_01.copyWith(color: GREEN_500),
-          ),
+          if (requiredPosition)
+            Text(
+              position.name,
+              overflow: TextOverflow.ellipsis,
+              style: m_Heading_01.copyWith(color: GREEN_500),
+            ),
         ],
       ),
     );

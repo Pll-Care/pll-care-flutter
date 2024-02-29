@@ -185,12 +185,15 @@ class ScheduleFilterCard extends ConsumerWidget {
                                     child: Tooltip(
                                       message: e.name,
                                       textStyle:
-                                      m_Body_01.copyWith(color: GREY_100),
+                                          m_Body_01.copyWith(color: GREY_100),
                                       showDuration: const Duration(seconds: 1),
                                       triggerMode: TooltipTriggerMode.longPress,
                                       child: CircleAvatar(
-                                        backgroundImage:
-                                        NetworkImage(e.imageUrl),
+                                        backgroundImage: e.imageUrl.isNotEmpty
+                                            ? NetworkImage(e.imageUrl)
+                                            : const AssetImage(
+                                                    'assets/main/main1.png')
+                                                as ImageProvider,
                                         radius: 15.r,
                                       ),
                                     ),

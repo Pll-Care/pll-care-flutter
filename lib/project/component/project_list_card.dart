@@ -70,7 +70,7 @@ class ProjectListCard extends ConsumerWidget {
                         CircleAvatar(
                           backgroundImage: imageUrl.isNotEmpty
                               ? NetworkImage(imageUrl)
-                              : null,
+                              : const AssetImage('assets/main/main1.png') as ImageProvider,
                           radius: 20.r,
                         ),
                         SizedBox(

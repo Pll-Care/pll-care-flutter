@@ -84,7 +84,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           Container(
-            height: 180.h,
+            height: 200.h,
             // width: double.infinity,
             decoration: BoxDecoration(
                 color: GREY_100,
@@ -115,7 +115,7 @@ class PostCard extends StatelessWidget {
                       Expanded(
                           child: Text(
                         title,
-                        style: m_Heading_04.copyWith(color: GREY_500),
+                        style: m_Heading_01.copyWith(color: GREY_500, fontWeight: FontWeight.w700),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       )),
@@ -124,8 +124,8 @@ class PostCard extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5.w),
                           child: Container(
-                            width: 45.w,
-                            height: 45.w,
+                            width: 48.w,
+                            height: 48.w,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border:
@@ -138,7 +138,7 @@ class PostCard extends StatelessWidget {
                                       ? Icons.favorite
                                       : Icons.favorite_border,
                                   color: GREEN_200,
-                                  size: 15.w,
+                                  size: 20.w,
                                 ),
                                 Text(
                                   likeCount.toString(),
@@ -157,7 +157,7 @@ class PostCard extends StatelessWidget {
                   Text(
                     '모집기간 : \n$startDate ~ $endDate',
                     style:
-                        m_Button_01.copyWith(color: GREY_500, fontSize: 12.sp),
+                        m_Button_01.copyWith(color: GREY_500, fontSize: 14.sp),
                   ),
                   SizedBox(
                     height: 4.h,
@@ -165,7 +165,7 @@ class PostCard extends StatelessWidget {
                   Text(
                     '모집 포지션 :\n$position',
                     style:
-                        m_Button_01.copyWith(color: GREY_500, fontSize: 12.sp),
+                        m_Button_01.copyWith(color: GREY_500, fontSize: 14.sp),
                   ),
                 ],
               ),
@@ -189,6 +189,7 @@ class PostCard extends StatelessWidget {
         child: TechStackIcon(
           name: e.name,
           imageUrl: e.imageUrl,
+          radius: 15,
         ),
       );
     }).toList();

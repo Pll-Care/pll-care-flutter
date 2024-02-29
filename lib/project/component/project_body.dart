@@ -128,9 +128,9 @@ class ProjectListNav extends ConsumerWidget {
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h)),
                     minimumSize:
-                        MaterialStateProperty.all<Size?>(Size(90.w, 40.h)),
+                        MaterialStateProperty.all<Size?>(Size(90.w, 48.h)),
                     maximumSize:
-                        MaterialStateProperty.all<Size?>(Size(140.w, 40.h)),
+                        MaterialStateProperty.all<Size?>(Size(140.w, 48.h)),
                   ),
                   child: Text(
                     '새 프로젝트 생성',
@@ -148,9 +148,9 @@ class ProjectListNav extends ConsumerWidget {
                       onPressed: onTapAll,
                       style: buttonStyle.copyWith(
                         minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(32.w, 40.h)),
+                            MaterialStateProperty.all<Size?>(Size(48.w, 48.h)),
                         maximumSize:
-                            MaterialStateProperty.all<Size?>(Size(120.w, 40.h)),
+                            MaterialStateProperty.all<Size?>(Size(120.w, 48.h)),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                             EdgeInsets.symmetric(
                                 horizontal: 12.w, vertical: 8.h)),
@@ -171,9 +171,9 @@ class ProjectListNav extends ConsumerWidget {
                       onPressed: onTapOnGoing,
                       style: buttonStyle.copyWith(
                         minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(45.w, 40.h)),
+                            MaterialStateProperty.all<Size?>(Size(48.w, 48.h)),
                         maximumSize:
-                            MaterialStateProperty.all<Size?>(Size(120.w, 40.h)),
+                            MaterialStateProperty.all<Size?>(Size(120.w, 48.h)),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                             EdgeInsets.symmetric(
                                 horizontal: 12.w, vertical: 8.h)),

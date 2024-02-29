@@ -58,7 +58,9 @@ class ApplyCard extends ConsumerWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(imageUrl),
+                backgroundImage: imageUrl.isNotEmpty
+                    ? NetworkImage(imageUrl)
+                    : const AssetImage('assets/main/main1.png') as ImageProvider,
               ),
             ),
             Expanded(

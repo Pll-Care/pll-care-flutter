@@ -84,7 +84,9 @@ class ParticipantCard extends StatelessWidget {
               padding: EdgeInsets.only(left: 12.w, right: 12.w),
               child: CircleAvatar(
                 radius: 30.r,
-                backgroundImage: NetworkImage(imageUrl),
+                backgroundImage: imageUrl.isNotEmpty
+                    ? NetworkImage(imageUrl)
+                    : const AssetImage('assets/main/main1.png') as ImageProvider,
                 backgroundColor: Colors.transparent,
               ),
             ),

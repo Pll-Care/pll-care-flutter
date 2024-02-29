@@ -106,8 +106,11 @@ class _ProfileAppBarState extends ConsumerState<ProfileAppBar> {
                         pathParameters: pathParameters);
                   },
                   child: CircleAvatar(
-                    radius: 18.r,
-                    backgroundImage: NetworkImage(model.imageUrl),
+                    radius: 24.r,
+                    backgroundImage: model.imageUrl.isNotEmpty
+                        ? NetworkImage(model.imageUrl)
+                        : const AssetImage('assets/main/main1.png')
+                            as ImageProvider,
                   ),
                 ),
               );
@@ -159,7 +162,9 @@ class _ProfileInfo extends ConsumerWidget {
             title: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(model.imageUrl),
+                  backgroundImage: model.imageUrl.isNotEmpty
+                      ? NetworkImage(model.imageUrl)
+                      : const AssetImage('assets/main/main1.png') as ImageProvider,
                 ),
                 SizedBox(width: 14.w),
                 Column(
@@ -177,24 +182,23 @@ class _ProfileInfo extends ConsumerWidget {
                           style: m_Heading_03.copyWith(color: GREY_100),
                         ),
                         SizedBox(width: 12.w),
-                        // SizedBox(
-                        //   height: 25.h,
-                        //   width: 45.w,
-                        //   child: OutlinedButton(
-                        //     onPressed: () {},
-                        //     style: OutlinedButton.styleFrom(
-                        //       backgroundColor: GREEN_200,
-                        //       side: BorderSide(color: GREY_100, width: 2.w),
-                        //       padding: EdgeInsets.symmetric(
-                        //           horizontal: 8.w, vertical: 2.h),
-                        //       maximumSize: Size(60.w, 30.h),
-                        //     ),
-                        //     child: Text(
-                        //       '수정',
-                        //       style: m_Heading_04.copyWith(color: GREY_100),
-                        //     ),
-                        //   ),
-                        // ),
+                        SizedBox(
+                          height: 25.h,
+                          width: 48.w,
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: GREEN_200,
+                              side: BorderSide(color: GREY_100, width: 2.w),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8.w, vertical: 2.h),
+                            ),
+                            child: Text(
+                              '수정',
+                              style: m_Heading_04.copyWith(color: GREY_100),
+                            ),
+                          ),
+                        ),
                       ],
                     )
                   ],
@@ -219,14 +223,13 @@ class ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
   Widget _profileTabBar({required IconData icon, required bool isSelected}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
-      height: isSelected ? 60.r : 40.r,
-      width: isSelected ? 60.r : 40.r,
-      padding: EdgeInsets.all(8.r),
+      height: isSelected ? 60.r : 48.r,
+      width: isSelected ? 60.r : 48.r,
       decoration: BoxDecoration(
           color: isSelected ? GREEN_500 : GREEN_200,
           borderRadius: BorderRadius.circular(
-        12.r,
-      )),
+            12.r,
+          )),
       child: Container(
         decoration: BoxDecoration(
             // color: isSelected ? GREEN_500 : GREEN_200,
@@ -270,15 +273,15 @@ class ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
                 tabController.animateTo(idx);
               },
               tabs: [
+                // _profileTabBar(
+                //     isSelected: tabController.index == 0, icon: Icons.person),
                 _profileTabBar(
-                    isSelected: tabController.index == 0, icon: Icons.person),
-                _profileTabBar(
-                    isSelected: tabController.index == 1,
+                    isSelected: tabController.index == 0,
                     icon: Icons.layers_outlined),
                 _profileTabBar(
-                    isSelected: tabController.index == 2, icon: Icons.star),
+                    isSelected: tabController.index == 1, icon: Icons.star),
                 _profileTabBar(
-                    isSelected: tabController.index == 3, icon: Icons.favorite),
+                    isSelected: tabController.index == 2, icon: Icons.favorite),
               ],
             ),
           ),
