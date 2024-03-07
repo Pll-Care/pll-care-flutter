@@ -130,9 +130,9 @@ class _RecruitList extends ConsumerWidget {
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 22.h,
+                  mainAxisSpacing: 30.h,
                   crossAxisSpacing: 15.w,
-                  mainAxisExtent: 330.h,
+                  mainAxisExtent: 380.h,
                 ),
               ),
               BottomPageCount<PostListModel>(

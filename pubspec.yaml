@@ -111,44 +111,67 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-   - family: IBMPlexSansKR
-     fonts:
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Bold.ttf
-         weight: 700
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-ExtraLight.ttf
-         weight: 200
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Light.ttf
-         weight: 300
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Medium.ttf
-         weight: 500
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Regular.ttf
-         weight: 400
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-SemiBold.ttf
-         weight: 600
-       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Thin.ttf
-         weight: 100
 
-   - family: NotoSansKR
+
+  fonts:
+#   - family: IBMPlexSansKR
+#     fonts:
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Bold.ttf
+#         weight: 700
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-ExtraLight.ttf
+#         weight: 200
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Light.ttf
+#         weight: 300
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Medium.ttf
+#         weight: 500
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Regular.ttf
+#         weight: 400
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-SemiBold.ttf
+#         weight: 600
+#       - asset: assets/fonts/IBMPlexSans/IBMPlexSansKR-Thin.ttf
+#         weight: 100
+#
+#   - family: NotoSansKR
+#     fonts:
+#       - asset: assets/fonts/NotoSans/NotoSansKR-Black.ttf
+#         weight: 900
+#       - asset: assets/fonts/NotoSans/NotoSansKR-Bold.ttf
+#         weight: 700
+#       - asset: assets/fonts/NotoSans/NotoSansKR-ExtraBold.ttf
+#         weight: 800
+#       - asset: assets/fonts/NotoSans/NotoSansKR-ExtraLight.ttf
+#         weight: 200
+#       - asset: assets/fonts/NotoSans/NotoSansKR-Light.ttf
+#         weight: 300
+#       - asset: assets/fonts/NotoSans/NotoSansKR-Medium.ttf
+#         weight: 500
+#       - asset: assets/fonts/NotoSans/NotoSansKR-Regular.ttf
+#         weight: 400
+#       - asset: assets/fonts/NotoSans/NotoSansKR-SemiBold.ttf
+#         weight: 600
+#       - asset: assets/fonts/NotoSans/NotoSansKR-Thin.ttf
+#         weight: 100
+
+   - family: Pretendard
      fonts:
-       - asset: assets/fonts/NotoSans/NotoSansKR-Black.ttf
-         weight: 900
-       - asset: assets/fonts/NotoSans/NotoSansKR-Bold.ttf
-         weight: 700
-       - asset: assets/fonts/NotoSans/NotoSansKR-ExtraBold.ttf
-         weight: 800
-       - asset: assets/fonts/NotoSans/NotoSansKR-ExtraLight.ttf
-         weight: 200
-       - asset: assets/fonts/NotoSans/NotoSansKR-Light.ttf
-         weight: 300
-       - asset: assets/fonts/NotoSans/NotoSansKR-Medium.ttf
-         weight: 500
-       - asset: assets/fonts/NotoSans/NotoSansKR-Regular.ttf
-         weight: 400
-       - asset: assets/fonts/NotoSans/NotoSansKR-SemiBold.ttf
-         weight: 600
-       - asset: assets/fonts/NotoSans/NotoSansKR-Thin.ttf
+       - asset: assets/fonts/Pretendard/Pretendard-Thin.ttf
          weight: 100
+       - asset: assets/fonts/Pretendard/Pretendard-ExtraLight.ttf
+         weight: 200
+       - asset: assets/fonts/Pretendard/Pretendard-Light.ttf
+         weight: 300
+       - asset: assets/fonts/Pretendard/Pretendard-Regular.ttf
+         weight: 400
+       - asset: assets/fonts/Pretendard/Pretendard-Medium.ttf
+         weight: 500
+       - asset: assets/fonts/Pretendard/Pretendard-SemiBold.ttf
+         weight: 600
+       - asset: assets/fonts/Pretendard/Pretendard-Bold.ttf
+         weight: 700
+       - asset: assets/fonts/Pretendard/Pretendard-ExtraBold.ttf
+         weight: 800
+       - asset: assets/fonts/Pretendard/Pretendard-Black.ttf
+         weight: 900
     #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

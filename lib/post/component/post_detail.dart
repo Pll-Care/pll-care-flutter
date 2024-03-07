@@ -213,6 +213,7 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                 ),
               ],
             ),
+            SizedBox(height: 12.h),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.r),

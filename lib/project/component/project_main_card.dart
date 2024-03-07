@@ -49,7 +49,7 @@ class ProjectMainCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: Container(
-        height: 270.h,
+        height: 320.h,
         width: 220.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),

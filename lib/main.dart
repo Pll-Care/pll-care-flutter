@@ -28,6 +28,23 @@ void main() async {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
+  TextTheme _getTextTheme() {
+    return TextTheme(
+      headlineLarge: TextStyle(
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w600,
+          fontSize: 28.sp),
+      headlineMedium: TextStyle(
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w600,
+          fontSize: 22.sp),
+      headlineSmall: TextStyle(
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w500,
+          fontSize: 20.sp),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // log("MediaQuery.of(context).size.width ${MediaQuery.of(context).size.width}");
@@ -43,9 +60,10 @@ class MyApp extends ConsumerWidget {
           debugShowCheckedModeBanner: false,
           title: 'PLL-CARE',
           theme: ThemeData(
-            fontFamily: 'NotoSansKR',
+            fontFamily: 'Pretendard',
             primaryColor: GREEN_200,
             splashFactory: NoSplash.splashFactory,
+            textTheme: _getTextTheme(),
             iconTheme: const IconThemeData(color: GREEN_200),
             outlinedButtonTheme:
                 OutlinedButtonThemeData(style: outlinedButtonStyle),
@@ -61,4 +79,3 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-

@@ -84,7 +84,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           Container(
-            height: 200.h,
+            height: 250.h,
             // width: double.infinity,
             decoration: BoxDecoration(
                 color: GREY_100,
