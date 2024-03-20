@@ -84,7 +84,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           Container(
-            height: 200.h,
+            height: 250.h,
             // width: double.infinity,
             decoration: BoxDecoration(
                 color: GREY_100,
@@ -115,7 +115,11 @@ class PostCard extends StatelessWidget {
                       Expanded(
                           child: Text(
                         title,
-                        style: m_Heading_01.copyWith(color: GREY_500, fontWeight: FontWeight.w700),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                                color: GREY_500, fontWeight: FontWeight.w700),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       )),
@@ -142,7 +146,7 @@ class PostCard extends StatelessWidget {
                                 ),
                                 Text(
                                   likeCount.toString(),
-                                  style: Body_02.copyWith(color: GREEN_200),
+                                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREEN_200),
                                 ),
                               ],
                             ),
@@ -156,8 +160,10 @@ class PostCard extends StatelessWidget {
                   ),
                   Text(
                     '모집기간 : \n$startDate ~ $endDate',
-                    style:
-                        m_Button_01.copyWith(color: GREY_500, fontSize: 14.sp),
+                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: GREY_500),
                   ),
                   SizedBox(
                     height: 4.h,
@@ -165,7 +171,11 @@ class PostCard extends StatelessWidget {
                   Text(
                     '모집 포지션 :\n$position',
                     style:
-                        m_Button_01.copyWith(color: GREY_500, fontSize: 14.sp),
+                    Theme.of(context).textTheme.displayMedium!.copyWith(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      color: GREY_500,
+                    ),
                   ),
                 ],
               ),

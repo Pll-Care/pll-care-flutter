@@ -97,10 +97,12 @@ class BottomPageCount<T> extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                   child: Text(
                     (i).toString(),
-                    style: m_Heading_02.copyWith(
-                        color: (pModelList.pageNumber!) == (i)
-                            ? GREEN_200
-                            : GREY_500),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 20.sp,
+                          color: (pModelList.pageNumber!) == (i)
+                              ? GREEN_200
+                              : GREY_500,
+                        ),
                   ),
                 ),
               ),
@@ -154,10 +156,12 @@ class BottomPageCount<T> extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                   child: Text(
                     (i).toString(),
-                    style: m_Heading_02.copyWith(
-                        color: (pModelList.pageNumber!) == (i)
-                            ? GREEN_200
-                            : GREY_500),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 20.sp,
+                          color: (pModelList.pageNumber!) == (i)
+                              ? GREEN_200
+                              : GREY_500,
+                        ),
                   ),
                 ),
               ),

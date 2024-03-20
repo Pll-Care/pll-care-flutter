@@ -102,14 +102,19 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                     children: [
                       Text(
                         '주요 일정 미리보기',
-                        style: m_Heading_02.copyWith(color: GREEN_400),
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 20.sp,
+                          color: GREEN_400,
+                        ),
                         textAlign: TextAlign.start,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.h),
                         child: Text(
                           '시작 $startDate',
-                          style: m_Heading_01.copyWith(color: GREEN_400),
+                          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
                         ),
                       ),
                       Stack(
@@ -151,7 +156,9 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                                     alignment: Alignment.center,
                                     child: Text(
                                       (idx + 1).toString(),
-                                      style: m_Heading_01.copyWith(
+                                      style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(
                                           color: idx % 2 == 0
                                               ? GREEN_200
                                               : GREY_100),
@@ -183,7 +190,9 @@ class _ScheduleOverViewScreenState extends ConsumerState<ScheduleOverViewBody> {
                         padding: EdgeInsets.symmetric(vertical: 16.h),
                         child: Text(
                           '종료 $endDate',
-                          style: m_Heading_01.copyWith(color: GREEN_400),
+                          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
                         ),
                       ),
                     ],
@@ -244,7 +253,10 @@ class ScheduleOverviewCard extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: Text(
                 scheduleRange,
-                style: m_Heading_02.copyWith(color: GREY_100),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 20.sp,
+                  color: GREY_100,
+                ),
               )),
           ...schedules
               .map((e) => _ScheduleCard(
@@ -292,21 +304,21 @@ class _ScheduleCard extends StatelessWidget {
       child: isEmpty
           ? Text(
               '해당 기간에 일정이 없습니다.',
-              style: m_Body_01.copyWith(color: GREY_500),
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title!,
-                  style: m_Body_01.copyWith(color: GREY_500),
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 3.h),
                 Text(
                   DateTimeUtil.getDateRange(start: startDate!, end: endDate!),
-                  style: m_Body_01.copyWith(color: GREY_500),
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
                 ),
               ],
             ),

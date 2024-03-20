@@ -48,7 +48,7 @@ class DefaultAppbar extends ConsumerWidget {
           Container(
             width: 85.w,
             height: 48.h,
-            // padding: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(vertical: 10.h),
             child: TextButton(
               onPressed: () {
                 isLogin == null
@@ -62,7 +62,9 @@ class DefaultAppbar extends ConsumerWidget {
               ),
               child: Text(
                 isLogin == null ? '로그인' : 'Log Out',
-                style: m_Button_00.copyWith(color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: Colors.white),
               ),
             ),
           ),

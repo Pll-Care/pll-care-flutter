@@ -1,6 +1,7 @@
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pllcare/theme.dart';
 
@@ -15,11 +16,11 @@ class DefaultFlash {
     late BorderSide side;
     switch (type) {
       case FlashType.success:
-        widget = getSuccess(content: content);
+        widget = getSuccess(content: content, context: context);
         side = BorderSide(color: GREEN_200, width: 2.w);
         break;
       default:
-        widget = getFail(content: content);
+        widget = getFail(content: content, context: context);
         side = BorderSide(color: TOMATO_500, width: 3.w);
         break;
     }
@@ -42,11 +43,13 @@ class DefaultFlash {
         });
   }
 
-  static Widget getSuccess({required String content}) {
-    return Text(
-      content,
-      style: Button_03.copyWith(color: GREY_500, fontWeight: FontWeight.w700),
-    );
+  static Widget getSuccess(
+      {required String content, required BuildContext context}) {
+    return Text(content,
+        style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              color: GREY_500,
+              fontWeight: FontWeight.w700,
+            ));
     return Container(
       width: 200.w,
       height: 60.h,
@@ -57,10 +60,14 @@ class DefaultFlash {
     );
   }
 
-  static Widget getFail({required String content}) {
+  static Widget getFail(
+      {required String content, required BuildContext context}) {
     return Text(
       content,
-      style: Button_03.copyWith(color: GREY_500, fontWeight: FontWeight.w700),
+      style: Theme.of(context).textTheme.displayLarge!.copyWith(
+            color: GREY_500,
+            fontWeight: FontWeight.w700,
+          ),
     );
     return Container(
       width: 200.w,

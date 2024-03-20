@@ -32,7 +32,10 @@ class ProfileEvalBody extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Text(
                   '평가 종합 차트',
-                  style: m_Heading_02.copyWith(color: GREEN_500),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 20.sp,
+                    color: GREEN_500,
+                  ),
                 ),
               ),
               SliverToBoxAdapter(child: SizedBox(height: 14.h)),
@@ -43,7 +46,10 @@ class ProfileEvalBody extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Text(
                   '받은 평가',
-                  style: m_Heading_02.copyWith(color: GREEN_500),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 20.sp,
+                    color: GREEN_500,
+                  ),
                 ),
               ),
               SliverToBoxAdapter(child: SizedBox(height: 14.h)),
@@ -92,7 +98,9 @@ class _ProfileEvalListComponentState
                 return SliverToBoxAdapter(
                   child: Text(
                     '받은 평가가 없습니다.',
-                    style: m_Heading_01.copyWith(color: GREEN_500),
+                    style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
                   ),
                 );
               }
@@ -199,7 +207,9 @@ class ProfileEvalCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: m_Heading_01.copyWith(color: GREEN_500),
+                    style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
@@ -218,7 +228,7 @@ class ProfileEvalCard extends StatelessWidget {
                         children: [
                           Text(
                             '성실도',
-                            style: m_Body_02.copyWith(color: GREY_500),
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -229,7 +239,7 @@ class ProfileEvalCard extends StatelessWidget {
                             padding: EdgeInsets.all(4.r),
                             child: Text(
                               score.sincerity.toString(),
-                              style: m_Body_02.copyWith(color: GREEN_200),
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREEN_200),
                             ),
                           ),
                         ],
@@ -242,7 +252,7 @@ class ProfileEvalCard extends StatelessWidget {
                         children: [
                           Text(
                             '업무 수행 능력',
-                            style: m_Body_02.copyWith(color: GREY_500),
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -254,7 +264,7 @@ class ProfileEvalCard extends StatelessWidget {
                             padding: EdgeInsets.all(4.r),
                             child: Text(
                               score.jobPerformance.toString(),
-                              style: m_Body_02.copyWith(color: GREEN_200),
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREEN_200),
                             ),
                           )
                         ],
@@ -272,7 +282,7 @@ class ProfileEvalCard extends StatelessWidget {
                         children: [
                           Text(
                             '시간 엄수',
-                            style: m_Body_02.copyWith(color: GREY_500),
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -283,7 +293,7 @@ class ProfileEvalCard extends StatelessWidget {
                             padding: EdgeInsets.all(4.r),
                             child: Text(
                               score.punctuality.toString(),
-                              style: m_Body_02.copyWith(color: GREEN_200),
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREEN_200),
                             ),
                           ),
                         ],
@@ -296,7 +306,7 @@ class ProfileEvalCard extends StatelessWidget {
                         children: [
                           Text(
                             '의사 소통',
-                            style: m_Body_02.copyWith(color: GREY_500),
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -308,7 +318,7 @@ class ProfileEvalCard extends StatelessWidget {
                             padding: EdgeInsets.all(4.r),
                             child: Text(
                               score.communication.toString(),
-                              style: m_Body_02.copyWith(color: GREEN_200),
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREEN_200),
                             ),
                           )
                         ],

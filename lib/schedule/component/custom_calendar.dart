@@ -54,48 +54,59 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
         getOnlyYMd(DateTime.parse(endDate)).isAtSameMomentAs(validDay);
   }
 
-  final CalendarStyle calendarStyle = CalendarStyle(
-    rangeHighlightScale: 1.0,
-    rangeHighlightColor: GREEN_200,
-    selectedDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    rangeStartDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    rangeEndDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    markerDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    // todayDecoration: const BoxDecoration(
-    //   color: GREEN_200,
-    //   shape: BoxShape.circle,
-    // ),
-    isTodayHighlighted: false,
-    withinRangeDecoration: const BoxDecoration(
-      color: GREEN_200,
-      shape: BoxShape.circle,
-    ),
-    rangeEndTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    rangeStartTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    withinRangeTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    defaultTextStyle: m_Heading_03.copyWith(color: GREY_500),
-    outsideTextStyle: m_Heading_03.copyWith(color: GREY_400),
-    holidayTextStyle: m_Heading_03.copyWith(color: Colors.red),
-    weekendTextStyle: m_Heading_03.copyWith(color: GREY_500),
-    selectedTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    todayTextStyle: m_Heading_03.copyWith(color: GREY_100),
-    canMarkersOverflow: false,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final CalendarStyle calendarStyle = CalendarStyle(
+      rangeHighlightScale: 1.0,
+      rangeHighlightColor: GREEN_200,
+      selectedDecoration: const BoxDecoration(
+        color: GREEN_200,
+        shape: BoxShape.circle,
+      ),
+      rangeStartDecoration: const BoxDecoration(
+        color: GREEN_200,
+        shape: BoxShape.circle,
+      ),
+      rangeEndDecoration: const BoxDecoration(
+        color: GREEN_200,
+        shape: BoxShape.circle,
+      ),
+      markerDecoration: const BoxDecoration(
+        color: GREEN_200,
+        shape: BoxShape.circle,
+      ),
+      // todayDecoration: const BoxDecoration(
+      //   color: GREEN_200,
+      //   shape: BoxShape.circle,
+      // ),
+      isTodayHighlighted: false,
+      withinRangeDecoration: const BoxDecoration(
+        color: GREEN_200,
+        shape: BoxShape.circle,
+      ),
+      rangeEndTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_100),
+      rangeStartTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_100),
+      withinRangeTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_100),
+      defaultTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_500),
+      outsideTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_400),
+      holidayTextStyle: Theme.of(context)
+          .textTheme
+          .headlineSmall!
+          .copyWith(color: Colors.red),
+      weekendTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_500),
+      selectedTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_100),
+      todayTextStyle:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: GREY_100),
+      canMarkersOverflow: false,
+    );
+
     CalendarScheduleModel? calendar;
 
     final model = ref.watch(scheduleProvider(ScheduleProviderParam(
@@ -138,7 +149,14 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
               rangeStartDay: rangeStartDay,
               // rangeSelectionMode: RangeSelectionMode.toggledOn,
               calendarStyle: calendarStyle,
-              headerStyle: headerStyle,
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+                titleTextStyle: Theme.of(context)
+                    .textTheme
+                    .headlineSmall!
+                    .copyWith(color: GREY_500),
+              ),
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   this.selectedDay = selectedDay;
@@ -170,7 +188,10 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
                           dateFormat.format(selectedDay),
-                          style: m_Heading_01.copyWith(color: GREY_100),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(color: GREY_100),
                         ),
                       ),
                       Divider(
@@ -181,7 +202,13 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                         Expanded(
                           child: Text(
                             '오늘 회의가 없습니다',
-                            style: Heading_06.copyWith(color: GREY_100),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(
+                                    color: GREY_100,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20.sp),
                           ),
                         ),
                       if (calendarSchedule.isNotEmpty)
@@ -228,7 +255,10 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                             ),
                             child: Text(
                               '새 일정 생성',
-                              style: m_Button_03.copyWith(color: GREEN_400),
+                              style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: GREEN_400,
+                              ),
                             ),
                           ),
                         ),
@@ -319,7 +349,9 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                 style: textButtonStyle,
                 child: Text(
                   '작성완료',
-                  style: m_Button_00.copyWith(color: GREY_100),
+                  style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_100),
                 ),
               ),
               SizedBox(width: 12.w),
@@ -327,7 +359,9 @@ class _CustomCalendarState extends ConsumerState<CustomCalendar> {
                   onPressed: () => context.pop(),
                   style: textButtonStyle,
                   child:
-                      Text('취소', style: m_Button_00.copyWith(color: GREY_100))),
+                      Text('취소', style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_100))),
               SizedBox(width: 20.w),
             ],
           )
@@ -385,15 +419,15 @@ class CalendarContent extends StatelessWidget {
           Text(
             dateRange,
             overflow: TextOverflow.ellipsis,
-            style: m_Body_02.copyWith(
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
                 color: GREY_500, fontWeight: FontWeight.w700),
           ),
           Text(
             title,
             overflow: TextOverflow.ellipsis,
-            style: m_Heading_01.copyWith(
-              color: GREY_500,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: GREY_500,
+                ),
           ),
           SizedBox(
             height: 30.h,
@@ -402,7 +436,10 @@ class CalendarContent extends StatelessWidget {
                 Text(
                   location ?? '',
                   overflow: TextOverflow.ellipsis,
-                  style: m_Heading_01.copyWith(color: GREY_500),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(color: GREY_500),
                 ),
                 Expanded(
                   child: Stack(
@@ -412,7 +449,7 @@ class CalendarContent extends StatelessWidget {
                           right: idx * 25,
                           child: Tooltip(
                             message: e.name,
-                            textStyle: m_Body_01.copyWith(color: GREY_100),
+                            textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_100),
                             showDuration: const Duration(seconds: 1),
                             triggerMode: TooltipTriggerMode.longPress,
                             child: CircleAvatar(

@@ -143,7 +143,10 @@ class _MemoDetailComponent extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         title,
-                        style: Heading_04.copyWith(color: GREY_500),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge!
+                            .copyWith(color: GREY_500, fontSize: 28.sp),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -168,12 +171,12 @@ class _MemoDetailComponent extends ConsumerWidget {
                   children: [
                     Text(
                       author,
-                      style: m_Body_01.copyWith(color: GREY_500),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
                     ),
                     SizedBox(width: 12.w),
                     Text(
                       writeDate,
-                      style: m_Body_01.copyWith(color: GREY_500),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
                     ),
                   ],
                 ),

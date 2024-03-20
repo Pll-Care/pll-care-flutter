@@ -67,7 +67,10 @@ class _EvalBadgeComponent extends StatelessWidget {
       required this.projectId,
       required this.projectName});
 
-  Widget getBadgeIcon({required String badge, required int quantity}) {
+  Widget getBadgeIcon(
+      {required String badge,
+      required int quantity,
+      required BuildContext context}) {
     final IconData icon;
     switch (badge) {
       case '최고의 서포터':
@@ -101,7 +104,8 @@ class _EvalBadgeComponent extends StatelessWidget {
         ),
         Text(
           quantity.toString(),
-          style: m_Body_01.copyWith(color: GREY_500),
+          style:
+              Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
         )
       ],
     );
@@ -121,8 +125,12 @@ class _EvalBadgeComponent extends StatelessWidget {
                       padding: EdgeInsets.only(top: 40.h, bottom: 20.h),
                       child: Text(
                         '$projectName 평가',
-                        style: Heading_06.copyWith(
-                            color: GREEN_500, fontWeight: FontWeight.w700),
+                        style:
+                            Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20.sp,
+                                  color: GREEN_500,
+                                ),
                       ),
                     ),
                   ),
@@ -150,21 +158,33 @@ class _EvalBadgeComponent extends StatelessWidget {
                         children: [
                           Text(
                             '중간평가 뱃지',
-                            style: m_Heading_01.copyWith(color: GREEN_400),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(color: GREEN_400),
                           ),
                           Row(
                             children: [
                               getBadgeIcon(
-                                  badge: badge.leader,
-                                  quantity: badge.quantity2),
+                                badge: badge.leader,
+                                quantity: badge.quantity2,
+                                context: context,
+                              ),
                               getBadgeIcon(
-                                  badge: badge.participant,
-                                  quantity: badge.quantity3),
+                                badge: badge.participant,
+                                quantity: badge.quantity3,
+                                context: context,
+                              ),
                               getBadgeIcon(
-                                  badge: badge.support,
-                                  quantity: badge.quantity1),
+                                badge: badge.support,
+                                quantity: badge.quantity1,
+                                context: context,
+                              ),
                               getBadgeIcon(
-                                  badge: badge.bank, quantity: badge.quantity4),
+                                badge: badge.bank,
+                                quantity: badge.quantity4,
+                                context: context,
+                              ),
                             ],
                           )
                         ],
@@ -217,7 +237,10 @@ class _FinalComponent extends StatelessWidget {
           children: [
             Text(
               '최종평가',
-              style: m_Heading_01.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!
+                  .copyWith(color: GREEN_400),
             ),
             SizedBox(height: 16.h),
             Consumer(builder: (_, ref, __) {
@@ -248,8 +271,10 @@ class _FinalComponent extends StatelessWidget {
                                     SizedBox(width: 14.w),
                                     Text(
                                       model.name,
-                                      style: m_Heading_01.copyWith(
-                                          color: GREY_500),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(color: GREY_500),
                                     )
                                   ],
                                 ),
@@ -283,25 +308,28 @@ class _FinalComponent extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             _getFinalEval(
-                                                '성실도', model.score.sincerity),
+                                                '성실도', model.score.sincerity, context),
                                             SizedBox(height: 10.h),
                                             _getFinalEval('업무 수행 능력',
-                                                model.score.jobPerformance),
+                                                model.score.jobPerformance, context),
                                             SizedBox(height: 10.h),
                                             _getFinalEval('시간 엄수',
-                                                model.score.punctuality),
+                                                model.score.punctuality, context),
                                             SizedBox(height: 10.h),
                                             _getFinalEval('의사 소통',
-                                                model.score.communication),
+                                                model.score.communication, context),
                                           ],
                                         ),
                                       ),
                                       SizedBox(height: 16.h),
                                       Text(
                                         model.content,
-                                        style: m_Body_01.copyWith(
-                                          color: GREY_500,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge!
+                                            .copyWith(
+                                              color: GREY_500,
+                                            ),
                                       )
                                     ],
                                   ),
@@ -324,13 +352,14 @@ class _FinalComponent extends StatelessWidget {
     );
   }
 
-  Row _getFinalEval(String title, num score) {
+  Row _getFinalEval(String title, num score, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: m_Body_01.copyWith(color: GREY_500),
+          style:
+              Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
         ),
         Container(
           decoration: BoxDecoration(
@@ -340,8 +369,10 @@ class _FinalComponent extends StatelessWidget {
           padding: EdgeInsets.all(8.r),
           child: Text(
             score.toInt().toString(),
-            style: m_Body_01.copyWith(
-                color: GREEN_200, fontWeight: FontWeight.w700),
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge!
+                .copyWith(color: GREEN_200, fontWeight: FontWeight.w700),
           ),
         )
       ],

@@ -72,9 +72,9 @@ class ProjectForm extends ConsumerWidget {
               initialValue: projectModel?.title,
               decoration: InputDecoration(
                 hintText: '프로젝트 이름을 입력하세요',
-                hintStyle: titleFormTextStyle.copyWith(color: GREEN_400),
+                hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: GREEN_400),
               ),
-              style: titleFormTextStyle,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: GREY_500),
               cursorColor: GREEN_400,
               validator: (String? val) {
                 if (val == null || val.isEmpty) {
@@ -148,7 +148,7 @@ class ProjectForm extends ConsumerWidget {
                           padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
                             "시작일자가 종료일자와 같거나 이후 일 수 없습니다.",
-                            style: errorFormTextStyle,
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: TOMATO_500),
                           ),
                         ),
                       if (!ref
@@ -158,7 +158,7 @@ class ProjectForm extends ConsumerWidget {
                         Padding(
                           padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
-                            style: errorFormTextStyle,
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: TOMATO_500),
                             "시작일자와 종료일자를 선택해주세요.",
                           ),
                         ),
@@ -176,7 +176,7 @@ class ProjectForm extends ConsumerWidget {
                           decoration: const InputDecoration(
                             hintText: '프로젝트 내용을 입력해주세요.',
                           ),
-                          style: contentFormTextStyle,
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: GREY_500),
                           validator: (val) {
                             if (val == null || val.isEmpty) {
                               return '내용은 필수사항입니다.';
@@ -203,7 +203,9 @@ class ProjectForm extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(48.r))),
                 child: Text(
                   projectId == null ? '작성 완료' : '수정 완료',
-                  style: m_Button_00.copyWith(
+                  style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(
                     color: GREY_100,
                   ),
                 ),
@@ -239,8 +241,12 @@ class DateForm extends ConsumerWidget {
             Text(
               title,
               style: title == '진행 기간'
-                  ? m_Heading_03.copyWith(color: GREEN_400)
-                  : m_Heading_01.copyWith(color: GREEN_400),
+                  ? Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREEN_400)
+                  : Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
             ),
             GestureDetector(
               onTap: () {
@@ -272,12 +278,16 @@ class DateForm extends ConsumerWidget {
                 dateRange.startDate == null
                     ? '시작일자'
                     : dateFormat.format(dateRange.startDate!).toString(),
-                style: m_Heading_03.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREEN_400),
               ),
             ),
             Text(
               ' ~ ',
-              style: m_Heading_03.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREEN_400),
             ),
             GestureDetector(
               onTap: () {
@@ -307,7 +317,9 @@ class DateForm extends ConsumerWidget {
                 dateRange.endDate == null
                     ? '종료일자'
                     : dateFormat.format(dateRange.endDate!).toString(),
-                style: m_Heading_03.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREEN_400),
               ),
             ),
           ],
@@ -349,7 +361,11 @@ class DateForm extends ConsumerWidget {
                     Material(
                       child: Text(
                         isStartDate ? '$title 시작일자' : '$title 종료일자',
-                        style: Heading_06.copyWith(color: GREEN_200),
+                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20.sp,
+                          color: GREEN_200,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -366,7 +382,10 @@ class DateForm extends ConsumerWidget {
                           onPressed: onPressed,
                           child: Text(
                             "선택",
-                            style: m_Button_03.copyWith(color: GREY_100),
+                            style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: GREY_100,
+                            ),
                           )),
                     ),
                     SizedBox(height: 24.h),
@@ -398,7 +417,9 @@ class _CustomButton extends StatelessWidget {
         style: textButtonStyle,
         child: Text(
           title,
-          style: m_Button_00.copyWith(color: GREEN_400),
+          style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_400),
         ),
       ),
     );

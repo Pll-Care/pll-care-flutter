@@ -42,7 +42,10 @@ class _EvaluationBodyState extends State<EvaluationBody> {
               padding: EdgeInsets.only(left: 25.w, top: 14.h, bottom: 14.h),
               child: Text(
                 '뱃지 개수 차트',
-                style: m_Heading_02.copyWith(color: GREEN_400),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 20.sp,
+                      color: GREEN_200,
+                    ),
               )),
         ),
         ChartComponent(
@@ -53,7 +56,10 @@ class _EvaluationBodyState extends State<EvaluationBody> {
               padding: EdgeInsets.only(left: 25.w, bottom: 14.h, top: 25.h),
               child: Text(
                 '기여도 랭킹',
-                style: m_Heading_02.copyWith(color: GREEN_400),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 20.sp,
+                  color: GREEN_400,
+                ),
               )),
         ),
         RankCard(
@@ -64,7 +70,10 @@ class _EvaluationBodyState extends State<EvaluationBody> {
               padding: EdgeInsets.only(left: 25.w, bottom: 14.h),
               child: Text(
                 '참여자 보기',
-                style: m_Heading_02.copyWith(color: GREEN_400),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 20.sp,
+                  color: GREEN_400,
+                ),
               )),
         ),
         Consumer(

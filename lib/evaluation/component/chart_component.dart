@@ -231,7 +231,7 @@ class _ChartComponentState extends ConsumerState<ChartComponent> {
       }
     });
 
-    return BarTooltipItem(toolTip, m_Body_01.copyWith(color: GREY_100));
+    return BarTooltipItem(toolTip, Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_100));
   }
 
   void setMidChartData(List<MidChartModel<ChartBadgeModel>> chartModel) {
@@ -275,14 +275,14 @@ class _ChartComponentState extends ConsumerState<ChartComponent> {
       space: 20,
       child: Text(
         meta.formattedValue,
-        style: m_Body_01.copyWith(color: GREY_500),
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
       ),
     );
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
     final Widget text =
-        Text(titles[value.toInt()], style: m_Body_01.copyWith(color: GREY_500));
+        Text(titles[value.toInt()], style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500));
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -323,7 +323,6 @@ class _ChartComponentState extends ConsumerState<ChartComponent> {
   }
 }
 
-
 class _EmptyChart extends StatelessWidget {
   const _EmptyChart({super.key});
 
@@ -347,7 +346,11 @@ class _EmptyChart extends StatelessWidget {
               child: Center(
                 child: Text(
                   '평가를 진행해 주세요.',
-                  style: Heading_07.copyWith(color: GREEN_400),
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18.sp,
+                        color: GREEN_400,
+                      ),
                 ),
               ),
             ),

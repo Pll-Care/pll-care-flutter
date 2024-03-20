@@ -50,13 +50,17 @@ class TeamMemberCard extends StatelessWidget {
           Text(
             name,
             overflow: TextOverflow.ellipsis,
-            style: m_Heading_01.copyWith(color: GREEN_500),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
           ),
           if (requiredPosition)
             Text(
               position.name,
               overflow: TextOverflow.ellipsis,
-              style: m_Heading_01.copyWith(color: GREEN_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!.copyWith(color: GREEN_500),
             ),
         ],
       ),

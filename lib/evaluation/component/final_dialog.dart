@@ -72,7 +72,12 @@ class FinalDialog extends ConsumerWidget {
                     ),
                     Text(
                       '\'$name\' ${finalEvalId == null ? '평가하기' : '평가보기'}',
-                      style: m_Heading_05.copyWith(color: GREY_100),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.sp,
+                                color: GREY_100,
+                              ),
                     ),
                     SizedBox(height: 10.h),
                     Expanded(
@@ -129,7 +134,9 @@ class FinalDialog extends ConsumerWidget {
                           ),
                           child: Text(
                             "작성완료",
-                            style: m_Button_00.copyWith(color: GREEN_200),
+                            style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_200),
                           ),
                         ),
                       ),
@@ -153,9 +160,11 @@ class FinalDialog extends ConsumerWidget {
           backgroundColor: GREEN_200,
           content: Text(
             "작성 완료한 평가는 수정 또는 삭제할 수 없습니다.\n작성 완료 하시겠습니까?",
-            style: Heading_06.copyWith(
-              color: GREY_100,
-            ),
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20.sp,
+                  color: GREY_100,
+                ),
           ),
           actions: [
             TextButton(
@@ -187,7 +196,10 @@ class FinalDialog extends ConsumerWidget {
               style: CustomDialog.textButtonStyle,
               child: Text(
                 "네",
-                style: Button_03.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!
+                    .copyWith(color: GREEN_400),
               ),
             ),
             TextButton(
@@ -197,7 +209,9 @@ class FinalDialog extends ConsumerWidget {
               style: CustomDialog.textButtonStyle,
               child: Text(
                 "아니오",
-                style: Button_03.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
               ),
             )
           ]);
@@ -224,7 +238,10 @@ class _ScoreComponent extends StatelessWidget {
         ),
         Text(
           '평가 작성',
-          style: m_Heading_02.copyWith(color: GREEN_400),
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 20.sp,
+                color: GREEN_400,
+              ),
         ),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
@@ -347,13 +364,19 @@ class _ScoreCard extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: m_Heading_03.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!
+                  .copyWith(color: GREY_500),
             ),
           ),
           if (scoreModel != null)
             Text(
               "$score점",
-              style: m_Heading_03.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!
+                  .copyWith(color: GREY_500),
             ),
           if (scoreModel == null)
             ButtonTheme(
@@ -374,9 +397,10 @@ class _ScoreCard extends StatelessWidget {
                         borderSide: const BorderSide(color: GREEN_200))),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                      style: m_Heading_03.copyWith(
-                        color: GREEN_400,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                color: GREEN_400,
+                              ),
                       borderRadius: BorderRadius.circular(15.r),
                       iconEnabledColor: GREEN_200,
                       iconDisabledColor: GREEN_200,
@@ -438,7 +462,10 @@ class _BadgeComponent extends StatelessWidget {
       children: [
         Text(
           "누적 뱃지",
-          style: m_Heading_02.copyWith(color: GREEN_400),
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 20.sp,
+                color: GREEN_400,
+              ),
         ),
         SizedBox(
           height: 14.h,
@@ -476,11 +503,17 @@ class _BadgeCard extends StatelessWidget {
             Expanded(
                 child: Text(
               model.evaluationBadge.name,
-              style: m_Heading_03.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!
+                  .copyWith(color: GREY_500),
             )),
             Text(
               "${model.quantity ?? 0}개",
-              style: m_Heading_03.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!
+                  .copyWith(color: GREY_500),
             )
           ],
         ));
@@ -553,7 +586,10 @@ class _FinalTextFormComponent extends StatelessWidget {
         children: [
           Text(
             "최종 의견",
-            style: m_Heading_02.copyWith(color: GREEN_400),
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 20.sp,
+                  color: GREEN_400,
+                ),
           ),
           SizedBox(
             height: 14.h,
@@ -562,7 +598,10 @@ class _FinalTextFormComponent extends StatelessWidget {
             Expanded(
               child: Text(
                 evalContent!,
-                style: m_Heading_03.copyWith(color: GREY_500),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall!
+                    .copyWith(color: GREY_500),
                 maxLines: 10,
                 overflow: TextOverflow.ellipsis,
               ),

@@ -70,11 +70,13 @@ class ApplyCard extends ConsumerWidget {
                 children: [
                   Text(
                     name,
-                    style: m_Heading_03.copyWith(color: GREY_500),
+                    style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_500),
                   ),
                   Text(
                     position.name,
-                    style: m_Body_01.copyWith(color: GREY_500),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
                   )
                 ],
               ),
@@ -118,7 +120,9 @@ class _ApplyButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(48.r))),
       child: Text(
         title,
-        style: m_Button_00.copyWith(color: GREY_100),
+        style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_100),
       ),
     );
   }

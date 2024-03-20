@@ -87,7 +87,8 @@ class _ProfileRecruitComponent extends StatelessWidget {
             SliverToBoxAdapter(
                 child: Text(
               '내가 모집하는 프로젝트',
-              style: m_Heading_02.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 20.sp,
                 color: GREEN_500,
               ),
             )),
@@ -113,7 +114,9 @@ class _ProfileRecruitComponent extends StatelessWidget {
                       child: Center(
                           child: Text(
                     '모집하는 프로젝트가 없습니다.',
-                    style: m_Heading_01.copyWith(color: GREEN_500),
+                    style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
                   ))),
                 SliverList.separated(
                   itemBuilder: (BuildContext context, int index) {
@@ -173,7 +176,11 @@ class _ProfileApplyComponent extends StatelessWidget {
           child: Center(
               child: Text(
             '본인만 볼 수 있습니다.',
-            style: Heading_05.copyWith(color: GREEN_500),
+            style:
+            Theme.of(context)
+                .textTheme
+                .headlineLarge!
+                .copyWith(color: GREEN_500),
           )),
         );
       }
@@ -188,7 +195,8 @@ class _ProfileApplyComponent extends StatelessWidget {
             SliverToBoxAdapter(
                 child: Text(
               '지원한 프로젝트',
-              style: m_Heading_02.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 20.sp,
                 color: GREEN_500,
               ),
             )),
@@ -211,7 +219,9 @@ class _ProfileApplyComponent extends StatelessWidget {
                       child: Center(
                           child: Text(
                     '지원한 프로젝트가 없습니다.',
-                    style: m_Heading_01.copyWith(color: GREEN_500),
+                    style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
                   ))),
                 SliverList.separated(
                   itemBuilder: (BuildContext context, int index) {

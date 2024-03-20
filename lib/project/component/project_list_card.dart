@@ -81,7 +81,8 @@ class ProjectListCard extends ConsumerWidget {
                             title,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: m_Heading_02.copyWith(
+                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                              fontSize: 20.sp,
                               color: GREEN_500,
                             ),
                           ),
@@ -133,7 +134,7 @@ class ProjectListCard extends ConsumerWidget {
                   Text(
                     '진행 기간: $period',
                     overflow: TextOverflow.ellipsis,
-                    style: m_Body_02.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: GREY_500,
                     ),
                     textAlign: TextAlign.start,
@@ -143,7 +144,7 @@ class ProjectListCard extends ConsumerWidget {
                     '프로젝트 설명: $content',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: m_Body_02.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: GREY_500,
                     ),
                   ),
@@ -162,7 +163,9 @@ class ProjectListCard extends ConsumerWidget {
         backgroundColor: GREEN_200,
         content: Text(
           '정말 팀 탈퇴하시겠습니까?\n팀 탈퇴 후에는 복구가 불가합니다.',
-          style: Heading_06.copyWith(
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 20.sp,
             color: GREY_100,
           ),
         ),
@@ -190,7 +193,9 @@ class ProjectListCard extends ConsumerWidget {
               style: CustomDialog.textButtonStyle,
               child: Text(
                 '네',
-                style: Button_03.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
               ),
             ),
           ),
@@ -204,7 +209,9 @@ class ProjectListCard extends ConsumerWidget {
                 style: CustomDialog.textButtonStyle,
                 child: Text(
                   '아니오',
-                  style: Button_03.copyWith(color: GREEN_400),
+                  style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
                 )),
           )
         ]);

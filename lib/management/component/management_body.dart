@@ -56,7 +56,10 @@ class _ManagementBodyState extends ConsumerState<ManagementBody> {
               children: [
                 Text(
                   '팀원 관리',
-                  style: m_Heading_02.copyWith(color: GREEN_400),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 20.sp,
+                    color: GREEN_400,
+                  ),
                 ),
                 if (!isCompleted &&
                     leaderModel is LeaderModel &&
@@ -87,7 +90,7 @@ class _ManagementBodyState extends ConsumerState<ManagementBody> {
                     ),
                     child: Text(
                       '수정',
-                      style: m_Body_01.copyWith(color: GREEN_400),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREEN_400),
                     ),
                   ),
               ],
@@ -150,7 +153,10 @@ class _ManagementBodyState extends ConsumerState<ManagementBody> {
                 children: [
                   Text(
                     '지원 현황',
-                    style: m_Heading_02.copyWith(color: GREEN_400),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 20.sp,
+                      color: GREEN_400,
+                    ),
                   ),
                 ],
               ),
@@ -337,7 +343,7 @@ class TeamMemberUpdateButton extends ConsumerWidget {
             SizedBox(height: 4.h),
             Text(
               title,
-              style: m_Body_01.copyWith(
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
                   color: GREEN_400, fontWeight: FontWeight.w700),
             ),
           ],
@@ -366,7 +372,10 @@ class TeamMemberComponent extends ConsumerWidget {
         children: [
           Text(
             '팀원 선택',
-            style: m_Heading_02.copyWith(color: GREEN_400),
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+              fontSize: 20.sp,
+              color: GREEN_400,
+            ),
           ),
           SizedBox(height: 12.h),
           Wrap(
@@ -423,21 +432,21 @@ class TeamUpdateComponent extends ConsumerWidget {
       case TeamMemberUpdateType.position:
         return Column(
           children: [
-            _getPositionWidget(model, ref),
+            _getPositionWidget(model, ref, context),
             _getPositionButton(ref, context),
           ],
         );
       case TeamMemberUpdateType.ban:
         return Column(
           children: [
-            _getKickOutWidget(model),
+            _getKickOutWidget(model, context),
             _getKickOutButton(ref, context),
           ],
         );
       case TeamMemberUpdateType.leader:
         return Column(
           children: [
-            _getLeaderWidget(model),
+            _getLeaderWidget(model, context),
             _getLeaderButton(ref, context),
           ],
         );
@@ -490,7 +499,7 @@ class TeamUpdateComponent extends ConsumerWidget {
     );
   }
 
-  Widget _getKickOutWidget(TeamMemberUpdateModel model) {
+  Widget _getKickOutWidget(TeamMemberUpdateModel model, BuildContext context) {
     if (model.teamMember != null) {
       return SizedBox(
         height: 150.h,
@@ -506,7 +515,9 @@ class TeamUpdateComponent extends ConsumerWidget {
       child: Center(
         child: Text(
           '추방할 팀원을\n선택해주세요.',
-          style: m_Heading_01,
+          style: Theme.of(context)
+              .textTheme
+              .headlineMedium,
           textAlign: TextAlign.center,
         ),
       ),
@@ -567,7 +578,7 @@ class TeamUpdateComponent extends ConsumerWidget {
     );
   }
 
-  Widget _getLeaderWidget(TeamMemberUpdateModel model) {
+  Widget _getLeaderWidget(TeamMemberUpdateModel model, BuildContext context) {
     if (model.teamMember != null) {
       return SizedBox(
         height: 150.h,
@@ -583,14 +594,16 @@ class TeamUpdateComponent extends ConsumerWidget {
       child: Center(
         child: Text(
           '리더를 위윔할\n팀원을\n선택해주세요.',
-          style: m_Heading_01,
+          style: Theme.of(context)
+              .textTheme
+              .headlineMedium,
           textAlign: TextAlign.center,
         ),
       ),
     );
   }
 
-  Row _getPositionWidget(TeamMemberUpdateModel model, WidgetRef ref) {
+  Row _getPositionWidget(TeamMemberUpdateModel model, WidgetRef ref, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -607,7 +620,9 @@ class TeamUpdateComponent extends ConsumerWidget {
             width: 150.w,
             child: Text(
               '포지션을 변경할\n팀원을\n선택해주세요.',
-              style: m_Heading_01,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium,
               textAlign: TextAlign.center,
             ),
           ),
@@ -625,7 +640,9 @@ class TeamUpdateComponent extends ConsumerWidget {
                     (e) => ListTile(
                       title: Text(
                         e.name,
-                        style: m_Heading_01.copyWith(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!.copyWith(
                           color: e == model.position ? GREY_100 : GREEN_500,
                         ),
                         textAlign: TextAlign.center,

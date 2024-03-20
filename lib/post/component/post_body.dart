@@ -45,7 +45,10 @@ class PostBody extends ConsumerWidget {
                 },
                 child: Text(
                   "작성하기",
-                  style: m_Button_03.copyWith(color: GREY_100),
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: GREY_100,
+                      ),
                 ),
               ),
             ),
@@ -79,7 +82,10 @@ class RecruitNav extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
             '모집 중인 프로젝트 목록  Currently Recruiting',
-            style: m_Heading_01.copyWith(color: GREY_100, fontSize: 18.sp),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: GREY_100, fontSize: 18.sp),
           ),
         ]),
       ),
@@ -130,9 +136,9 @@ class _RecruitList extends ConsumerWidget {
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 22.h,
+                  mainAxisSpacing: 30.h,
                   crossAxisSpacing: 15.w,
-                  mainAxisExtent: 330.h,
+                  mainAxisExtent: 380.h,
                 ),
               ),
               BottomPageCount<PostListModel>(

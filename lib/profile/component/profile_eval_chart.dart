@@ -104,7 +104,10 @@ class ProfileEvalChart extends StatelessWidget {
         break;
     }
 
-    final Widget text = Text(title, style: m_Body_01.copyWith(color: GREY_500));
+    final Widget text = Text(title, style: TextStyle(
+        fontFamily: 'Pretendard',
+        fontWeight: FontWeight.w500,
+        fontSize: 16.sp).copyWith(color: GREY_500));
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: text,
@@ -116,7 +119,10 @@ class ProfileEvalChart extends StatelessWidget {
       return Container();
     }
     final Widget text = Text(value.toInt().toString(),
-        style: m_Body_01.copyWith(color: GREY_500));
+        style: TextStyle(
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp).copyWith(color: GREY_500));
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: text,

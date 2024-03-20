@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -67,7 +66,10 @@ class HomeBody extends ConsumerWidget {
               padding: EdgeInsets.only(left: 33.w),
               child: Text(
                 '프로젝트 관리 서비스, 풀케어',
-                style: m_Heading_05.copyWith(color: GREEN_500),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(color: GREEN_500), //m_Heading_05
               )),
           SizedBox(
             height: 10.h,
@@ -75,10 +77,10 @@ class HomeBody extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.only(left: 37.w, right: 37.w),
             child: Text(
-              '유구한 역사와 전통에 빛나는 우리 대한국민은 3ㆍ1운동으로 건립된 대한민국임시정부의 법통과 불의에 항거한 4ㆍ19민주이념을 계승하고, 조국의 민주개혁과 평화적 통일의 사명에 입각하여 정의ㆍ인도와 동포애로써 민족의 단결을 공고히 하고, 모든 사회적 폐습과 불의를 타파하며, ',
+              '개발자들을 위한 프로젝트 관리 서비스를 제공하고 있습니다. 서로 관심있는 주제를 선정하여 프로젝트를 함께할 사람들을 구해보세요. 프로젝트 내에서는 팀원 평가, 일정 관리, 회의록 정리가 있으며 지원하는 사람의 프로젝트 이력이나 이전 프로젝트의 평가 이력을 확인하여 더 신중한 팀원을 모집할 수 있습니다.',
               overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-              style: m_Body_01.copyWith(color: GREY_500),
+              maxLines: 8,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
             ),
           ),
           SizedBox(
@@ -230,13 +232,13 @@ class _HomeFooter extends StatelessWidget {
           height: 8.h,
         ),
         Text('플케어 : PLL CARE, Project Manager',
-            style: m_Body_02.copyWith(color: GREY_500)),
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500)),
         SizedBox(
           height: 3.h,
         ),
         Text(
           'Copyright 2023. Team Pll-Care. All rights reserved',
-          style: m_Body_02.copyWith(color: GREY_500),
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
         ),
       ],
     );

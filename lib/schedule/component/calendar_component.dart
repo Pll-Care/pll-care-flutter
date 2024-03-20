@@ -11,11 +11,7 @@ import '../../theme.dart';
 import '../model/schedule_calendar_model.dart';
 import '../model/schedule_detail_model.dart';
 
-final HeaderStyle headerStyle = HeaderStyle(
-  formatButtonVisible: false,
-  titleCentered: true,
-  titleTextStyle: m_Heading_03.copyWith(color: GREY_500),
-);
+
 
 class CalendarComponent extends ConsumerStatefulWidget {
   const CalendarComponent({super.key});
@@ -36,9 +32,18 @@ class _CalendarComponentState extends ConsumerState<CalendarComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultTextStyle = m_Heading_03.copyWith(color: GREY_500);
+    final defaultTextStyle = Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_500);
     final form = ref.watch(scheduleCreateFormProvider);
     validDay(form);
+    final HeaderStyle headerStyle = HeaderStyle(
+      formatButtonVisible: false,
+      titleCentered: true,
+      titleTextStyle: Theme.of(context)
+          .textTheme
+          .headlineSmall!.copyWith(color: GREY_500),
+    );
     final CalendarStyle calendarStyle = CalendarStyle(
       rangeHighlightScale: 1.0,
       rangeHighlightColor: validRangeHighlight ? GREEN_200 : Colors.red,
@@ -67,15 +72,29 @@ class _CalendarComponentState extends ConsumerState<CalendarComponent> {
         color: validRangeHighlight ? GREEN_200 : Colors.red,
         shape: BoxShape.circle,
       ),
-      rangeEndTextStyle: m_Heading_03.copyWith(color: GREY_100),
-      rangeStartTextStyle: m_Heading_03.copyWith(color: GREY_100),
-      withinRangeTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      rangeEndTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_100),
+      rangeStartTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_100),
+      withinRangeTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_100),
       defaultTextStyle: defaultTextStyle,
-      outsideTextStyle: m_Heading_03.copyWith(color: GREY_400),
-      holidayTextStyle: m_Heading_03.copyWith(color: Colors.red),
+      outsideTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_400),
+      holidayTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: Colors.red),
       weekendTextStyle: defaultTextStyle,
-      selectedTextStyle: m_Heading_03.copyWith(color: GREY_100),
-      todayTextStyle: m_Heading_03.copyWith(color: GREY_100),
+      selectedTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_100),
+      todayTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_100),
       canMarkersOverflow: false,
     );
 

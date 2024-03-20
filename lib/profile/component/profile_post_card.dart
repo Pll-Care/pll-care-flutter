@@ -65,7 +65,9 @@ class ProfilePostCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: m_Heading_01.copyWith(color: GREEN_500),
+                          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -103,7 +105,9 @@ class ProfilePostCard extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     desc,
-                    style: m_Heading_03.copyWith(color: GREEN_500),
+                    style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREEN_500),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

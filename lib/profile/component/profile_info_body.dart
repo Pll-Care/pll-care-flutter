@@ -25,7 +25,10 @@ class ProfileInfoBody extends StatelessWidget {
             SliverToBoxAdapter(
               child: Text(
                 '개인정보',
-                style: m_Heading_02.copyWith(color: GREEN_500),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  fontSize: 20.sp,
+                  color: GREEN_500,
+                ),
               ),
             ),
             SliverToBoxAdapter(child: SizedBox(height: 14.h)),
@@ -67,7 +70,10 @@ class _ContactForm extends ConsumerWidget {
                 children: [
                   Text(
                     '연락처',
-                    style: m_Heading_02.copyWith(color: GREEN_500),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 20.sp,
+                      color: GREEN_500,
+                    ),
                   ),
                   TextButton(
                     onPressed: ()  async {
@@ -93,7 +99,9 @@ class _ContactForm extends ConsumerWidget {
                     width: 70.w,
                     child: Text(
                       'E-mail',
-                      style: m_Heading_01,
+                      style: Theme.of(context)
+                .textTheme
+                .headlineMedium!,
                     ),
                   ),
                   SizedBox(width: 12.w),
@@ -108,7 +116,9 @@ class _ContactForm extends ConsumerWidget {
                     padding: EdgeInsets.symmetric(horizontal: 4.w),
                     child: Text(
                       '@',
-                      style: m_Heading_01,
+                      style: Theme.of(context)
+                .textTheme
+                .headlineMedium!,
                     ),
                   ),
                   Expanded(
@@ -125,7 +135,9 @@ class _ContactForm extends ConsumerWidget {
                     width: 70.w,
                     child: Text(
                       'GitHub',
-                      style: m_Heading_01,
+                      style: Theme.of(context)
+                .textTheme
+                .headlineMedium!,
                     ),
                   ),
                   SizedBox(width: 12.w),
@@ -143,7 +155,9 @@ class _ContactForm extends ConsumerWidget {
                     width: 70.w,
                     child: Text(
                       'WebSite',
-                      style: m_Heading_01,
+                      style: Theme.of(context)
+                .textTheme
+                .headlineMedium!,
                     ),
                   ),
                   SizedBox(width: 12.w),

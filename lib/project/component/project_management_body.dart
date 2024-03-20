@@ -73,7 +73,9 @@ class ProjectManagementBody extends ConsumerWidget {
         backgroundColor: GREEN_200,
         content: Text(
           '정말 완료하시겠습니까?\n완료 후에는 복구가 불가합니다.',
-          style: Heading_06.copyWith(
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 20.sp,
             color: GREY_100,
           ),
         ),
@@ -96,7 +98,9 @@ class ProjectManagementBody extends ConsumerWidget {
             style: CustomDialog.textButtonStyle,
             child: Text(
               "네",
-              style: Button_03.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
             ),
           ),
           TextButton(
@@ -106,7 +110,9 @@ class ProjectManagementBody extends ConsumerWidget {
             style: CustomDialog.textButtonStyle,
             child: Text(
               "아니오",
-              style: Button_03.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
             ),
           )
         ]);
@@ -118,7 +124,9 @@ class ProjectManagementBody extends ConsumerWidget {
         backgroundColor: GREEN_200,
         content: Text(
           '정말 삭제하시겠습니까?\n삭제 후에는 복구가 불가합니다.',
-          style: Heading_06.copyWith(
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 20.sp,
             color: GREY_100,
           ),
         ),
@@ -141,7 +149,9 @@ class ProjectManagementBody extends ConsumerWidget {
             style: CustomDialog.textButtonStyle,
             child: Text(
               "네",
-              style: Button_03.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
             ),
           ),
           TextButton(
@@ -151,7 +161,9 @@ class ProjectManagementBody extends ConsumerWidget {
             style: CustomDialog.textButtonStyle,
             child: Text(
               "아니오",
-              style: Button_03.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!.copyWith(color: GREEN_400),
             ),
           )
         ]);
@@ -203,7 +215,9 @@ class _ManageCard extends ConsumerWidget {
           ),
           Text(
             title,
-            style: m_Heading_01.copyWith(color: GREEN_500),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_500),
           )
         ],
       ),

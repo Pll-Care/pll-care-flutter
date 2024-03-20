@@ -50,8 +50,10 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final dropTextStyle = m_Body_01.copyWith(color: GREEN_400);
-    final textStyle = m_Button_00.copyWith(color: GREEN_400);
+    final dropTextStyle = Theme.of(context).textTheme.labelLarge!.copyWith(color: GREEN_400);
+    final textStyle = Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_400);
     final ScheduleForm form = ref.watch(scheduleCreateFormProvider);
     final view = ref.watch(calendarViewProvider);
     final memberList = ref.watch(managementProvider(widget.projectId));
@@ -88,12 +90,10 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
               TextFormField(
                 decoration: InputDecoration(
                     hintText: '일정 제목을 입력해주세요.',
-                    hintStyle: titleFormTextStyle.copyWith(
-                      color: GREEN_400,
-                    )),
+                    hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: GREEN_400)),
                 initialValue: widget.model?.title ?? '',
                 cursorColor: GREEN_200,
-                style: titleFormTextStyle,
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(color: GREY_500),
                 validator: (String? val) {
                   if (val == null || val.isEmpty) {
                     return '일정 제목은 필수사항입니다.';
@@ -168,7 +168,9 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                               ),
                               Text(
                                 format.format(form.startDateTime!),
-                                style: Body_01.copyWith(color: GREY_500),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!.copyWith(color: GREY_500),
                               ),
                             ],
                           ),
@@ -182,7 +184,9 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                                 form.endDateTime == null
                                     ? ''
                                     : format.format(form.endDateTime!),
-                                style: Body_01.copyWith(color: GREY_500),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!.copyWith(color: GREY_500),
                               ),
                             ],
                           ),
@@ -262,7 +266,9 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                                     child: Chip(
                                       label: Text(
                                         e.name,
-                                        style: m_Button_00.copyWith(
+                                        style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(
                                             color: hasMember
                                                 ? GREY_100
                                                 : GREEN_400),
@@ -295,12 +301,12 @@ class _ScheduleFormComponentState extends ConsumerState<ScheduleFormComponent> {
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: '내용 입력',
-                    hintStyle: contentFormTextStyle.copyWith(color: GREEN_400),
+                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: GREEN_400),
                   ),
                   textAlignVertical: TextAlignVertical.top,
                   initialValue: widget.model?.content ?? '',
                   cursorColor: GREEN_200,
-                  style: contentFormTextStyle,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: GREY_500),
                   validator: (String? val) {
                     if (val == null || val.isEmpty) {
                       return '내용은 필수사항입니다.';

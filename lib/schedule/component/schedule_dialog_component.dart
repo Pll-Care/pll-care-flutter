@@ -37,7 +37,9 @@ class ScheduleDialogComponent extends ConsumerWidget {
     }
 
     final size = MediaQuery.of(context).size;
-    final textStyle = Body_01.copyWith(color: GREY_500);
+    final textStyle = Theme.of(context)
+        .textTheme
+        .labelLarge!.copyWith(color: GREY_500);
     final model = ref.watch(scheduleProvider(ScheduleProviderParam(
         projectId: projectId,
         type: ScheduleProviderType.getSchedule,
@@ -97,7 +99,8 @@ class ScheduleDialogComponent extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () async { // todo detail 캐시 값 변경
+                  onPressed: () async {
+                    // todo detail 캐시 값 변경
                     final form = ref.read(scheduleCreateFormProvider);
                     log('formKey.currentState!.validate() ${formKey.currentState!.validate()}');
                     log(' form.memberIds.isNotEmpty ${form.memberIds.isNotEmpty}');
@@ -135,7 +138,9 @@ class ScheduleDialogComponent extends ConsumerWidget {
                   style: textButtonStyle,
                   child: Text(
                     '수정완료',
-                    style: m_Button_00.copyWith(color: GREY_100),
+                    style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_100),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -143,7 +148,9 @@ class ScheduleDialogComponent extends ConsumerWidget {
                     onPressed: () => context.pop(),
                     style: textButtonStyle,
                     child: Text('취소',
-                        style: m_Button_00.copyWith(color: GREY_100))),
+                        style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_100))),
                 SizedBox(width: 20.w),
               ],
             )
@@ -166,12 +173,14 @@ class ScheduleDialogComponent extends ConsumerWidget {
                   flex: 3,
                   child: Text(
                     model.title,
-                    style: Heading_05.copyWith(color: GREY_500),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(color: GREY_500),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                
                 SizedBox(
                   width: 16.w,
                 ),
@@ -182,7 +191,8 @@ class ScheduleDialogComponent extends ConsumerWidget {
                         : remainingDay > 0
                             ? 'd-$remainingDay'
                             : 'd+${remainingDay.abs()}',
-                    style: m_Button_03.copyWith(
+                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      fontWeight: FontWeight.w600,
                       color: GREEN_400,
                     ),
                   ),
@@ -330,7 +340,9 @@ class ScheduleDialogComponent extends ConsumerWidget {
                       ),
                       child: Text(
                         '삭제하기',
-                        style: m_Button_00.copyWith(color: GREEN_400),
+                        style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_400),
                       ),
                     ),
                   SizedBox(
@@ -348,7 +360,9 @@ class ScheduleDialogComponent extends ConsumerWidget {
                     ),
                     child: Text(
                       '수정하기',
-                      style: m_Button_00.copyWith(color: GREY_100),
+                      style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_100),
                     ),
                   ),
                 ],

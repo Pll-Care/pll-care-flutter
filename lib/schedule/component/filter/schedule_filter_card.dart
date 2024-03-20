@@ -103,13 +103,15 @@ class ScheduleFilterCard extends ConsumerWidget {
               children: [
                 Text(
                   day,
-                  style: m_Heading_05.copyWith(
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24.sp,
                     color: GREY_500,
                   ),
                 ),
                 Text(
                   dayOfWeek,
-                  style: m_Body_01.copyWith(
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
                     color: GREY_500,
                   ),
                 ),
@@ -129,7 +131,10 @@ class ScheduleFilterCard extends ConsumerWidget {
                         backgroundColor: GREY_100),
                     child: Text(
                       "평가하기",
-                      style: m_Button_03.copyWith(color: GREEN_400),
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: GREEN_400,
+                      ),
                     ),
                   ),
               ],
@@ -162,14 +167,16 @@ class ScheduleFilterCard extends ConsumerWidget {
                         children: [
                           Text(
                             period,
-                            style: m_Heading_04.copyWith(
+                            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12.sp,
                               color: GREY_500,
                             ),
                           ),
                           Expanded(
                             child: Text(
                               title,
-                              style: m_Body_02.copyWith(
+                              style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                 color: GREY_500,
                               ),
                               maxLines: 2,
@@ -185,7 +192,7 @@ class ScheduleFilterCard extends ConsumerWidget {
                                     child: Tooltip(
                                       message: e.name,
                                       textStyle:
-                                          m_Body_01.copyWith(color: GREY_100),
+                                          Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_100),
                                       showDuration: const Duration(seconds: 1),
                                       triggerMode: TooltipTriggerMode.longPress,
                                       child: CircleAvatar(
@@ -207,7 +214,7 @@ class ScheduleFilterCard extends ConsumerWidget {
                               children: [
                                 Text(
                                   '$modifiedDay 수정',
-                                  style: m_Body_02.copyWith(
+                                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                       color: (check != null && check == true)
                                           ? GREEN_400
                                           : Colors.red),
@@ -230,7 +237,8 @@ class ScheduleFilterCard extends ConsumerWidget {
                                 : remainingDay > 0
                                     ? 'd-$remainingDay'
                                     : 'd+${remainingDay.abs()}',
-                            style: m_Button_03.copyWith(
+                            style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                              fontWeight: FontWeight.w600,
                               color: GREEN_400,
                             ),
                           ),
@@ -249,7 +257,10 @@ class ScheduleFilterCard extends ConsumerWidget {
                             child: Chip(
                               label: Text(
                                 "완료하기",
-                                style: m_Button_03.copyWith(color: GREY_100),
+                                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: GREY_100,
+                                ),
                               ),
                               backgroundColor: GREEN_200,
                               materialTapTargetSize:

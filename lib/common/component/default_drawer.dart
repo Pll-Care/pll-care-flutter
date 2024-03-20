@@ -33,11 +33,17 @@ class DefaultDrawer extends ConsumerWidget {
             currentAccountPictureSize: Size.fromRadius(35.r),
             accountName: Text(
               name,
-              style: m_Heading_02.copyWith(color: GREY_100),
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: GREY_100,
+                    fontSize: 20.sp,
+                  ),
             ),
             accountEmail: Text(
               bio,
-              style: m_Heading_01.copyWith(color: GREY_100),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!
+                  .copyWith(color: GREY_100),
             ),
             currentAccountPicture: CircleAvatar(
               backgroundImage: imageUrl.isNotEmpty
