@@ -48,6 +48,10 @@
 
 <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"> <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=Vite&logoColor=white"> <img src="https://img.shields.io/badge/Redux-764ABC?style=flat-square&logo=Redux&logoColor=white"> <img src="https://img.shields.io/badge/React Query-FF4154?style=flat-square&logo=React Query&logoColor=white"> <img src="https://img.shields.io/badge/Sass-CC6699?style=flat-square&logo=Sass&logoColor=white">
 
+### 크로스 플랫폼
+
+<img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">
+
 <br/>
 
 ### 기술 스택 구조
@@ -59,7 +63,7 @@
 
 <table>
     <tr align="center">
-        <td><B>BE,Android<B></td>
+        <td><B>BE, Cross Platform<B></td>
         <td><B>BE<B></td>
         <td><B>FE<B></td>
         <td><B>FE<B></td>
