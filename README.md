@@ -7,6 +7,7 @@
 ## 📽️ 프로젝트 소개
 
 ### 사이트: https://pll-care.store/
+### 플레이스토어: https://play.google.com/store/apps/details?id=com.project.pllcare&hl=en-KR
 <br />
 
 <img src="https://github.com/Pll-Care/Pll-Care/assets/81316050/2d6b1b91-6c2e-4ae6-a7e1-9a4ce67db461">
@@ -58,7 +59,7 @@
 
 <table>
     <tr align="center">
-        <td><B>BE<B></td>
+        <td><B>BE,Android<B></td>
         <td><B>BE<B></td>
         <td><B>FE<B></td>
         <td><B>FE<B></td>
