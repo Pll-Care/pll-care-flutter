@@ -99,6 +99,7 @@ flutter:
    - assets/images/
    - assets/main/
    - assets/images/login/kakao_login.png
+   - assets/images/login/google_login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

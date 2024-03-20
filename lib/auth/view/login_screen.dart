@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:pllcare/auth/param/auth_param.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
@@ -126,26 +127,40 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  restApiLogin(ref: ref, context: context);
-                },
-                child: Container(
-                  width: 300.w,
-                  height: 150.h,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                          'assets/images/login/kakao_login.png'),
-                    ),
-                  ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: () {
+              restApiLogin(ref: ref, context: context);
+            },
+            child: Container(
+              width: 300.w,
+              height: 150.h,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/login/kakao_login.png'),
                 ),
               ),
-            ],
-          )),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              GoogleSignIn().signIn();
+            },
+            child: Container(
+              width: 300.w,
+              height: 90.h,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/login/google_login.png'),
+                ),
+              ),
+
+            ),
+          )
+        ],
+      )),
     );
   }
 
@@ -160,7 +175,4 @@ class LoginScreen extends ConsumerWidget {
       context.goNamed('home');
     }
   }
-
 }
-
-
