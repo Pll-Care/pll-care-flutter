@@ -190,31 +190,31 @@ class _ProfileInfo extends ConsumerWidget {
                               .headlineSmall!
                               .copyWith(color: GREY_100),
                         ),
-                        SizedBox(width: 12.w),
-                        SizedBox(
-                          height: 25.h,
-                          width: 48.w,
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: GREEN_200,
-                              side: BorderSide(color: GREY_100, width: 2.w),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8.w, vertical: 2.h),
-                            ),
-                            child: Text(
-                              '수정',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12.sp,
-                                    color: GREY_100,
-                                  ),
-                            ),
-                          ),
-                        ),
+                        // SizedBox(width: 12.w),
+                        // SizedBox(
+                        //   height: 25.h,
+                        //   width: 48.w,
+                        //   child: OutlinedButton(
+                        //     onPressed: () {},
+                        //     style: OutlinedButton.styleFrom(
+                        //       backgroundColor: GREEN_200,
+                        //       side: BorderSide(color: GREY_100, width: 2.w),
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 8.w, vertical: 2.h),
+                        //     ),
+                        //     child: Text(
+                        //       '수정',
+                        //       style: Theme.of(context)
+                        //           .textTheme
+                        //           .headlineSmall!
+                        //           .copyWith(
+                        //             fontWeight: FontWeight.w700,
+                        //             fontSize: 12.sp,
+                        //             color: GREY_100,
+                        //           ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     )
                   ],

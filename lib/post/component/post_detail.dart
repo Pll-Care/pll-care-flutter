@@ -438,92 +438,100 @@ class _PositionRecruitField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        SizedBox(
-          width: 85.w,
-          child: Text(
-            position.name,
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: GREY_500, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          width: 60.w,
-          child: Text(
-            '$currentCnt / $totalCnt',
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: GREY_500, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        if (currentCnt != totalCnt && applyPosition == null)
-          Expanded(
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SizedBox(
+            width: 85.w,
+            height: 40.h,
             child: Center(
-              child: SizedBox(
-                width: 80.w,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    final isLogin =
-                        ref.read(memberProvider.notifier).checkLogin(context);
-                    if (!isLogin) {
-                      return;
-                    }
+              child: Text(
+                position.name,
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: GREY_500, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 60.w,
+            child: Text(
+              '$currentCnt / $totalCnt',
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: GREY_500, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          if (currentCnt != totalCnt && applyPosition == null)
+            Expanded(
+              child: Center(
+                child: SizedBox(
+                  width: 80.w,
+                  height: 40.h,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      final isLogin =
+                          ref.read(memberProvider.notifier).checkLogin(context);
+                      if (!isLogin) {
+                        return;
+                      }
 
-                    final param = ApplyPostParam(position: position);
-                    final model = await ref
-                        .read(postProvider(PostProviderParam(
-                                type: PostProviderType.get, postId: postId))
-                            .notifier)
-                        .applyPost(param: param);
-                    if (model is CompletedModel && context.mounted) {
-                      DefaultFlash.showFlash(
-                          context: context,
-                          type: FlashType.success,
-                          content: '${position.name}에 지원하였습니다.');
-                    } else if (model is ErrorModel && context.mounted) {
-                      DefaultFlash.showFlash(
-                          context: context,
-                          type: FlashType.fail,
-                          content: model.message);
-                    }
-                  },
-                  child: const Text('지원'),
+                      final param = ApplyPostParam(position: position);
+                      final model = await ref
+                          .read(postProvider(PostProviderParam(
+                                  type: PostProviderType.get, postId: postId))
+                              .notifier)
+                          .applyPost(param: param);
+                      if (model is CompletedModel && context.mounted) {
+                        DefaultFlash.showFlash(
+                            context: context,
+                            type: FlashType.success,
+                            content: '${position.name}에 지원하였습니다.');
+                      } else if (model is ErrorModel && context.mounted) {
+                        DefaultFlash.showFlash(
+                            context: context,
+                            type: FlashType.fail,
+                            content: model.message);
+                      }
+                    },
+                    child: const Text('지원'),
+                  ),
                 ),
               ),
             ),
-          ),
-        if (currentCnt != totalCnt &&
-            applyPosition != null &&
-            position == applyPosition)
-          Expanded(
-            child: Center(
-              child: SizedBox(
-                width: 100.w,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    ref
-                        .read(postProvider(PostProviderParam(
-                                type: PostProviderType.get, postId: postId))
-                            .notifier)
-                        .applyCancelPost();
-                  },
-                  child: const Text('지원취소'),
+          if (currentCnt != totalCnt &&
+              applyPosition != null &&
+              position == applyPosition)
+            Expanded(
+              child: Center(
+                child: SizedBox(
+                  width: 100.w,
+                  height: 40.h,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      ref
+                          .read(postProvider(PostProviderParam(
+                                  type: PostProviderType.get, postId: postId))
+                              .notifier)
+                          .applyCancelPost();
+                    },
+                    child: const Text('지원취소'),
+                  ),
                 ),
               ),
             ),
-          ),
-        if (currentCnt == totalCnt)
-          Expanded(
-            child: Center(
-              child: Text('모집완료',
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: GREEN_400, fontWeight: FontWeight.w800)),
-            ),
-          )
-      ],
+          if (currentCnt == totalCnt)
+            Expanded(
+              child: Center(
+                child: Text('모집완료',
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: GREEN_400, fontWeight: FontWeight.w800)),
+              ),
+            )
+        ],
+      ),
     );
   }
 }

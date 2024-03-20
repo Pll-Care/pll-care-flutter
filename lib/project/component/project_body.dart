@@ -116,10 +116,10 @@ class ProjectListNav extends ConsumerWidget {
               children: [
                 Text(
                   '참여 프로젝트',
-                  style:
-                      Theme.of(context)
-                .textTheme
-                .headlineMedium!.copyWith(color: GREY_100, fontSize: 18.sp),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(color: GREY_100, fontSize: 18.sp),
                 ),
                 SizedBox(
                   width: 8.w,
@@ -137,8 +137,9 @@ class ProjectListNav extends ConsumerWidget {
                   child: Text(
                     '새 프로젝트 생성',
                     style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!.copyWith(color: GREY_500),
+                        .textTheme
+                        .displayMedium!
+                        .copyWith(color: GREY_500),
                   ),
                 )
               ],
@@ -165,9 +166,9 @@ class ProjectListNav extends ConsumerWidget {
                       child: Text(
                         '전체',
                         style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!.copyWith(
-                            color: isSelectAll ? GREY_100 : GREY_500),
+                            .textTheme
+                            .displayMedium!
+                            .copyWith(color: isSelectAll ? GREY_100 : GREY_500),
                       ),
                     ),
                     SizedBox(
@@ -190,9 +191,9 @@ class ProjectListNav extends ConsumerWidget {
                       child: Text(
                         '진행 중',
                         style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!.copyWith(
-                            color: isSelectAll ? GREY_500 : GREY_100),
+                            .textTheme
+                            .displayMedium!
+                            .copyWith(color: isSelectAll ? GREY_500 : GREY_100),
                       ),
                     )
                   ],
@@ -223,17 +224,31 @@ class _ProjectList extends ConsumerWidget {
       padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
       sliver: modelList is! LoadingModel
           ? SliverMainAxisGroup(slivers: [
-              SliverList.separated(
-                  itemBuilder: (context, index) {
-                    return ProjectListCard.fromModel(
-                        model: pModelList.data![index]);
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 18.h,
-                    );
-                  },
-                  itemCount: pModelList.data!.length),
+              if(pModelList.data!.isNotEmpty)
+                SliverList.separated(
+                    itemBuilder: (context, index) {
+                      return ProjectListCard.fromModel(
+                          model: pModelList.data![index]);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 18.h,
+                      );
+                    },
+                    itemCount: pModelList.data!.length),
+              if (pModelList.data!.isEmpty)
+                SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      '참여한 프로젝트가 없습니다.',
+                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18.sp,
+                            color: GREEN_400,
+                          ),
+                    ),
+                  ),
+                ),
               // page 수
               BottomPageCount<ProjectListModel>(
                 pModelList: pModelList,

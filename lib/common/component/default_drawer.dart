@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:pllcare/auth/provider/auth_provider.dart';
 import 'package:pllcare/common/component/default_flash.dart';
@@ -65,6 +66,7 @@ class DefaultDrawer extends ConsumerWidget {
               onPressed: () async {
                 ref.read(tokenProvider.notifier).logout();
                 await UserApi.instance.logout();
+                await GoogleSignIn().signOut();
                 if (context.mounted) {
                   context.pop();
                 }
@@ -80,6 +82,7 @@ class DefaultDrawer extends ConsumerWidget {
                 ref.read(tokenProvider.notifier).logout();
                 await UserApi.instance.logout();
                 await UserApi.instance.unlink();
+                await GoogleSignIn().disconnect();
                 final result =
                     await ref.read(authProvider.notifier).withdrawal();
                 if (result is CompletedModel && context.mounted) {

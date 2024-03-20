@@ -17,7 +17,7 @@ class MemoBody extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 28.h),
           sliver: SliverToBoxAdapter(
             child: Container(
-              height: 600.h,
+              height: 650.h,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),

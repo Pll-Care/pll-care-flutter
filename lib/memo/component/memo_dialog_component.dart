@@ -158,7 +158,7 @@ class _MemoDetailComponent extends ConsumerWidget {
                         child: IconButton(
                           onPressed: onBookmark,
                           padding: EdgeInsets.zero,
-                          iconSize: 32.r,
+                          iconSize: 48.r,
                           icon: Icon(
                             bookmarked ? Icons.bookmark : Icons.bookmark_border,
                           ),

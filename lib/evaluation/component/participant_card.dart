@@ -55,27 +55,28 @@ class ParticipantCard extends StatelessWidget {
 
     final showEvalTextStyle =
         Theme.of(context).textTheme.displayMedium!.copyWith(
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w600,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w700,
             );
 
     final createEvalButtonStyle = TextButton.styleFrom(
       backgroundColor: GREY_100,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.r),
-          side: const BorderSide(color: GREEN_200, width: 1)),
+          side: BorderSide(color: GREEN_200, width: 2.r)),
     );
-    final createEvalTextStyle = Theme.of(context).textTheme.displayMedium!.copyWith(
-      fontSize: 10.sp,
-      fontWeight: FontWeight.w600,
-      color: GREEN_200
-    );
+    final createEvalTextStyle = Theme.of(context)
+        .textTheme
+        .displayMedium!
+        .copyWith(
+            fontSize: 14.sp, fontWeight: FontWeight.w700, color: GREEN_200);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 28.w),
       child: Container(
-        height: 100.h,
+        height: 120.h,
         width: 340.w,
+        padding: EdgeInsets.only(bottom: 12.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
           color: GREY_100,
@@ -148,16 +149,17 @@ class ParticipantCard extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        ...badges.map((e) => getBadgeIcon(badge: e, context: context)).toList(),
+                        ...badges
+                            .map(
+                                (e) => getBadgeIcon(badge: e, context: context))
+                            .toList(),
                       ],
                     ),
                   )
                 ],
               ),
             ),
-            SizedBox(
-              width: 15.w,
-            )
+            SizedBox(width: 15.w)
           ],
         ),
       ),
@@ -168,7 +170,8 @@ class ParticipantCard extends StatelessWidget {
   // Icons.lightbulb
   // Icons.people
   // Icons.handshake
-  Widget getBadgeIcon({required BadgeModel badge, required BuildContext context}) {
+  Widget getBadgeIcon(
+      {required BadgeModel badge, required BuildContext context}) {
     final IconData icon;
     switch (badge.evaluationBadge) {
       case BadgeType.PASSIONATE:
@@ -204,7 +207,8 @@ class ParticipantCard extends StatelessWidget {
         ),
         Text(
           badge.quantity.toString(),
-          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
+          style:
+              Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
         )
       ],
     );

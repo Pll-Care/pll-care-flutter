@@ -35,13 +35,15 @@ class MemoListComponent extends ConsumerWidget {
       if (next == '전체') {
         final param = MemoProviderParam(
             type: MemoProviderType.getList, projectId: projectId);
-        ref.read(memoProvider(param).notifier).getMemoList(
-            param: defaultPageParam);
+        ref
+            .read(memoProvider(param).notifier)
+            .getMemoList(param: defaultPageParam);
       } else {
         final param = MemoProviderParam(
             type: MemoProviderType.bookmarkList, projectId: projectId);
-        ref.read(memoProvider(param).notifier).getBookmarkMemoList(
-            param: defaultPageParam);
+        ref
+            .read(memoProvider(param).notifier)
+            .getBookmarkMemoList(param: defaultPageParam);
       }
     });
     return Column(
@@ -53,9 +55,9 @@ class MemoListComponent extends ConsumerWidget {
             Text(
               dropValue,
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontSize: 20.sp,
-                color: GREY_500,
-              ),
+                    fontSize: 20.sp,
+                    color: GREY_500,
+                  ),
             ),
             const Spacer(),
             CustomDropDownButton(
@@ -160,19 +162,33 @@ class MemoListComponent extends ConsumerWidget {
             return Expanded(
               child: Column(
                 children: [
+                  if (modelList.isNotEmpty)
+                    Expanded(
+                      child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (_, idx) {
+                            return _MemoListCard.fromModel(
+                              model: modelList[idx],
+                              onTap: () {
+                                showMemoDetail(context, modelList, idx);
+                              },
+                            );
+                          },
+                          separatorBuilder: (_, idx) => SizedBox(height: 10.h),
+                          itemCount: modelList.length),
+                    ),
+                  if (modelList.isEmpty)
                   Expanded(
-                    child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, idx) {
-                          return _MemoListCard.fromModel(
-                            model: modelList[idx],
-                            onTap: () {
-                              showMemoDetail(context, modelList, idx);
-                            },
-                          );
-                        },
-                        separatorBuilder: (_, idx) => SizedBox(height: 10.h),
-                        itemCount: modelList.length),
+                    child: Center(
+                      child: Text(
+                        '작성한 회의록이 없습니다.',
+                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 18.sp,
+                              color: GREEN_400,
+                            ),
+                      ),
+                    ),
                   ),
                   BottomPageCount<MemoListModel>(
                     pModelList: pModelList,
@@ -257,7 +273,7 @@ class _MemoListCard extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 100.h,
+        height: 110.h,
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),
@@ -269,21 +285,28 @@ class _MemoListCard extends ConsumerWidget {
           children: [
             Text(
               createdDate,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: GREY_500),
             ),
             SizedBox(height: 4.h),
             Text(
               title,
               style: Theme.of(context)
                   .textTheme
-                  .headlineMedium!.copyWith(color: GREY_500),
+                  .headlineMedium!
+                  .copyWith(color: GREY_500),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: 8.h),
             Text(
               author,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: GREY_500),
             ),
           ],
         ),

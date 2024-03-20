@@ -90,7 +90,7 @@ class ProjectForm extends ConsumerWidget {
           ),
           Container(
             width: 330.w,
-            height: 195.h,
+            height: 210.h,
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
             decoration: BoxDecoration(
               color: GREEN_200,
@@ -212,6 +212,8 @@ class ProjectForm extends ConsumerWidget {
               ),
             ],
           ),
+          SizedBox(height: 18.h),
+
         ],
       ),
     );

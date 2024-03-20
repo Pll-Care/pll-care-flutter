@@ -46,7 +46,10 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
         width: width,
         child: Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall!,
+          style: TextStyle(
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w600,
+              fontSize: 14.sp),
         ),
       ),
     );

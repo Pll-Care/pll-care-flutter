@@ -20,16 +20,6 @@ class LoginScreen extends ConsumerWidget {
 
   LoginPlatform _loginPlatform = LoginPlatform.none;
 
-  AuthParameter getSignUpParam({required User userProfile}) {
-    return AuthParameter(
-      email: userProfile.kakaoAccount?.email ?? '',
-      imageUrl: userProfile.kakaoAccount?.profile?.thumbnailImageUrl ?? '',
-      name: userProfile.kakaoAccount?.profile?.nickname ?? '',
-      nickName: userProfile.kakaoAccount?.profile?.nickname ?? '',
-      oauth2Id: 'kakao_${userProfile.id}',
-    );
-  }
-
   void checkToken() async {
     if (await AuthApi.instance.hasToken()) {
       try {
@@ -87,9 +77,11 @@ class LoginScreen extends ConsumerWidget {
     if (await isKakaoTalkInstalled()) {
       try {
         await UserApi.instance.loginWithKakaoTalk();
+        final User userProfile = await UserApi.instance.me();
+        final param = AuthParameter.fromKakao(userProfile: userProfile);
         print('카카오톡으로 로그인 성공');
         if (context.mounted) {
-          await getTokenByOauth2Token(ref, context);
+          await getTokenByOauth2Token(ref, context, param);
         }
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
@@ -102,9 +94,11 @@ class LoginScreen extends ConsumerWidget {
         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
         try {
           await UserApi.instance.loginWithKakaoAccount();
+          final User userProfile = await UserApi.instance.me();
+          final param = AuthParameter.fromKakao(userProfile: userProfile);
           print('카카오계정으로 로그인 성공');
           if (context.mounted) {
-            await getTokenByOauth2Token(ref, context);
+            await getTokenByOauth2Token(ref, context, param);
           }
         } catch (error) {
           print('카카오계정으로 로그인 실패 $error');
@@ -113,9 +107,11 @@ class LoginScreen extends ConsumerWidget {
     } else {
       try {
         await UserApi.instance.loginWithKakaoAccount();
+        final User userProfile = await UserApi.instance.me();
+        final param = AuthParameter.fromKakao(userProfile: userProfile);
         print('카카오계정으로 로그인 성공');
         if (context.mounted) {
-          await getTokenByOauth2Token(ref, context);
+          await getTokenByOauth2Token(ref, context, param);
         }
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
@@ -145,8 +141,19 @@ class LoginScreen extends ConsumerWidget {
             ),
           ),
           InkWell(
-            onTap: () {
-              GoogleSignIn().signIn();
+            onTap: () async {
+              final GoogleSignInAccount? googleUser =
+                  await GoogleSignIn().signIn();
+              if (googleUser != null) {
+                final id = googleUser.id;
+                final displayName = googleUser.displayName;
+                final photoUrl = googleUser.photoUrl;
+                log('id $id displayName $displayName photoUrl $photoUrl');
+                final param = AuthParameter.fromGoogle(googleUser: googleUser);
+                if (context.mounted) {
+                  getTokenByOauth2Token(ref, context, param);
+                }
+              }
             },
             child: Container(
               width: 300.w,
@@ -156,7 +163,6 @@ class LoginScreen extends ConsumerWidget {
                   image: AssetImage('assets/images/login/google_login.png'),
                 ),
               ),
-
             ),
           )
         ],
@@ -165,12 +171,8 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Future<void> getTokenByOauth2Token(
-      WidgetRef ref, BuildContext context) async {
-    final User userProfile = await UserApi.instance.me();
-    final param = getSignUpParam(userProfile: userProfile);
-    log("userProfile = ${userProfile}");
-    log('param $param');
-    await ref.read(authProvider.notifier).signUp(param: param);
+      WidgetRef ref, BuildContext context, AuthParameter param) async {
+      await ref.read(authProvider.notifier).signUp(param: param);
     if (context.mounted) {
       context.goNamed('home');
     }
