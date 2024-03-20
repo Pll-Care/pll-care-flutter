@@ -45,7 +45,7 @@ class CustomDropDownButton<T> extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           '$e',
-                          style: m_Body_01.copyWith(color: GREEN_400),
+                          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREEN_400),
                         ),
                       ),
                     ),

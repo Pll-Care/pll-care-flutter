@@ -86,7 +86,9 @@ class _ProfileAppBarState extends ConsumerState<ProfileAppBar> {
               ),
               child: Text(
                 isLogin == null ? 'Log In' : 'Log Out',
-                style: m_Button_00.copyWith(color: GREEN_200),
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_200),
               ),
             ),
           ),
@@ -164,7 +166,8 @@ class _ProfileInfo extends ConsumerWidget {
                 CircleAvatar(
                   backgroundImage: model.imageUrl.isNotEmpty
                       ? NetworkImage(model.imageUrl)
-                      : const AssetImage('assets/main/main1.png') as ImageProvider,
+                      : const AssetImage('assets/main/main1.png')
+                          as ImageProvider,
                 ),
                 SizedBox(width: 14.w),
                 Column(
@@ -173,13 +176,19 @@ class _ProfileInfo extends ConsumerWidget {
                   children: [
                     Text(
                       model.name,
-                      style: m_Heading_01.copyWith(color: GREY_100),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium!
+                          .copyWith(color: GREY_100),
                     ),
                     Row(
                       children: [
                         Text(
                           model.bio,
-                          style: m_Heading_03.copyWith(color: GREY_100),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(color: GREY_100),
                         ),
                         SizedBox(width: 12.w),
                         SizedBox(
@@ -195,7 +204,14 @@ class _ProfileInfo extends ConsumerWidget {
                             ),
                             child: Text(
                               '수정',
-                              style: m_Heading_04.copyWith(color: GREY_100),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12.sp,
+                                    color: GREY_100,
+                                  ),
                             ),
                           ),
                         ),

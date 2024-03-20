@@ -77,7 +77,8 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             if (model is LoadingModel) {
-              return const CustomSkeleton(skeleton: ScheduleFilterCardSkeleton());
+              return const CustomSkeleton(
+                  skeleton: ScheduleFilterCardSkeleton());
             } else if (model is ErrorModel) {
               return Text("error");
             }
@@ -90,9 +91,11 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
                 child: Center(
                     child: Text(
                   '진행중인 일정이 없습니다.',
-                  style: Heading_07.copyWith(
-                    color: GREEN_400,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18.sp,
+                        color: GREEN_400,
+                      ),
                 )),
               );
             }
@@ -184,7 +187,9 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
         backgroundColor: GREEN_200,
         content: Text(
           content,
-          style: Body_01.copyWith(color: GREY_100),
+          style: Theme.of(context)
+              .textTheme
+              .labelLarge!.copyWith(color: GREY_100),
         ),
         actions: [
           TextButton(
@@ -194,13 +199,17 @@ class _ScheduleFilterContentState extends ConsumerState<ScheduleFilterContent> {
             style: CustomDialog.textButtonStyle,
             child: Text(
               '네',
-              style: m_Button_00.copyWith(color: GREEN_200),
+              style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_200),
             ),
           ),
           TextButton(
               onPressed: () => context.pop(),
               style: CustomDialog.textButtonStyle,
-              child: Text('아니오', style: m_Button_00.copyWith(color: GREEN_200)))
+              child: Text('아니오', style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREEN_200)))
         ]);
   }
 

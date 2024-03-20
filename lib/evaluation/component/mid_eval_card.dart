@@ -77,7 +77,11 @@ class MidEvalCard extends ConsumerWidget {
         children: [
           Text(
             '중간평가 작성',
-            style: m_Heading_05.copyWith(color: GREY_100),
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24.sp,
+                  color: GREY_100,
+                ),
           ),
           SizedBox(height: 5.h),
           Expanded(
@@ -92,11 +96,17 @@ class MidEvalCard extends ConsumerWidget {
                 children: [
                   Text(
                     title,
-                    style: Heading_04.copyWith(color: GREEN_400),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(color: GREEN_400, fontSize: 28.sp),
                   ),
                   Text(
                     period,
-                    style: m_Heading_02.copyWith(color: GREY_500),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 20.sp,
+                          color: GREY_500,
+                        ),
                   ),
                   SizedBox(height: 5.h),
                   Expanded(
@@ -112,7 +122,13 @@ class MidEvalCard extends ConsumerWidget {
                         children: [
                           Text(
                             '참여자 선택',
-                            style: m_Heading_02.copyWith(color: GREEN_400),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(
+                                  fontSize: 20.sp,
+                                  color: GREEN_400,
+                                ),
                           ),
                           Consumer(
                             builder: (BuildContext context, WidgetRef ref,
@@ -137,7 +153,9 @@ class MidEvalCard extends ConsumerWidget {
                                             child: Chip(
                                               label: Text(
                                                 e.name,
-                                                style: m_Button_00.copyWith(
+                                                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(
                                                     color: e.id == votedId
                                                         ? GREY_100
                                                         : GREEN_400),
@@ -159,7 +177,13 @@ class MidEvalCard extends ConsumerWidget {
                           SizedBox(height: 14.h),
                           Text(
                             '뱃지 선택',
-                            style: m_Heading_02.copyWith(color: GREEN_400),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(
+                                  fontSize: 20.sp,
+                                  color: GREEN_400,
+                                ),
                           ),
                           const _RadioTile(
                             badgeType: BadgeType.PASSIONATE,
@@ -220,7 +244,7 @@ class MidEvalCard extends ConsumerWidget {
               style: CustomDialog.textButtonStyle,
               child: Text(
                 '작성 완료',
-                style: m_Body_01.copyWith(color: GREEN_400),
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREEN_400),
               ),
             ),
           ),
@@ -282,7 +306,10 @@ class _RadioTile extends ConsumerWidget {
             ),
             Text(
               title,
-              style: m_Heading_03.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!
+                  .copyWith(color: GREY_500),
             ),
           ],
         ),

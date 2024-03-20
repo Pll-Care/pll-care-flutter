@@ -153,7 +153,11 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                 Expanded(
                   child: Text(
                     widget.title,
-                    style: m_Heading_05.copyWith(color: GREY_500),
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24.sp,
+                      color: GREY_500,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -168,12 +172,16 @@ class _PostDetailComponentState extends ConsumerState<PostDetailComponent> {
                   children: [
                     Text(
                       widget.writeDate,
-                      style: m_Heading_03.copyWith(color: GREY_500),
+                      style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_500),
                     ),
                     SizedBox(width: 8.w),
                     Text(
                       '좋아요 ${widget.likeCount}개',
-                      style: m_Heading_03.copyWith(color: GREY_500),
+                      style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREY_500),
                     ),
                   ],
                 ),
@@ -341,12 +349,14 @@ class _PostField extends StatelessWidget {
       children: [
         Text(
           fieldName,
-          style: m_Heading_01.copyWith(color: GREEN_400),
+          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
         ),
         Text(
           content,
           style:
-              m_Body_01.copyWith(color: GREY_500, fontWeight: FontWeight.bold),
+              Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -372,7 +382,9 @@ class _PostPositionField extends StatelessWidget {
       children: [
         Text(
           '포지션',
-          style: m_Heading_01.copyWith(color: GREEN_400),
+          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
         ),
         SizedBox(width: 70.w),
         Expanded(
@@ -434,7 +446,7 @@ class _PositionRecruitField extends ConsumerWidget {
           width: 85.w,
           child: Text(
             position.name,
-            style: m_Body_01.copyWith(
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
                 color: GREY_500, fontWeight: FontWeight.bold),
           ),
         ),
@@ -442,7 +454,7 @@ class _PositionRecruitField extends ConsumerWidget {
           width: 60.w,
           child: Text(
             '$currentCnt / $totalCnt',
-            style: m_Body_01.copyWith(
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
                 color: GREY_500, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -507,7 +519,7 @@ class _PositionRecruitField extends ConsumerWidget {
           Expanded(
             child: Center(
               child: Text('모집완료',
-                  style: m_Body_01.copyWith(
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: GREEN_400, fontWeight: FontWeight.w800)),
             ),
           )
@@ -528,7 +540,9 @@ class _TechStackField extends StatelessWidget {
       children: [
         Text(
           '기술 스택',
-          style: m_Heading_01.copyWith(color: GREEN_400),
+          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
         ),
         SizedBox(
           width: 16.w,
@@ -575,7 +589,9 @@ class _ContentField extends StatelessWidget {
       children: [
         Text(
           fieldName,
-          style: m_Heading_01.copyWith(color: GREEN_400),
+          style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREEN_400),
         ),
         SizedBox(height: 5.h),
         // if (isHtml) SingleChildScrollView(child: Html(data: content)),
@@ -583,7 +599,7 @@ class _ContentField extends StatelessWidget {
         Text(
           content,
           style:
-              m_Body_01.copyWith(color: GREY_500, fontWeight: FontWeight.bold),
+              Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500, fontWeight: FontWeight.bold),
         ),
       ],
     );

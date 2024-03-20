@@ -20,7 +20,7 @@ class TechStackIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       message: name,
-      textStyle: m_Body_01.copyWith(color: GREY_100),
+      textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_100),
       showDuration: const Duration(seconds: 1),
       triggerMode: TooltipTriggerMode.longPress,
       child: CircleAvatar(

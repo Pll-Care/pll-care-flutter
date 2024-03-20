@@ -52,7 +52,10 @@ class MemoListComponent extends ConsumerWidget {
           children: [
             Text(
               dropValue,
-              style: m_Heading_02.copyWith(color: GREY_500),
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontSize: 20.sp,
+                color: GREY_500,
+              ),
             ),
             const Spacer(),
             CustomDropDownButton(
@@ -266,19 +269,21 @@ class _MemoListCard extends ConsumerWidget {
           children: [
             Text(
               createdDate,
-              style: m_Body_02.copyWith(color: GREY_500),
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
             ),
             SizedBox(height: 4.h),
             Text(
               title,
-              style: m_Heading_01.copyWith(color: GREY_500),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!.copyWith(color: GREY_500),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: 8.h),
             Text(
               author,
-              style: m_Body_02.copyWith(color: GREY_500),
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
             ),
           ],
         ),

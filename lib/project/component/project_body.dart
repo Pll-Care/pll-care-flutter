@@ -117,7 +117,9 @@ class ProjectListNav extends ConsumerWidget {
                 Text(
                   '참여 프로젝트',
                   style:
-                      m_Heading_01.copyWith(color: GREY_100, fontSize: 18.sp),
+                      Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(color: GREY_100, fontSize: 18.sp),
                 ),
                 SizedBox(
                   width: 8.w,
@@ -134,7 +136,9 @@ class ProjectListNav extends ConsumerWidget {
                   ),
                   child: Text(
                     '새 프로젝트 생성',
-                    style: m_Button_00.copyWith(color: GREY_500),
+                    style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_500),
                   ),
                 )
               ],
@@ -160,7 +164,9 @@ class ProjectListNav extends ConsumerWidget {
                       ),
                       child: Text(
                         '전체',
-                        style: m_Button_00.copyWith(
+                        style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(
                             color: isSelectAll ? GREY_100 : GREY_500),
                       ),
                     ),
@@ -183,7 +189,9 @@ class ProjectListNav extends ConsumerWidget {
                       ),
                       child: Text(
                         '진행 중',
-                        style: m_Button_00.copyWith(
+                        style: Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(
                             color: isSelectAll ? GREY_500 : GREY_100),
                       ),
                     )

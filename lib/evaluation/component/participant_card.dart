@@ -53,7 +53,11 @@ class ParticipantCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.r),
     ));
 
-    final showEvalTextStyle = m_Button_01;
+    final showEvalTextStyle =
+        Theme.of(context).textTheme.displayMedium!.copyWith(
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w600,
+            );
 
     final createEvalButtonStyle = TextButton.styleFrom(
       backgroundColor: GREY_100,
@@ -61,7 +65,11 @@ class ParticipantCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           side: const BorderSide(color: GREEN_200, width: 1)),
     );
-    final createEvalTextStyle = m_Button_01.copyWith(color: GREEN_200);
+    final createEvalTextStyle = Theme.of(context).textTheme.displayMedium!.copyWith(
+      fontSize: 10.sp,
+      fontWeight: FontWeight.w600,
+      color: GREEN_200
+    );
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 28.w),
@@ -86,7 +94,8 @@ class ParticipantCard extends StatelessWidget {
                 radius: 30.r,
                 backgroundImage: imageUrl.isNotEmpty
                     ? NetworkImage(imageUrl)
-                    : const AssetImage('assets/main/main1.png') as ImageProvider,
+                    : const AssetImage('assets/main/main1.png')
+                        as ImageProvider,
                 backgroundColor: Colors.transparent,
               ),
             ),
@@ -100,7 +109,12 @@ class ParticipantCard extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: Heading_07.copyWith(color: GREY_500),
+                        style:
+                            Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18.sp,
+                                  color: GREY_500,
+                                ),
                       ),
                       if (!me && isCompleted)
                         TextButton(
@@ -121,7 +135,8 @@ class ParticipantCard extends StatelessWidget {
                               ? showEvalButtonStyle
                               : createEvalButtonStyle,
                           child: Text(
-                            finalEvalId != null ? "최종평가 보기" : "최종평가 하기", // todo optimistic response 필요
+                            finalEvalId != null ? "최종평가 보기" : "최종평가 하기",
+                            // todo optimistic response 필요
                             style: finalEvalId != null
                                 ? showEvalTextStyle
                                 : createEvalTextStyle,
@@ -133,7 +148,7 @@ class ParticipantCard extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        ...badges.map((e) => getBadgeIcon(badge: e)).toList(),
+                        ...badges.map((e) => getBadgeIcon(badge: e, context: context)).toList(),
                       ],
                     ),
                   )
@@ -153,7 +168,7 @@ class ParticipantCard extends StatelessWidget {
   // Icons.lightbulb
   // Icons.people
   // Icons.handshake
-  Widget getBadgeIcon({required BadgeModel badge}) {
+  Widget getBadgeIcon({required BadgeModel badge, required BuildContext context}) {
     final IconData icon;
     switch (badge.evaluationBadge) {
       case BadgeType.PASSIONATE:
@@ -189,7 +204,7 @@ class ParticipantCard extends StatelessWidget {
         ),
         Text(
           badge.quantity.toString(),
-          style: m_Body_01.copyWith(color: GREY_500),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
         )
       ],
     );

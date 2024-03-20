@@ -66,7 +66,10 @@ class ProjectMainCard extends StatelessWidget {
               ),
               child: Text(
                 cardTitle,
-                style: Heading_05.copyWith(color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(color: Colors.white),
               ),
             ),
             Padding(
@@ -115,7 +118,7 @@ class ProjectMainCard extends StatelessWidget {
                                   ),
                                   Text(
                                     likeCount.toString(),
-                                    style: Body_02.copyWith(color: GREEN_200),
+                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREEN_200),
                                   ),
                                 ],
                               ),
@@ -131,18 +134,29 @@ class ProjectMainCard extends StatelessWidget {
                           Text(
                             title,
                             overflow: TextOverflow.ellipsis,
-                            style: Heading_05.copyWith(color: GREY_500),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(color: GREY_500),
                           ),
                           Text(
                             period,
                             overflow: TextOverflow.ellipsis,
-                            style: Body_01.copyWith(color: GREY_500),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                  color: GREY_500,
+                                ),
                           ),
                           Text(
                             content,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
-                            style: Body_01.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
                               color: GREY_500,
                             ),
                           ),

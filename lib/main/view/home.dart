@@ -66,7 +66,10 @@ class HomeBody extends ConsumerWidget {
               padding: EdgeInsets.only(left: 33.w),
               child: Text(
                 '프로젝트 관리 서비스, 풀케어',
-                style: Heading_05.copyWith(color: GREEN_500), //m_Heading_05
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(color: GREEN_500), //m_Heading_05
               )),
           SizedBox(
             height: 10.h,
@@ -77,7 +80,7 @@ class HomeBody extends ConsumerWidget {
               '개발자들을 위한 프로젝트 관리 서비스를 제공하고 있습니다. 서로 관심있는 주제를 선정하여 프로젝트를 함께할 사람들을 구해보세요. 프로젝트 내에서는 팀원 평가, 일정 관리, 회의록 정리가 있으며 지원하는 사람의 프로젝트 이력이나 이전 프로젝트의 평가 이력을 확인하여 더 신중한 팀원을 모집할 수 있습니다.',
               overflow: TextOverflow.ellipsis,
               maxLines: 8,
-              style: m_Body_01.copyWith(color: GREY_500),
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREY_500),
             ),
           ),
           SizedBox(
@@ -229,13 +232,13 @@ class _HomeFooter extends StatelessWidget {
           height: 8.h,
         ),
         Text('플케어 : PLL CARE, Project Manager',
-            style: m_Body_02.copyWith(color: GREY_500)),
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500)),
         SizedBox(
           height: 3.h,
         ),
         Text(
           'Copyright 2023. Team Pll-Care. All rights reserved',
-          style: m_Body_02.copyWith(color: GREY_500),
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(color: GREY_500),
         ),
       ],
     );

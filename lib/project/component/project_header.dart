@@ -38,6 +38,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
 
   Widget projectTab({
     required String title,
+    required BuildContext context,
     double? width,
   }) {
     return Tab(
@@ -45,7 +46,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
         width: width,
         child: Text(
           title,
-          style: m_Heading_03,
+          style: Theme.of(context).textTheme.headlineSmall!,
         ),
       ),
     );
@@ -73,12 +74,12 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
                 tabController.animateTo(idx);
               },
               tabs: [
-                projectTab(title: '오버뷰'),
-                projectTab(title: '회의록'),
-                projectTab(title: '일정'),
-                projectTab(title: '평가'),
-                projectTab(title: '팀관리'),
-                projectTab(title: '관리'),
+                projectTab(title: '오버뷰', context: context),
+                projectTab(title: '회의록', context: context),
+                projectTab(title: '일정', context: context),
+                projectTab(title: '평가', context: context),
+                projectTab(title: '팀관리', context: context),
+                projectTab(title: '관리', context: context),
               ],
             ),
           ),

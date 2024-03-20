@@ -155,10 +155,7 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                 left: 20.w,
                 right: 20.w,
                 top: 20.h,
-                bottom: 20.h + MediaQuery
-                    .of(context)
-                    .viewInsets
-                    .bottom),
+                bottom: 20.h + MediaQuery.of(context).viewInsets.bottom),
 
             /// 키보드에 가려진 부분만큼 padding 추가
             child: Column(
@@ -169,7 +166,7 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                   focusNode: focusNodes[0],
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
-                  style: titleFormTextStyle,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(color: GREY_500),
                   validator: (String? val) {
                     if (val == null || val.isEmpty) {
                       return '제목은 필수사항입니다.';
@@ -177,20 +174,18 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                   },
                   decoration: InputDecoration(
                     hintText: '제목을 입력해주세요.',
-                    hintStyle: titleFormTextStyle.copyWith(
-                      color: GREEN_400,
-                    ),
+                    hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: GREEN_400),
                   ),
                   onChanged: (value) {
                     final form =
-                    ref.read(postFormProvider).copyWith(title: value);
+                        ref.read(postFormProvider).copyWith(title: value);
                     ref.read(postFormProvider.notifier).updateForm(form: form);
                   },
                 ),
                 SizedBox(height: 12.h),
                 Container(
                   padding:
-                  EdgeInsets.symmetric(horizontal: 14.w, vertical: 18.h),
+                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 18.h),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(color: GREEN_200, width: 2.w),
@@ -231,7 +226,7 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                                   return Text('error');
                                 },
                                 loading: () =>
-                                const CircularProgressIndicator());
+                                    const CircularProgressIndicator());
                           },
                         )
                       else
@@ -240,11 +235,17 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                           children: [
                             Text(
                               '프로젝트',
-                              style: m_Heading_01.copyWith(color: GREEN_400),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(color: GREEN_400),
                             ),
                             Text(
                               projectTitle,
-                              style: m_Heading_01.copyWith(color: GREEN_400),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(color: GREEN_400),
                             )
                           ],
                         ),
@@ -257,17 +258,17 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                           padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
                             "시작일자가 종료일자와 같거나 이후 일 수 없습니다.",
-                            style: errorFormTextStyle,
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: TOMATO_500),
                           ),
                         ),
                       if (!ref
-                          .watch(dateRangeProvider.notifier)
-                          .isSaveValidate() &&
+                              .watch(dateRangeProvider.notifier)
+                              .isSaveValidate() &&
                           ref.watch(checkDateValidateProvider))
                         Padding(
                           padding: EdgeInsets.only(top: 12.0.h, left: 8.w),
                           child: Text(
-                            style: errorFormTextStyle,
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: TOMATO_500),
                             "시작일자와 종료일자를 선택해주세요.",
                           ),
                         ),
@@ -358,10 +359,8 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                             onPressed: () async {
-                              ref
-                                  .read(checkTechValidProvider.notifier)
-                                  .state =
-                              true;
+                              ref.read(checkTechValidProvider.notifier).state =
+                                  true;
                               ref
                                   .read(checkPositionValidProvider.notifier)
                                   .state = true;
@@ -389,18 +388,18 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
 
                                 model = widget.postId == null
                                     ? await ref
-                                    .read(postProvider(
-                                    const PostProviderParam(
-                                        type: PostProviderType
-                                            .create))
-                                    .notifier)
-                                    .createPost(param: param)
+                                        .read(postProvider(
+                                                const PostProviderParam(
+                                                    type: PostProviderType
+                                                        .create))
+                                            .notifier)
+                                        .createPost(param: param)
                                     : await ref
-                                    .read(postProvider(PostProviderParam(
-                                    type: PostProviderType.update,
-                                    postId: widget.postId))
-                                    .notifier)
-                                    .updatePost(param: param);
+                                        .read(postProvider(PostProviderParam(
+                                                type: PostProviderType.update,
+                                                postId: widget.postId))
+                                            .notifier)
+                                        .updatePost(param: param);
 
                                 if (model is CompletedModel &&
                                     context.mounted) {
@@ -415,7 +414,7 @@ class _PostFormComponentState extends ConsumerState<PostFormComponent> {
                               }
                             },
                             child:
-                            Text(widget.postId == null ? '작성하기' : '수정하기')),
+                                Text(widget.postId == null ? '작성하기' : '수정하기')),
                       ),
                     ],
                   ),
@@ -445,11 +444,12 @@ class _PostFormField extends StatelessWidget {
   final ValueChanged<String?> onChanged;
   final String initValue;
 
-  const _PostFormField({super.key,
-    required this.fieldName,
-    required this.dropItems,
-    required this.onChanged,
-    required this.initValue});
+  const _PostFormField(
+      {super.key,
+      required this.fieldName,
+      required this.dropItems,
+      required this.onChanged,
+      required this.initValue});
 
   @override
   Widget build(BuildContext context) {
@@ -459,7 +459,10 @@ class _PostFormField extends StatelessWidget {
         Expanded(
           child: Text(
             fieldName,
-            style: m_Heading_01.copyWith(color: GREEN_400),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: GREEN_400),
           ),
         ),
         CustomDropDownButton(
@@ -510,7 +513,10 @@ class _PostPositionFormState extends ConsumerState<_PostPositionForm> {
             Expanded(
               child: Text(
                 '포지션',
-                style: m_Heading_01.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium!
+                    .copyWith(color: GREEN_400),
               ),
             ),
             Column(
@@ -529,7 +535,7 @@ class _PostPositionFormState extends ConsumerState<_PostPositionForm> {
                         onAdd: () {
                           FocusManager.instance.primaryFocus?.unfocus();
                           final position =
-                          PositionType.stringToEnum(position: e.name);
+                              PositionType.stringToEnum(position: e.name);
                           final value = ref
                               .read(postFormProvider.notifier)
                               .addRecruitCnt(position: position);
@@ -539,7 +545,7 @@ class _PostPositionFormState extends ConsumerState<_PostPositionForm> {
                         onSubtract: () {
                           FocusManager.instance.primaryFocus?.unfocus();
                           final position =
-                          PositionType.stringToEnum(position: e.name);
+                              PositionType.stringToEnum(position: e.name);
                           final value = ref
                               .read(postFormProvider.notifier)
                               .subtractRecruitCnt(position: position);
@@ -563,7 +569,7 @@ class _PostPositionFormState extends ConsumerState<_PostPositionForm> {
             ref.watch(checkPositionValidProvider))
           Padding(
               padding: EdgeInsets.only(left: 8.w),
-              child: Text('하나 이상 포지션을 모집해야합니다.', style: errorFormTextStyle)),
+              child: Text('하나 이상 포지션을 모집해야합니다.', style: Theme.of(context).textTheme.labelSmall!.copyWith(color: TOMATO_500))),
       ],
     );
   }
@@ -631,7 +637,10 @@ class _PositionTextFormState extends ConsumerState<_PositionTextForm> {
           width: 100.w,
           child: Text(
             widget.title,
-            style: m_Heading_01.copyWith(color: GREEN_400),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: GREEN_400),
             textAlign: TextAlign.left,
           ),
         ),
@@ -647,7 +656,10 @@ class _PositionTextFormState extends ConsumerState<_PositionTextForm> {
             key: widget.globalKey,
             focusNode: widget.focusNode,
             controller: widget.controller,
-            style: m_Heading_01.copyWith(color: GREEN_400),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: GREEN_400),
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             cursorColor: GREEN_200,
@@ -773,52 +785,51 @@ class _TechStackFormState extends ConsumerState<_TechStackForm> {
                                 horizontal: 12.w, vertical: 8.h),
                             child: Text(
                               '찾는 기술이 없습니다!',
-                              style: m_Body_01.copyWith(color: GREEN_400),
+                              style: Theme.of(context).textTheme.labelLarge!.copyWith(color: GREEN_400),
                             )),
                       ],
                     ),
                   ...model
-                      .map((e) =>
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: GREY_400, width: 1.w))),
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              ref
-                                  .read(postFormProvider.notifier)
-                                  .updateTechStack(model: e);
-                              _removeOverlay();
-                              _controller.text = '';
-                            });
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 8.h),
-                            child: Row(
-                              children: [
-                                TechStackIcon(
-                                  name: e.name,
-                                  imageUrl: e.imageUrl,
-                                  radius: 12,
-                                ),
-                                SizedBox(width: 12.w),
-                                Expanded(
-                                  child: Text(
-                                    e.name,
-                                    style: m_Body_01.copyWith(
-                                      color: GREEN_400,
+                      .map((e) => Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: GREY_400, width: 1.w))),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  ref
+                                      .read(postFormProvider.notifier)
+                                      .updateTechStack(model: e);
+                                  _removeOverlay();
+                                  _controller.text = '';
+                                });
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 8.h),
+                                child: Row(
+                                  children: [
+                                    TechStackIcon(
+                                      name: e.name,
+                                      imageUrl: e.imageUrl,
+                                      radius: 12,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                    SizedBox(width: 12.w),
+                                    Expanded(
+                                      child: Text(
+                                        e.name,
+                                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                                          color: GREEN_400,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ))
+                          ))
                       .toList(),
                 ],
               ),
@@ -864,7 +875,10 @@ class _TechStackFormState extends ConsumerState<_TechStackForm> {
             Expanded(
               child: Text(
                 '기술 스택',
-                style: m_Heading_01.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium!
+                    .copyWith(color: GREEN_400),
               ),
             ),
             CompositedTransformTarget(
@@ -873,7 +887,10 @@ class _TechStackFormState extends ConsumerState<_TechStackForm> {
                 key: widget.globalKey,
                 focusNode: widget.focusNode,
                 controller: _controller,
-                style: m_Heading_01.copyWith(color: GREEN_400),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium!
+                    .copyWith(color: GREEN_400),
                 textInputAction: TextInputAction.next,
                 cursorColor: GREEN_200,
                 decoration: InputDecoration(
@@ -897,15 +914,12 @@ class _TechStackFormState extends ConsumerState<_TechStackForm> {
             ref.watch(checkTechValidProvider))
           Padding(
             padding: EdgeInsets.only(left: 8.w),
-            child: Text('필수 사항입니다.', style: errorFormTextStyle),
+            child: Text('필수 사항입니다.', style: Theme.of(context).textTheme.labelSmall!.copyWith(color: TOMATO_500)),
           ),
         Wrap(
           spacing: 12.w,
           children: [
-            ...ref
-                .watch(postFormProvider)
-                .forWidgetTech
-                .map((e) {
+            ...ref.watch(postFormProvider).forWidgetTech.map((e) {
               log('name = ${e.name}');
               return Badge(
                 padding: EdgeInsets.zero,
@@ -946,13 +960,14 @@ class _MultiTextForm extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final TextEditingController controller;
 
-  const _MultiTextForm({super.key,
-    required this.title,
-    required this.focusNode,
-    required this.onNext,
-    required this.globalKey,
-    required this.onChanged,
-    required this.controller});
+  const _MultiTextForm(
+      {super.key,
+      required this.title,
+      required this.focusNode,
+      required this.onNext,
+      required this.globalKey,
+      required this.onChanged,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -964,7 +979,10 @@ class _MultiTextForm extends StatelessWidget {
         children: [
           Text(
             title,
-            style: m_Heading_01.copyWith(color: GREEN_400),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: GREEN_400),
           ),
           SizedBox(height: 12.h),
           Expanded(
@@ -972,7 +990,10 @@ class _MultiTextForm extends StatelessWidget {
               key: globalKey,
               focusNode: focusNode,
               controller: controller,
-              style: m_Heading_01.copyWith(color: GREEN_400),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!
+                  .copyWith(color: GREEN_400),
               textInputAction: TextInputAction.next,
               cursorColor: GREEN_200,
               maxLines: null,

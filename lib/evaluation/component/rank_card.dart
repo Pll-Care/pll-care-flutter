@@ -112,11 +112,17 @@ class RankCard extends ConsumerWidget {
                       children: [
                         Text(
                           '${midRank[index].rank}위',
-                          style: m_Heading_03.copyWith(color: GREEN_200),
+                          style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(color: GREEN_200),
                         ),
                         Text(
                           midRank[index].name,
-                          style: Heading_07.copyWith(color: GREEN_200),
+                          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18.sp,
+                            color: GREEN_200,
+                          ),
                         ),
                         SizedBox(
                           height: 5.h,
@@ -126,8 +132,14 @@ class RankCard extends ConsumerWidget {
                               ? '${midRank[index].quantity}개'
                               : '전체 평점 ${midRank[index].quantity.toStringAsFixed(1)} / 5.0',
                           style: !isCompleted
-                              ? m_Button_00.copyWith(color: GREY_500)
-                              : m_Button_01.copyWith(color: GREY_500),
+                              ? Theme.of(context)
+                    .textTheme
+                    .displayMedium!.copyWith(color: GREY_500)
+                              : Theme.of(context).textTheme.displayMedium!.copyWith(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w600,
+                            color: GREY_500
+                          ),
                         )
                       ],
                     ),
@@ -171,7 +183,11 @@ class _EmptyRankCard extends StatelessWidget {
             child: Center(
               child: Text(
                 '평가를 진행해 주세요.',
-                style: Heading_07.copyWith(color: GREEN_400),
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 18.sp,
+                  color: GREEN_400,
+                ),
               ),
             ),
           ),

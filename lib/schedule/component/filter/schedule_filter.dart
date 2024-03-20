@@ -94,7 +94,7 @@ class _FilterChip extends ConsumerWidget {
       child: Chip(
         label: Text(
           filterType.name,
-          style: m_Body_01.copyWith(
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
             color: filterModel == null
                 ? GREY_100
                 : filterModel!.filterType == filterType
@@ -186,7 +186,9 @@ class _FilterNames extends ConsumerWidget {
           children: [
             Text(
               '참여자',
-              style: m_Heading_01.copyWith(
+              style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(
                 color: GREY_100,
               ),
             ),
@@ -203,7 +205,9 @@ class _FilterNames extends ConsumerWidget {
                     child: Chip(
                       label: Text(
                         e.name,
-                        style: m_Heading_01.copyWith(
+                        style: Theme.of(context)
+                .textTheme
+                .headlineMedium!.copyWith(
                           color: filterModel.memberId == e.memberId
                               ? GREY_100
                               : GREEN_400,

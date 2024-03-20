@@ -51,12 +51,13 @@ class _MemoFormState extends ConsumerState<MemoForm> {
                   initialValue: widget.title,
                   decoration: InputDecoration(
                       hintText: '회의록 제목을 입력해주세요.',
-                      hintStyle: titleFormTextStyle.copyWith(
+                      hintStyle:
+                      Theme.of(context).textTheme.titleSmall!.copyWith(
                         color: GREEN_400,
                       )),
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
-                  style: titleFormTextStyle,
+                  style: Theme.of(context).textTheme.titleSmall!,
                   validator: (String? val) {
                     if (val == null || val.isEmpty) {
                       return '제목은 필수사항입니다.';
@@ -80,7 +81,7 @@ class _MemoFormState extends ConsumerState<MemoForm> {
                     maxLength: 500,
                     textInputAction: TextInputAction.newline,
                     cursorColor: GREEN_200,
-                    style: contentFormTextStyle,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: GREY_500),
                     textAlign: TextAlign.start,
                     textAlignVertical: TextAlignVertical.top,
                     validator: (String? val) {

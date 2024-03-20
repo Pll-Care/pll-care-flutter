@@ -56,7 +56,10 @@ final TextStyle m_Heading_01 = TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 16.sp); // -6
 final TextStyle m_Heading_02 = TextStyle(
-    fontFamily: 'Pretendard', fontWeight: FontWeight.w700, fontSize: 20.sp);
+  fontFamily: 'Pretendard',
+  fontWeight: FontWeight.w700,
+  fontSize: 20.sp,
+);
 final TextStyle m_Heading_03 = TextStyle(
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
@@ -86,13 +89,17 @@ final TextStyle m_Button_01 = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 10.sp); // -6
 final TextStyle m_Button_02 = TextStyle(
-    fontFamily: 'Pretendard',
-    fontWeight: FontWeight.w600,
-    fontSize: 7.sp); //-4
+  fontFamily: 'Pretendard',
+  fontWeight: FontWeight.w600,
+  fontSize: 7.sp,
+); //-4
 final TextStyle m_Button_03 = TextStyle(
-    fontFamily: 'Pretendard', fontWeight: FontWeight.w600, fontSize: 14.sp);
+  fontFamily: 'Pretendard',
+  fontWeight: FontWeight.w600,
+  fontSize: 14.sp,
+);
 
-  TextStyle Body_01 = TextStyle(
+TextStyle Body_01 = TextStyle(
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w500,
     fontSize: 16.sp); // - 6
@@ -105,7 +112,7 @@ TextStyle Body_04 = TextStyle(
 
 TextStyle m_Body_01 = TextStyle(
     fontFamily: 'Pretendard', fontWeight: FontWeight.w500, fontSize: 16.sp);
-  TextStyle m_Body_02 = TextStyle(
+TextStyle m_Body_02 = TextStyle(
     fontFamily: 'Pretendard', fontWeight: FontWeight.w500, fontSize: 14.sp);
 
 final textButtonStyle = ButtonStyle(
@@ -113,7 +120,8 @@ final textButtonStyle = ButtonStyle(
   maximumSize: MaterialStateProperty.all<Size>(Size(120.w, 48.h)),
   backgroundColor: MaterialStateProperty.all<Color>(GREEN_200),
   foregroundColor: MaterialStateProperty.all(GREY_100),
-  textStyle: MaterialStateProperty.all(m_Button_00.copyWith(color: GREY_100, fontSize: 16.sp)),
+  textStyle: MaterialStateProperty.all(
+      m_Button_00.copyWith(color: GREY_100, fontSize: 16.sp)),
   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
       EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h)),
   shape: MaterialStateProperty.all(
@@ -128,7 +136,8 @@ final ButtonStyle outlinedButtonStyle = ButtonStyle(
   maximumSize: MaterialStateProperty.all<Size>(Size(120.w, 48.h)),
   backgroundColor: MaterialStateProperty.all<Color>(GREY_100),
   foregroundColor: MaterialStateProperty.all(GREEN_200),
-  textStyle: MaterialStateProperty.all(m_Button_00.copyWith(color: GREEN_200, fontSize: 16.sp)),
+  textStyle: MaterialStateProperty.all(
+      m_Button_00.copyWith(color: GREEN_200, fontSize: 16.sp)),
   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
       EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h)),
   side: MaterialStateProperty.all<BorderSide>(
